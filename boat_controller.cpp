@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.54
+// Model version                  : 1.55
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 12:30:06 2021
+// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -630,10 +630,10 @@ void boat_controller_initialize(void)
   boat_controller_M->Timing.stepSize0 = 0.2;
 
   // External mode info
-  boat_controller_M->Sizes.checksums[0] = (2003968270U);
-  boat_controller_M->Sizes.checksums[1] = (1297883007U);
-  boat_controller_M->Sizes.checksums[2] = (2822492861U);
-  boat_controller_M->Sizes.checksums[3] = (209054981U);
+  boat_controller_M->Sizes.checksums[0] = (3852560315U);
+  boat_controller_M->Sizes.checksums[1] = (2405753417U);
+  boat_controller_M->Sizes.checksums[2] = (1926533184U);
+  boat_controller_M->Sizes.checksums[3] = (3900680471U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -689,14 +689,16 @@ void boat_controller_initialize(void)
   }
 
   {
-    char_T tmp[9];
-    char_T tmp_0[30];
+    char_T tmp[17];
+    char_T tmp_0[9];
+    char_T tmp_1[30];
     int32_T i;
-    static const char_T tmp_1[8] = { '/', 'h', 'e', 'a', 'd', 'i', 'n', 'g' };
+    static const char_T tmp_2[16] = { '/', 'h', 'e', 'a', 'd', 'i', 'n', 'g',
+      '_', 'd', 'e', 'g', 'r', 'e', 'e', 's' };
 
-    static const char_T tmp_2[8] = { '/', 's', 'e', 'n', 's', 'o', 'r', 's' };
+    static const char_T tmp_3[8] = { '/', 's', 'e', 'n', 's', 'o', 'r', 's' };
 
-    static const char_T tmp_3[29] = { '/', 'r', 'u', 'd', 'd', 'e', 'r', '_',
+    static const char_T tmp_4[29] = { '/', 'r', 'u', 'd', 'd', 'e', 'r', '_',
       'w', 'i', 'n', 'c', 'h', '_', 'a', 'c', 't', 'u', 'a', 't', 'i', 'o', 'n',
       '_', 'a', 'n', 'g', 'l', 'e' };
 
@@ -704,11 +706,11 @@ void boat_controller_initialize(void)
     // Start for MATLABSystem: '<S6>/SourceBlock'
     boat_controller_DW.obj_p.matlabCodegenIsDeleted = false;
     boat_controller_DW.obj_p.isInitialized = 1;
-    for (i = 0; i < 8; i++) {
-      tmp[i] = tmp_1[i];
+    for (i = 0; i < 16; i++) {
+      tmp[i] = tmp_2[i];
     }
 
-    tmp[8] = '\x00';
+    tmp[16] = '\x00';
     Sub_boat_controller_192.createSubscriber(tmp, 1);
     boat_controller_DW.obj_p.isSetupComplete = true;
 
@@ -726,11 +728,11 @@ void boat_controller_initialize(void)
     boat_controller_DW.obj_e.matlabCodegenIsDeleted = false;
     boat_controller_DW.obj_e.isInitialized = 1;
     for (i = 0; i < 8; i++) {
-      tmp[i] = tmp_2[i];
+      tmp_0[i] = tmp_3[i];
     }
 
-    tmp[8] = '\x00';
-    Sub_boat_controller_97.createSubscriber(tmp, 1);
+    tmp_0[8] = '\x00';
+    Sub_boat_controller_97.createSubscriber(tmp_0, 1);
     boat_controller_DW.obj_e.isSetupComplete = true;
 
     // End of Start for MATLABSystem: '<S5>/SourceBlock'
@@ -751,11 +753,11 @@ void boat_controller_initialize(void)
     boat_controller_DW.obj.matlabCodegenIsDeleted = false;
     boat_controller_DW.obj.isInitialized = 1;
     for (i = 0; i < 29; i++) {
-      tmp_0[i] = tmp_3[i];
+      tmp_1[i] = tmp_4[i];
     }
 
-    tmp_0[29] = '\x00';
-    Pub_boat_controller_103.createPublisher(tmp_0, 1);
+    tmp_1[29] = '\x00';
+    Pub_boat_controller_103.createPublisher(tmp_1, 1);
     boat_controller_DW.obj.isSetupComplete = true;
 
     // End of Start for MATLABSystem: '<S4>/SinkBlock'

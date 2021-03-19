@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.54
+// Model version                  : 1.55
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 12:30:06 2021
+// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
