@@ -7,9 +7,9 @@
 //
 //  Code generation for model "boat_controller".
 //
-//  Model version              : 1.55
+//  Model version              : 1.62
 //  Simulink Coder version : 9.3 (R2020a) 18-Nov-2019
-//  C++ source code generated on : Fri Mar 19 13:01:20 2021
+//  C++ source code generated on : Tue May 18 19:32:54 2021
 //
 //  Target selection: ert.tlc
 //  Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -36,15 +36,11 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(SL_Bus_boat_controller_sailbot_msg_actuation_angle),
+  sizeof(SL_Bus_boat_controller_sailbot_msg_heading),
   sizeof(SL_Bus_ROSVariableLengthArrayInfo),
   sizeof(SL_Bus_boat_controller_sailbot_msg_Sensors),
-  sizeof(SL_Bus_boat_controller_sailbot_msg_heading),
-  sizeof(int32_T),
-  sizeof(int64_T),
   sizeof(ros_slros_internal_block_Publ_T),
-  sizeof(ros_slros_internal_block_Subs_T),
-  sizeof(int64_T),
-  sizeof(uint64_T)
+  sizeof(ros_slros_internal_block_Subs_T)
 };
 
 // data type name table
@@ -64,15 +60,11 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "SL_Bus_boat_controller_sailbot_msg_actuation_angle",
+  "SL_Bus_boat_controller_sailbot_msg_heading",
   "SL_Bus_ROSVariableLengthArrayInfo",
   "SL_Bus_boat_controller_sailbot_msg_Sensors",
-  "SL_Bus_boat_controller_sailbot_msg_heading",
-  "int32_T",
-  "int64_T",
   "ros_slros_internal_block_Publ_T",
-  "ros_slros_internal_block_Subs_T",
-  "int64_T",
-  "uint64_T"
+  "ros_slros_internal_block_Subs_T"
 };
 
 // data type transitions for block I/O structure
@@ -80,9 +72,9 @@ static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&boat_controller_B.rudderanglesaturation), 0, 0, 5 }
   ,
 
-  { (char_T *)(&boat_controller_DW.obj), 20, 0, 1 },
+  { (char_T *)(&boat_controller_DW.obj), 18, 0, 1 },
 
-  { (char_T *)(&boat_controller_DW.obj_p), 21, 0, 2 },
+  { (char_T *)(&boat_controller_DW.obj_i), 19, 0, 2 },
 
   { (char_T *)(&boat_controller_DW.ToWorkspace_PWORK.LoggedData), 11, 0, 3 },
 
@@ -99,24 +91,26 @@ static DataTypeTransitionTable rtBTransTable = {
 static DataTypeTransition rtPTransitions[] = {
   { (char_T *)(&boat_controller_P.PIDController_P), 0, 0, 1 },
 
-  { (char_T *)(&boat_controller_P.Out1_Y0), 16, 0, 1 },
+  { (char_T *)(&boat_controller_P.Out1_Y0), 17, 0, 1 },
 
-  { (char_T *)(&boat_controller_P.Constant_Value), 16, 0, 1 },
+  { (char_T *)(&boat_controller_P.Constant_Value), 17, 0, 1 },
 
   { (char_T *)(&boat_controller_P.Constant_Value_f), 14, 0, 1 },
 
-  { (char_T *)(&boat_controller_P.Out1_Y0_f), 17, 0, 1 },
+  { (char_T *)(&boat_controller_P.Out1_Y0_f), 15, 0, 1 },
 
-  { (char_T *)(&boat_controller_P.Constant_Value_m), 17, 0, 1 },
+  { (char_T *)(&boat_controller_P.Constant_Value_m), 15, 0, 1 },
 
-  { (char_T *)(&boat_controller_P.WindSensor0SpeedMetersPerSec_Y0), 0, 0, 11 },
+  { (char_T *)(&boat_controller_P.WindSensor1SpeedMetersPerSec_Y0), 0, 0, 13 },
 
-  { (char_T *)(&boat_controller_P.Gain1_Gain_l), 6, 0, 2 }
+  { (char_T *)(&boat_controller_P.Gain1_Gain_n), 6, 0, 1 },
+
+  { (char_T *)(&boat_controller_P.Gain1_Gain_l), 1, 0, 1 }
 };
 
 // data type transition table for Parameters structure
 static DataTypeTransitionTable rtPTransTable = {
-  8U,
+  9U,
   rtPTransitions
 };
 
