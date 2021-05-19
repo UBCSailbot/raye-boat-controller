@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.55
+// Model version                  : 1.62
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
+// C/C++ source code generated on : Tue May 18 19:32:54 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -38,7 +38,7 @@ static void boat_controller_sailcoef(real_T attack[101], real_T Cls[101], real_T
 static void matlabCodegenHandle_matlabCod_m(ros_slros_internal_block_Subs_T *obj);
 static void matlabCodegenHandle_matlabCodeg(ros_slros_internal_block_Publ_T *obj);
 
-// Function for MATLAB Function: '<S7>/MATLAB Function2'
+// Function for MATLAB Function: '<S9>/MATLAB Function2'
 static real_T boat_controller_ppval(const real_T pp_breaks[73], const real_T
   pp_coefs[288], real_T x)
 {
@@ -74,7 +74,7 @@ static real_T boat_controller_ppval(const real_T pp_breaks[73], const real_T
   return v;
 }
 
-// Function for MATLAB Function: '<S7>/MATLAB Function2'
+// Function for MATLAB Function: '<S9>/MATLAB Function2'
 static void boat_controller_sailcoef(real_T attack[101], real_T Cls[101], real_T
   Cds[101])
 {
@@ -323,72 +323,61 @@ void boat_controller_step(void)
   srClearBC(boat_controller_DW.EnabledSubsystem1_SubsysRanBC);
 
   // Reset subsysRan breadcrumbs
-  srClearBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC_k);
+  srClearBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC_b);
 
   // Reset subsysRan breadcrumbs
   srClearBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC);
 
   // Outputs for Atomic SubSystem: '<Root>/Subscribe1'
-  // MATLABSystem: '<S6>/SourceBlock'
+  // MATLABSystem: '<S7>/SourceBlock'
   rEQ0 = Sub_boat_controller_192.getLatestMessage
     (&boat_controller_B.b_varargout_2_m);
 
   // Outputs for Enabled SubSystem: '<Root>/Enabled Subsystem1' incorporates:
   //   EnablePort: '<S3>/Enable'
 
-  // Outputs for Enabled SubSystem: '<S6>/Enabled Subsystem' incorporates:
-  //   EnablePort: '<S12>/Enable'
+  // Outputs for Enabled SubSystem: '<S7>/Enabled Subsystem' incorporates:
+  //   EnablePort: '<S13>/Enable'
 
   if (rEQ0) {
-    srUpdateBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC);
+    srUpdateBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC_b);
 
-    // Gain: '<S10>/Gain1'
+    // Gain: '<S12>/Gain1'
     boat_controller_B.Gain1 = boat_controller_P.Gain1_Gain *
       boat_controller_B.b_varargout_2_m.HeadingDegrees;
     srUpdateBC(boat_controller_DW.EnabledSubsystem1_SubsysRanBC);
   }
 
-  // End of MATLABSystem: '<S6>/SourceBlock'
-  // End of Outputs for SubSystem: '<S6>/Enabled Subsystem'
+  // End of MATLABSystem: '<S7>/SourceBlock'
+  // End of Outputs for SubSystem: '<S7>/Enabled Subsystem'
   // End of Outputs for SubSystem: '<Root>/Enabled Subsystem1'
   // End of Outputs for SubSystem: '<Root>/Subscribe1'
 
-  // Outputs for Atomic SubSystem: '<Root>/Subscribe'
-  // MATLABSystem: '<S5>/SourceBlock'
-  rEQ0 = Sub_boat_controller_97.getLatestMessage
+  // Outputs for Atomic SubSystem: '<Root>/Subscribe2'
+  // MATLABSystem: '<S8>/SourceBlock'
+  rEQ0 = Sub_boat_controller_212.getLatestMessage
     (&boat_controller_B.b_varargout_2);
 
   // Outputs for Enabled SubSystem: '<Root>/Enabled Subsystem' incorporates:
   //   EnablePort: '<S2>/Enable'
 
-  // Outputs for Enabled SubSystem: '<S5>/Enabled Subsystem' incorporates:
-  //   EnablePort: '<S11>/Enable'
+  // Outputs for Enabled SubSystem: '<S8>/Enabled Subsystem' incorporates:
+  //   EnablePort: '<S14>/Enable'
 
   if (rEQ0) {
-    srUpdateBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC_k);
-
-    // Gain: '<S9>/Gain1'
-    tmp = static_cast<int64_T>(static_cast<int64_T>
-      (boat_controller_P.Gain1_Gain_l) * static_cast<int64_T>
-      (boat_controller_B.b_varargout_2.Gps0TrueHeading));
-    if (tmp > 2147483647L) {
-      tmp = 2147483647L;
-    } else {
-      if (tmp < -2147483648L) {
-        tmp = -2147483648L;
-      }
-    }
+    srUpdateBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC);
 
     // DataTypeConversion: '<S2>/Cast To Double1' incorporates:
-    //   Gain: '<S9>/Gain1'
+    //   Gain: '<S11>/Gain1'
 
-    boat_controller_B.CastToDouble1 = static_cast<real_T>(static_cast<int32_T>
-      (tmp));
+    boat_controller_B.CastToDouble1 = static_cast<real_T>
+      (boat_controller_P.Gain1_Gain_l *
+       boat_controller_B.b_varargout_2.GpsCanTrueHeadingDegrees);
 
-    // Gain: '<S8>/Gain1'
+    // Gain: '<S10>/Gain1'
     tmp = static_cast<int64_T>(static_cast<int64_T>
       (boat_controller_P.Gain1_Gain_n) * static_cast<int64_T>
-      (boat_controller_B.b_varargout_2.WindSensor0Direction));
+      (boat_controller_B.b_varargout_2.WindSensor1AngleDegrees));
     if (tmp > 2147483647L) {
       tmp = 2147483647L;
     } else {
@@ -398,19 +387,19 @@ void boat_controller_step(void)
     }
 
     // DataTypeConversion: '<S2>/Cast To Double2' incorporates:
-    //   Gain: '<S8>/Gain1'
+    //   Gain: '<S10>/Gain1'
 
     boat_controller_B.CastToDouble2 = static_cast<real_T>(static_cast<int32_T>
       (tmp));
     srUpdateBC(boat_controller_DW.EnabledSubsystem_SubsysRanBC_i);
   }
 
-  // End of MATLABSystem: '<S5>/SourceBlock'
-  // End of Outputs for SubSystem: '<S5>/Enabled Subsystem'
+  // End of MATLABSystem: '<S8>/SourceBlock'
+  // End of Outputs for SubSystem: '<S8>/Enabled Subsystem'
   // End of Outputs for SubSystem: '<Root>/Enabled Subsystem'
-  // End of Outputs for SubSystem: '<Root>/Subscribe'
+  // End of Outputs for SubSystem: '<Root>/Subscribe2'
 
-  // MATLAB Function: '<S7>/MATLAB Function'
+  // MATLAB Function: '<S9>/MATLAB Function'
   boat_controller_B.error = boat_controller_B.Gain1 -
     boat_controller_B.CastToDouble1;
   if (fabs(boat_controller_B.error) > 3.1415926535897931) {
@@ -448,13 +437,13 @@ void boat_controller_step(void)
     boat_controller_B.error = boat_controller_B.sailAngle - 3.1415926535897931;
   }
 
-  // End of MATLAB Function: '<S7>/MATLAB Function'
+  // End of MATLAB Function: '<S9>/MATLAB Function'
 
-  // Gain: '<S54>/Proportional Gain'
+  // Gain: '<S56>/Proportional Gain'
   boat_controller_B.sailAngle = boat_controller_P.PIDController_P *
     boat_controller_B.error;
 
-  // Saturate: '<S7>/rudder angle saturation'
+  // Saturate: '<S9>/rudder angle saturation'
   if (boat_controller_B.sailAngle >
       boat_controller_P.rudderanglesaturation_UpperSat) {
     boat_controller_B.rudderanglesaturation =
@@ -467,9 +456,9 @@ void boat_controller_step(void)
     boat_controller_B.rudderanglesaturation = boat_controller_B.sailAngle;
   }
 
-  // End of Saturate: '<S7>/rudder angle saturation'
+  // End of Saturate: '<S9>/rudder angle saturation'
 
-  // MATLAB Function: '<S7>/MATLAB Function2'
+  // MATLAB Function: '<S9>/MATLAB Function2'
   boat_controller_B.q = fabs(boat_controller_B.CastToDouble2);
   memcpy(&boat_controller_B.b[0], &b[0], static_cast<uint32_T>(101 * sizeof
           (real_T)));
@@ -514,43 +503,43 @@ void boat_controller_step(void)
     }
   }
 
-  // End of MATLAB Function: '<S7>/MATLAB Function2'
+  // End of MATLAB Function: '<S9>/MATLAB Function2'
 
   // Saturate: '<Root>/Saturation'
   if (boat_controller_B.rudderanglesaturation >
       boat_controller_P.Saturation_UpperSat) {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Rudder =
-      boat_controller_P.Saturation_UpperSat;
+    boat_controller_B.q = boat_controller_P.Saturation_UpperSat;
   } else if (boat_controller_B.rudderanglesaturation <
              boat_controller_P.Saturation_LowerSat) {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Rudder =
-      boat_controller_P.Saturation_LowerSat;
+    boat_controller_B.q = boat_controller_P.Saturation_LowerSat;
   } else {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Rudder =
-      boat_controller_B.rudderanglesaturation;
+    boat_controller_B.q = boat_controller_B.rudderanglesaturation;
   }
 
   // End of Saturate: '<Root>/Saturation'
 
+  // BusAssignment: '<Root>/Bus Assignment' incorporates:
+  //   Gain: '<S6>/Gain'
+
+  boat_controller_B.BusAssignment.RudderAngleDegrees =
+    boat_controller_P.Gain_Gain * boat_controller_B.q;
+
   // Saturate: '<Root>/Saturation1'
   if (boat_controller_B.sailAngle > boat_controller_P.Saturation1_UpperSat) {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Winch =
-      boat_controller_P.Saturation1_UpperSat;
-  } else if (boat_controller_B.sailAngle <
-             boat_controller_P.Saturation1_LowerSat) {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Winch =
-      boat_controller_P.Saturation1_LowerSat;
+    boat_controller_B.sailAngle = boat_controller_P.Saturation1_UpperSat;
   } else {
-    // BusAssignment: '<Root>/Bus Assignment'
-    boat_controller_B.BusAssignment.Winch = boat_controller_B.sailAngle;
+    if (boat_controller_B.sailAngle < boat_controller_P.Saturation1_LowerSat) {
+      boat_controller_B.sailAngle = boat_controller_P.Saturation1_LowerSat;
+    }
   }
 
   // End of Saturate: '<Root>/Saturation1'
+
+  // BusAssignment: '<Root>/Bus Assignment' incorporates:
+  //   Gain: '<S5>/Gain'
+
+  boat_controller_B.BusAssignment.AbsSailAngleDegrees =
+    boat_controller_P.Gain_Gain_b * boat_controller_B.sailAngle;
 
   // Outputs for Atomic SubSystem: '<Root>/Publish'
   // MATLABSystem: '<S4>/SinkBlock'
@@ -630,10 +619,10 @@ void boat_controller_initialize(void)
   boat_controller_M->Timing.stepSize0 = 0.2;
 
   // External mode info
-  boat_controller_M->Sizes.checksums[0] = (3852560315U);
-  boat_controller_M->Sizes.checksums[1] = (2405753417U);
-  boat_controller_M->Sizes.checksums[2] = (1926533184U);
-  boat_controller_M->Sizes.checksums[3] = (3900680471U);
+  boat_controller_M->Sizes.checksums[0] = (1399668266U);
+  boat_controller_M->Sizes.checksums[1] = (421306931U);
+  boat_controller_M->Sizes.checksums[2] = (720742680U);
+  boat_controller_M->Sizes.checksums[3] = (399406319U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -650,7 +639,7 @@ void boat_controller_initialize(void)
     systemRan[4] = &rtAlwaysEnabled;
     systemRan[5] = &rtAlwaysEnabled;
     systemRan[6] = (sysRanDType *)
-      &boat_controller_DW.EnabledSubsystem_SubsysRanBC_k;
+      &boat_controller_DW.EnabledSubsystem_SubsysRanBC_b;
     systemRan[7] = &rtAlwaysEnabled;
     systemRan[8] = &rtAlwaysEnabled;
     systemRan[9] = (sysRanDType *)
@@ -677,7 +666,7 @@ void boat_controller_initialize(void)
   {
     static DataTypeTransInfo dtInfo;
     boat_controller_M->SpecialInfo.mappingInfo = (&dtInfo);
-    dtInfo.numDataTypes = 24;
+    dtInfo.numDataTypes = 20;
     dtInfo.dataTypeSizes = &rtDataTypeSizes[0];
     dtInfo.dataTypeNames = &rtDataTypeNames[0];
 
@@ -703,7 +692,7 @@ void boat_controller_initialize(void)
       '_', 'a', 'n', 'g', 'l', 'e' };
 
     // SystemInitialize for Atomic SubSystem: '<Root>/Subscribe1'
-    // Start for MATLABSystem: '<S6>/SourceBlock'
+    // Start for MATLABSystem: '<S7>/SourceBlock'
     boat_controller_DW.obj_p.matlabCodegenIsDeleted = false;
     boat_controller_DW.obj_p.isInitialized = 1;
     for (i = 0; i < 16; i++) {
@@ -714,7 +703,7 @@ void boat_controller_initialize(void)
     Sub_boat_controller_192.createSubscriber(tmp, 1);
     boat_controller_DW.obj_p.isSetupComplete = true;
 
-    // End of Start for MATLABSystem: '<S6>/SourceBlock'
+    // End of Start for MATLABSystem: '<S7>/SourceBlock'
     // End of SystemInitialize for SubSystem: '<Root>/Subscribe1'
 
     // SystemInitialize for Enabled SubSystem: '<Root>/Enabled Subsystem1'
@@ -723,28 +712,28 @@ void boat_controller_initialize(void)
 
     // End of SystemInitialize for SubSystem: '<Root>/Enabled Subsystem1'
 
-    // SystemInitialize for Atomic SubSystem: '<Root>/Subscribe'
-    // Start for MATLABSystem: '<S5>/SourceBlock'
-    boat_controller_DW.obj_e.matlabCodegenIsDeleted = false;
-    boat_controller_DW.obj_e.isInitialized = 1;
+    // SystemInitialize for Atomic SubSystem: '<Root>/Subscribe2'
+    // Start for MATLABSystem: '<S8>/SourceBlock'
+    boat_controller_DW.obj_i.matlabCodegenIsDeleted = false;
+    boat_controller_DW.obj_i.isInitialized = 1;
     for (i = 0; i < 8; i++) {
       tmp_0[i] = tmp_3[i];
     }
 
     tmp_0[8] = '\x00';
-    Sub_boat_controller_97.createSubscriber(tmp_0, 1);
-    boat_controller_DW.obj_e.isSetupComplete = true;
+    Sub_boat_controller_212.createSubscriber(tmp_0, 1);
+    boat_controller_DW.obj_i.isSetupComplete = true;
 
-    // End of Start for MATLABSystem: '<S5>/SourceBlock'
-    // End of SystemInitialize for SubSystem: '<Root>/Subscribe'
+    // End of Start for MATLABSystem: '<S8>/SourceBlock'
+    // End of SystemInitialize for SubSystem: '<Root>/Subscribe2'
 
     // SystemInitialize for Enabled SubSystem: '<Root>/Enabled Subsystem'
-    // SystemInitialize for Outport: '<S2>/Gps0TrueHeadingRad'
-    boat_controller_B.CastToDouble1 = boat_controller_P.Gps0TrueHeadingRad_Y0;
+    // SystemInitialize for Outport: '<S2>/GpsTrueHeadingRad'
+    boat_controller_B.CastToDouble1 = boat_controller_P.GpsTrueHeadingRad_Y0;
 
-    // SystemInitialize for Outport: '<S2>/WindSensor0DirectionRad'
+    // SystemInitialize for Outport: '<S2>/WindSensor1DirectionRad'
     boat_controller_B.CastToDouble2 =
-      boat_controller_P.WindSensor0DirectionRad_Y0;
+      boat_controller_P.WindSensor1DirectionRad_Y0;
 
     // End of SystemInitialize for SubSystem: '<Root>/Enabled Subsystem'
 
@@ -769,16 +758,16 @@ void boat_controller_initialize(void)
 void boat_controller_terminate(void)
 {
   // Terminate for Atomic SubSystem: '<Root>/Subscribe1'
-  // Terminate for MATLABSystem: '<S6>/SourceBlock'
+  // Terminate for MATLABSystem: '<S7>/SourceBlock'
   matlabCodegenHandle_matlabCod_m(&boat_controller_DW.obj_p);
 
   // End of Terminate for SubSystem: '<Root>/Subscribe1'
 
-  // Terminate for Atomic SubSystem: '<Root>/Subscribe'
-  // Terminate for MATLABSystem: '<S5>/SourceBlock'
-  matlabCodegenHandle_matlabCod_m(&boat_controller_DW.obj_e);
+  // Terminate for Atomic SubSystem: '<Root>/Subscribe2'
+  // Terminate for MATLABSystem: '<S8>/SourceBlock'
+  matlabCodegenHandle_matlabCod_m(&boat_controller_DW.obj_i);
 
-  // End of Terminate for SubSystem: '<Root>/Subscribe'
+  // End of Terminate for SubSystem: '<Root>/Subscribe2'
 
   // Terminate for Atomic SubSystem: '<Root>/Publish'
   // Terminate for MATLABSystem: '<S4>/SinkBlock'

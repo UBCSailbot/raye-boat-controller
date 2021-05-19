@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.55
+// Model version                  : 1.62
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
+// C/C++ source code generated on : Tue May 18 19:32:54 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -27,9 +27,19 @@
 
 // MsgType=sailbot_msg/actuation_angle
 typedef struct {
-  real_T Rudder;
-  real_T Winch;
+  real_T RudderAngleDegrees;
+  real_T AbsSailAngleDegrees;
 } SL_Bus_boat_controller_sailbot_msg_actuation_angle;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_SL_Bus_boat_controller_sailbot_msg_heading_
+#define DEFINED_TYPEDEF_FOR_SL_Bus_boat_controller_sailbot_msg_heading_
+
+// MsgType=sailbot_msg/heading
+typedef struct {
+  real_T HeadingDegrees;
+} SL_Bus_boat_controller_sailbot_msg_heading;
 
 #endif
 
@@ -48,60 +58,50 @@ typedef struct {
 
 // MsgType=sailbot_msg/Sensors
 typedef struct {
-  int32_T BoomAngleSensorAngle;
-  int32_T WindSensor0Speed;
-  int32_T WindSensor0Direction;
-  int32_T WindSensor0Reference;
-  int32_T WindSensor1Speed;
-  int32_T WindSensor1Direction;
-  int32_T WindSensor1Reference;
-  int32_T WindSensor2Speed;
-  int32_T WindSensor2Direction;
-  int32_T WindSensor2Reference;
+  int32_T SailencoderDegrees;
+  real32_T WindSensor1SpeedKnots;
+  int32_T WindSensor1AngleDegrees;
+  real32_T WindSensor2SpeedKnots;
+  int32_T WindSensor2AngleDegrees;
+  real32_T WindSensor3SpeedKnots;
+  int32_T WindSensor3AngleDegrees;
 
-  // PrimitiveROSType=string:IsVarLen=1:VarLenCategory=data:VarLenElem=Gps0Timestamp_SL_Info:TruncateAction=warn 
-  uint8_T Gps0Timestamp[128];
+  // PrimitiveROSType=string:IsVarLen=1:VarLenCategory=data:VarLenElem=GpsCanTimestampUtc_SL_Info:TruncateAction=warn 
+  uint8_T GpsCanTimestampUtc[128];
 
-  // IsVarLen=1:VarLenCategory=length:VarLenElem=Gps0Timestamp
-  SL_Bus_ROSVariableLengthArrayInfo Gps0Timestamp_SL_Info;
-  real_T Gps0Latitude;
-  real_T Gps0Longitude;
-  boolean_T Gps0LatitudeLoc;
-  boolean_T Gps0LongitudeLoc;
-  int32_T Gps0Groundspeed;
-  int32_T Gps0TrackMadeGood;
-  int32_T Gps0TrueHeading;
-  int32_T Gps0MagneticVariation;
-  boolean_T Gps0MagneticVariationSense;
+  // IsVarLen=1:VarLenCategory=length:VarLenElem=GpsCanTimestampUtc
+  SL_Bus_ROSVariableLengthArrayInfo GpsCanTimestampUtc_SL_Info;
+  real32_T GpsCanLatitudeDegreeMinutes;
+  real32_T GpsCanLongitudeDegreeMinutes;
+  real32_T GpsCanGroundspeedKnots;
+  real32_T GpsCanTrackMadeGoodDegrees;
+  real32_T GpsCanTrueHeadingDegrees;
+  real32_T GpsCanMagneticVariationDegrees;
+  boolean_T GpsCanState;
 
-  // PrimitiveROSType=string:IsVarLen=1:VarLenCategory=data:VarLenElem=Gps1Timestamp_SL_Info:TruncateAction=warn 
-  uint8_T Gps1Timestamp[128];
+  // PrimitiveROSType=string:IsVarLen=1:VarLenCategory=data:VarLenElem=GpsAisTimestampUtc_SL_Info:TruncateAction=warn 
+  uint8_T GpsAisTimestampUtc[128];
 
-  // IsVarLen=1:VarLenCategory=length:VarLenElem=Gps1Timestamp
-  SL_Bus_ROSVariableLengthArrayInfo Gps1Timestamp_SL_Info;
-  real_T Gps1Latitude;
-  real_T Gps1Longitude;
-  boolean_T Gps1LatitudeLoc;
-  boolean_T Gps1LongitudeLoc;
-  int32_T Gps1Groundspeed;
-  int32_T Gps1TrackMadeGood;
-  int32_T Gps1TrueHeading;
-  int32_T Gps1MagneticVariation;
-  boolean_T Gps1MagneticVariationSense;
-  int32_T AccelerometerXAxisAcceleration;
-  int32_T AccelerometerYAxisAcceleration;
-  int32_T AccelerometerZAxisAcceleration;
+  // IsVarLen=1:VarLenCategory=length:VarLenElem=GpsAisTimestampUtc
+  SL_Bus_ROSVariableLengthArrayInfo GpsAisTimestampUtc_SL_Info;
+  real32_T GpsAisLatitudeDegreeMinutes;
+  real32_T GpsAisLongitudeDegreeMinutes;
+  real32_T GpsAisGroundspeedKnots;
+  real32_T GpsAisTrackMadeGoodDegrees;
+  real32_T GpsAisTrueHeadingDegrees;
+  real32_T GpsAisMagneticVariationDegrees;
+  boolean_T GpsAisState;
+  int32_T WinchMainAngleDegrees;
+  int32_T WinchJibAngleDegrees;
+  real32_T RudderPortAngleDegrees;
+  real32_T RudderStbdAngleDegrees;
+  real32_T AccelerometerXForceMillig;
+  real32_T AccelerometerYForceMillig;
+  real32_T AccelerometerZForceMillig;
+  real32_T GyroscopeXVelocityMillidegreesps;
+  real32_T GyroscopeYVelocityMillidegreesps;
+  real32_T GyroscopeZVelocityMillidegreesps;
 } SL_Bus_boat_controller_sailbot_msg_Sensors;
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_SL_Bus_boat_controller_sailbot_msg_heading_
-#define DEFINED_TYPEDEF_FOR_SL_Bus_boat_controller_sailbot_msg_heading_
-
-// MsgType=sailbot_msg/heading
-typedef struct {
-  real_T HeadingDegrees;
-} SL_Bus_boat_controller_sailbot_msg_heading;
 
 #endif
 

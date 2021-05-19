@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.55
+// Model version                  : 1.62
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
+// C/C++ source code generated on : Tue May 18 19:32:54 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -87,35 +87,35 @@ typedef struct {
   real_T b[101];
   SL_Bus_boat_controller_sailbot_msg_Sensors b_varargout_2;
   SL_Bus_boat_controller_sailbot_msg_actuation_angle BusAssignment;// '<Root>/Bus Assignment' 
-  real_T rudderanglesaturation;        // '<S7>/rudder angle saturation'
-  real_T error;                        // '<S7>/MATLAB Function'
-  real_T Gain1;                        // '<S10>/Gain1'
+  real_T rudderanglesaturation;        // '<S9>/rudder angle saturation'
+  real_T error;                        // '<S9>/MATLAB Function'
+  real_T Gain1;                        // '<S12>/Gain1'
   real_T CastToDouble1;                // '<S2>/Cast To Double1'
   real_T CastToDouble2;                // '<S2>/Cast To Double2'
   real_T q;
-  real_T sailAngle;                    // '<S7>/MATLAB Function2'
+  real_T sailAngle;                    // '<S9>/MATLAB Function2'
   SL_Bus_boat_controller_sailbot_msg_heading b_varargout_2_m;
 } B_boat_controller_T;
 
 // Block states (default storage) for system '<Root>'
 typedef struct {
   ros_slros_internal_block_Publ_T obj; // '<S4>/SinkBlock'
-  ros_slros_internal_block_Subs_T obj_p;// '<S6>/SourceBlock'
-  ros_slros_internal_block_Subs_T obj_e;// '<S5>/SourceBlock'
+  ros_slros_internal_block_Subs_T obj_i;// '<S8>/SourceBlock'
+  ros_slros_internal_block_Subs_T obj_p;// '<S7>/SourceBlock'
   struct {
     void *LoggedData;
-  } ToWorkspace_PWORK;                 // '<S7>/To Workspace'
+  } ToWorkspace_PWORK;                 // '<S9>/To Workspace'
 
   struct {
     void *LoggedData;
-  } delta_rt_PWORK;                    // '<S7>/delta_r(t)'
+  } delta_rt_PWORK;                    // '<S9>/delta_r(t)'
 
   struct {
     void *LoggedData;
-  } headingErrorRadianst_PWORK;        // '<S7>/headingErrorRadians (t)'
+  } headingErrorRadianst_PWORK;        // '<S9>/headingErrorRadians (t)'
 
-  int8_T EnabledSubsystem_SubsysRanBC; // '<S6>/Enabled Subsystem'
-  int8_T EnabledSubsystem_SubsysRanBC_k;// '<S5>/Enabled Subsystem'
+  int8_T EnabledSubsystem_SubsysRanBC; // '<S8>/Enabled Subsystem'
+  int8_T EnabledSubsystem_SubsysRanBC_b;// '<S7>/Enabled Subsystem'
   int8_T EnabledSubsystem1_SubsysRanBC;// '<Root>/Enabled Subsystem1'
   int8_T EnabledSubsystem_SubsysRanBC_i;// '<Root>/Enabled Subsystem'
 } DW_boat_controller_T;
@@ -123,45 +123,45 @@ typedef struct {
 // Parameters (default storage)
 struct P_boat_controller_T_ {
   real_T PIDController_P;              // Mask Parameter: PIDController_P
-                                          //  Referenced by: '<S54>/Proportional Gain'
+                                          //  Referenced by: '<S56>/Proportional Gain'
 
   SL_Bus_boat_controller_sailbot_msg_Sensors Out1_Y0;// Computed Parameter: Out1_Y0
-                                                        //  Referenced by: '<S11>/Out1'
+                                                        //  Referenced by: '<S14>/Out1'
 
   SL_Bus_boat_controller_sailbot_msg_Sensors Constant_Value;// Computed Parameter: Constant_Value
-                                                               //  Referenced by: '<S5>/Constant'
+                                                               //  Referenced by: '<S8>/Constant'
 
   SL_Bus_boat_controller_sailbot_msg_actuation_angle Constant_Value_f;// Computed Parameter: Constant_Value_f
                                                                       //  Referenced by: '<S1>/Constant'
 
   SL_Bus_boat_controller_sailbot_msg_heading Out1_Y0_f;// Computed Parameter: Out1_Y0_f
-                                                          //  Referenced by: '<S12>/Out1'
+                                                          //  Referenced by: '<S13>/Out1'
 
   SL_Bus_boat_controller_sailbot_msg_heading Constant_Value_m;// Computed Parameter: Constant_Value_m
-                                                                 //  Referenced by: '<S6>/Constant'
+                                                                 //  Referenced by: '<S7>/Constant'
 
-  real_T WindSensor0SpeedMetersPerSec_Y0;
-                          // Computed Parameter: WindSensor0SpeedMetersPerSec_Y0
-                             //  Referenced by: '<S2>/WindSensor0SpeedMetersPerSec'
+  real_T WindSensor1SpeedMetersPerSec_Y0;
+                          // Computed Parameter: WindSensor1SpeedMetersPerSec_Y0
+                             //  Referenced by: '<S2>/WindSensor1SpeedMetersPerSec'
 
-  real_T Gps0TrueHeadingRad_Y0;     // Computed Parameter: Gps0TrueHeadingRad_Y0
-                                       //  Referenced by: '<S2>/Gps0TrueHeadingRad'
+  real_T GpsTrueHeadingRad_Y0;       // Computed Parameter: GpsTrueHeadingRad_Y0
+                                        //  Referenced by: '<S2>/GpsTrueHeadingRad'
 
-  real_T WindSensor0DirectionRad_Y0;
-                               // Computed Parameter: WindSensor0DirectionRad_Y0
-                                  //  Referenced by: '<S2>/WindSensor0DirectionRad'
+  real_T WindSensor1DirectionRad_Y0;
+                               // Computed Parameter: WindSensor1DirectionRad_Y0
+                                  //  Referenced by: '<S2>/WindSensor1DirectionRad'
 
   real_T desiredHeadingRad_Y0;       // Computed Parameter: desiredHeadingRad_Y0
                                         //  Referenced by: '<S3>/desiredHeadingRad'
 
   real_T Gain1_Gain;                   // Expression: pi/180
-                                          //  Referenced by: '<S10>/Gain1'
+                                          //  Referenced by: '<S12>/Gain1'
 
   real_T rudderanglesaturation_UpperSat;// Expression: pi/3
-                                           //  Referenced by: '<S7>/rudder angle saturation'
+                                           //  Referenced by: '<S9>/rudder angle saturation'
 
   real_T rudderanglesaturation_LowerSat;// Expression: -pi/3
-                                           //  Referenced by: '<S7>/rudder angle saturation'
+                                           //  Referenced by: '<S9>/rudder angle saturation'
 
   real_T Saturation_UpperSat;          // Expression: pi/3
                                           //  Referenced by: '<Root>/Saturation'
@@ -169,17 +169,23 @@ struct P_boat_controller_T_ {
   real_T Saturation_LowerSat;          // Expression: -pi/3
                                           //  Referenced by: '<Root>/Saturation'
 
+  real_T Gain_Gain;                    // Expression: 180/pi
+                                          //  Referenced by: '<S6>/Gain'
+
   real_T Saturation1_UpperSat;         // Expression: pi/2
                                           //  Referenced by: '<Root>/Saturation1'
 
   real_T Saturation1_LowerSat;         // Expression: 0
                                           //  Referenced by: '<Root>/Saturation1'
 
-  int32_T Gain1_Gain_l;                // Computed Parameter: Gain1_Gain_l
-                                          //  Referenced by: '<S9>/Gain1'
+  real_T Gain_Gain_b;                  // Expression: 180/pi
+                                          //  Referenced by: '<S5>/Gain'
 
   int32_T Gain1_Gain_n;                // Computed Parameter: Gain1_Gain_n
-                                          //  Referenced by: '<S8>/Gain1'
+                                          //  Referenced by: '<S10>/Gain1'
+
+  real32_T Gain1_Gain_l;               // Computed Parameter: Gain1_Gain_l
+                                          //  Referenced by: '<S11>/Gain1'
 
 };
 
@@ -291,11 +297,11 @@ extern "C" {
 //
 //  Block '<S2>/Cast To Double3' : Unused code path elimination
 //  Block '<S2>/Knots2MertersPerSec' : Unused code path elimination
-//  Block '<S13>/Assertion' : Unused code path elimination
-//  Block '<S13>/conjunction' : Unused code path elimination
-//  Block '<S13>/max_relop' : Unused code path elimination
-//  Block '<S13>/min_relop' : Unused code path elimination
-//  Block '<S17>/FromWs' : Unused code path elimination
+//  Block '<S15>/Assertion' : Unused code path elimination
+//  Block '<S15>/conjunction' : Unused code path elimination
+//  Block '<S15>/max_relop' : Unused code path elimination
+//  Block '<S15>/min_relop' : Unused code path elimination
+//  Block '<S19>/FromWs' : Unused code path elimination
 
 
 //-
@@ -317,67 +323,69 @@ extern "C" {
 //  '<S2>'   : 'boat_controller/Enabled Subsystem'
 //  '<S3>'   : 'boat_controller/Enabled Subsystem1'
 //  '<S4>'   : 'boat_controller/Publish'
-//  '<S5>'   : 'boat_controller/Subscribe'
-//  '<S6>'   : 'boat_controller/Subscribe1'
-//  '<S7>'   : 'boat_controller/controller using apparent wind angle'
-//  '<S8>'   : 'boat_controller/Enabled Subsystem/Degrees to Radians'
-//  '<S9>'   : 'boat_controller/Enabled Subsystem/Degrees to Radians1'
-//  '<S10>'  : 'boat_controller/Enabled Subsystem1/Degrees to Radians'
-//  '<S11>'  : 'boat_controller/Subscribe/Enabled Subsystem'
-//  '<S12>'  : 'boat_controller/Subscribe1/Enabled Subsystem'
-//  '<S13>'  : 'boat_controller/controller using apparent wind angle/Check  Dynamic Range'
-//  '<S14>'  : 'boat_controller/controller using apparent wind angle/MATLAB Function'
-//  '<S15>'  : 'boat_controller/controller using apparent wind angle/MATLAB Function2'
-//  '<S16>'  : 'boat_controller/controller using apparent wind angle/PID Controller'
-//  '<S17>'  : 'boat_controller/controller using apparent wind angle/Signal Builder'
-//  '<S18>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Anti-windup'
-//  '<S19>'  : 'boat_controller/controller using apparent wind angle/PID Controller/D Gain'
-//  '<S20>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter'
-//  '<S21>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter ICs'
-//  '<S22>'  : 'boat_controller/controller using apparent wind angle/PID Controller/I Gain'
-//  '<S23>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain'
-//  '<S24>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain Fdbk'
-//  '<S25>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator'
-//  '<S26>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator ICs'
-//  '<S27>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Copy'
-//  '<S28>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Gain'
-//  '<S29>'  : 'boat_controller/controller using apparent wind angle/PID Controller/P Copy'
-//  '<S30>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Parallel P Gain'
-//  '<S31>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Reset Signal'
-//  '<S32>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation'
-//  '<S33>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation Fdbk'
-//  '<S34>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum'
-//  '<S35>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum Fdbk'
-//  '<S36>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode'
-//  '<S37>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode Sum'
-//  '<S38>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Integral'
-//  '<S39>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Ngain'
-//  '<S40>'  : 'boat_controller/controller using apparent wind angle/PID Controller/postSat Signal'
-//  '<S41>'  : 'boat_controller/controller using apparent wind angle/PID Controller/preSat Signal'
-//  '<S42>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Anti-windup/Disabled'
-//  '<S43>'  : 'boat_controller/controller using apparent wind angle/PID Controller/D Gain/Disabled'
-//  '<S44>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter/Disabled'
-//  '<S45>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter ICs/Disabled'
-//  '<S46>'  : 'boat_controller/controller using apparent wind angle/PID Controller/I Gain/Disabled'
-//  '<S47>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain/Passthrough'
-//  '<S48>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain Fdbk/Disabled'
-//  '<S49>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator/Disabled'
-//  '<S50>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator ICs/Disabled'
-//  '<S51>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Copy/Disabled wSignal Specification'
-//  '<S52>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Gain/Disabled'
-//  '<S53>'  : 'boat_controller/controller using apparent wind angle/PID Controller/P Copy/Disabled'
-//  '<S54>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Parallel P Gain/Internal Parameters'
-//  '<S55>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Reset Signal/Disabled'
-//  '<S56>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation/Passthrough'
-//  '<S57>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation Fdbk/Disabled'
-//  '<S58>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum/Passthrough_P'
-//  '<S59>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum Fdbk/Disabled'
-//  '<S60>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode/Disabled'
-//  '<S61>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode Sum/Passthrough'
-//  '<S62>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Integral/Disabled wSignal Specification'
-//  '<S63>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Ngain/Passthrough'
-//  '<S64>'  : 'boat_controller/controller using apparent wind angle/PID Controller/postSat Signal/Forward_Path'
-//  '<S65>'  : 'boat_controller/controller using apparent wind angle/PID Controller/preSat Signal/Forward_Path'
+//  '<S5>'   : 'boat_controller/Radians to Degrees1'
+//  '<S6>'   : 'boat_controller/Radians to Degrees2'
+//  '<S7>'   : 'boat_controller/Subscribe1'
+//  '<S8>'   : 'boat_controller/Subscribe2'
+//  '<S9>'   : 'boat_controller/controller using apparent wind angle'
+//  '<S10>'  : 'boat_controller/Enabled Subsystem/Degrees to Radians'
+//  '<S11>'  : 'boat_controller/Enabled Subsystem/Degrees to Radians1'
+//  '<S12>'  : 'boat_controller/Enabled Subsystem1/Degrees to Radians'
+//  '<S13>'  : 'boat_controller/Subscribe1/Enabled Subsystem'
+//  '<S14>'  : 'boat_controller/Subscribe2/Enabled Subsystem'
+//  '<S15>'  : 'boat_controller/controller using apparent wind angle/Check  Dynamic Range'
+//  '<S16>'  : 'boat_controller/controller using apparent wind angle/MATLAB Function'
+//  '<S17>'  : 'boat_controller/controller using apparent wind angle/MATLAB Function2'
+//  '<S18>'  : 'boat_controller/controller using apparent wind angle/PID Controller'
+//  '<S19>'  : 'boat_controller/controller using apparent wind angle/Signal Builder'
+//  '<S20>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Anti-windup'
+//  '<S21>'  : 'boat_controller/controller using apparent wind angle/PID Controller/D Gain'
+//  '<S22>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter'
+//  '<S23>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter ICs'
+//  '<S24>'  : 'boat_controller/controller using apparent wind angle/PID Controller/I Gain'
+//  '<S25>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain'
+//  '<S26>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain Fdbk'
+//  '<S27>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator'
+//  '<S28>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator ICs'
+//  '<S29>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Copy'
+//  '<S30>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Gain'
+//  '<S31>'  : 'boat_controller/controller using apparent wind angle/PID Controller/P Copy'
+//  '<S32>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Parallel P Gain'
+//  '<S33>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Reset Signal'
+//  '<S34>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation'
+//  '<S35>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation Fdbk'
+//  '<S36>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum'
+//  '<S37>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum Fdbk'
+//  '<S38>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode'
+//  '<S39>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode Sum'
+//  '<S40>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Integral'
+//  '<S41>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Ngain'
+//  '<S42>'  : 'boat_controller/controller using apparent wind angle/PID Controller/postSat Signal'
+//  '<S43>'  : 'boat_controller/controller using apparent wind angle/PID Controller/preSat Signal'
+//  '<S44>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Anti-windup/Disabled'
+//  '<S45>'  : 'boat_controller/controller using apparent wind angle/PID Controller/D Gain/Disabled'
+//  '<S46>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter/Disabled'
+//  '<S47>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Filter ICs/Disabled'
+//  '<S48>'  : 'boat_controller/controller using apparent wind angle/PID Controller/I Gain/Disabled'
+//  '<S49>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain/Passthrough'
+//  '<S50>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Ideal P Gain Fdbk/Disabled'
+//  '<S51>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator/Disabled'
+//  '<S52>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Integrator ICs/Disabled'
+//  '<S53>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Copy/Disabled wSignal Specification'
+//  '<S54>'  : 'boat_controller/controller using apparent wind angle/PID Controller/N Gain/Disabled'
+//  '<S55>'  : 'boat_controller/controller using apparent wind angle/PID Controller/P Copy/Disabled'
+//  '<S56>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Parallel P Gain/Internal Parameters'
+//  '<S57>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Reset Signal/Disabled'
+//  '<S58>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation/Passthrough'
+//  '<S59>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Saturation Fdbk/Disabled'
+//  '<S60>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum/Passthrough_P'
+//  '<S61>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Sum Fdbk/Disabled'
+//  '<S62>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode/Disabled'
+//  '<S63>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tracking Mode Sum/Passthrough'
+//  '<S64>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Integral/Disabled wSignal Specification'
+//  '<S65>'  : 'boat_controller/controller using apparent wind angle/PID Controller/Tsamp - Ngain/Passthrough'
+//  '<S66>'  : 'boat_controller/controller using apparent wind angle/PID Controller/postSat Signal/Forward_Path'
+//  '<S67>'  : 'boat_controller/controller using apparent wind angle/PID Controller/preSat Signal/Forward_Path'
 
 #endif                                 // RTW_HEADER_boat_controller_h_
 

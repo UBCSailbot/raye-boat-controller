@@ -7,78 +7,78 @@ void convertFromBus(sailbot_msg::Sensors* msgPtr, SL_Bus_boat_controller_sailbot
 {
   const std::string rosMessageType("sailbot_msg/Sensors");
 
-  msgPtr->accelerometer_x_axis_acceleration =  busPtr->AccelerometerXAxisAcceleration;
-  msgPtr->accelerometer_y_axis_acceleration =  busPtr->AccelerometerYAxisAcceleration;
-  msgPtr->accelerometer_z_axis_acceleration =  busPtr->AccelerometerZAxisAcceleration;
-  msgPtr->boom_angle_sensor_angle =  busPtr->BoomAngleSensorAngle;
-  msgPtr->gps_0_groundspeed =  busPtr->Gps0Groundspeed;
-  msgPtr->gps_0_latitude =  busPtr->Gps0Latitude;
-  msgPtr->gps_0_latitude_loc =  busPtr->Gps0LatitudeLoc;
-  msgPtr->gps_0_longitude =  busPtr->Gps0Longitude;
-  msgPtr->gps_0_longitude_loc =  busPtr->Gps0LongitudeLoc;
-  msgPtr->gps_0_magnetic_variation =  busPtr->Gps0MagneticVariation;
-  msgPtr->gps_0_magnetic_variation_sense =  busPtr->Gps0MagneticVariationSense;
-  convertFromBusVariablePrimitiveArray(msgPtr->gps_0_timestamp, busPtr->Gps0Timestamp, busPtr->Gps0Timestamp_SL_Info);
-  msgPtr->gps_0_track_made_good =  busPtr->Gps0TrackMadeGood;
-  msgPtr->gps_0_true_heading =  busPtr->Gps0TrueHeading;
-  msgPtr->gps_1_groundspeed =  busPtr->Gps1Groundspeed;
-  msgPtr->gps_1_latitude =  busPtr->Gps1Latitude;
-  msgPtr->gps_1_latitude_loc =  busPtr->Gps1LatitudeLoc;
-  msgPtr->gps_1_longitude =  busPtr->Gps1Longitude;
-  msgPtr->gps_1_longitude_loc =  busPtr->Gps1LongitudeLoc;
-  msgPtr->gps_1_magnetic_variation =  busPtr->Gps1MagneticVariation;
-  msgPtr->gps_1_magnetic_variation_sense =  busPtr->Gps1MagneticVariationSense;
-  convertFromBusVariablePrimitiveArray(msgPtr->gps_1_timestamp, busPtr->Gps1Timestamp, busPtr->Gps1Timestamp_SL_Info);
-  msgPtr->gps_1_track_made_good =  busPtr->Gps1TrackMadeGood;
-  msgPtr->gps_1_true_heading =  busPtr->Gps1TrueHeading;
-  msgPtr->wind_sensor_0_direction =  busPtr->WindSensor0Direction;
-  msgPtr->wind_sensor_0_reference =  busPtr->WindSensor0Reference;
-  msgPtr->wind_sensor_0_speed =  busPtr->WindSensor0Speed;
-  msgPtr->wind_sensor_1_direction =  busPtr->WindSensor1Direction;
-  msgPtr->wind_sensor_1_reference =  busPtr->WindSensor1Reference;
-  msgPtr->wind_sensor_1_speed =  busPtr->WindSensor1Speed;
-  msgPtr->wind_sensor_2_direction =  busPtr->WindSensor2Direction;
-  msgPtr->wind_sensor_2_reference =  busPtr->WindSensor2Reference;
-  msgPtr->wind_sensor_2_speed =  busPtr->WindSensor2Speed;
+  msgPtr->accelerometer_x_force_millig =  busPtr->AccelerometerXForceMillig;
+  msgPtr->accelerometer_y_force_millig =  busPtr->AccelerometerYForceMillig;
+  msgPtr->accelerometer_z_force_millig =  busPtr->AccelerometerZForceMillig;
+  msgPtr->gps_ais_groundspeed_knots =  busPtr->GpsAisGroundspeedKnots;
+  msgPtr->gps_ais_latitude_degreeMinutes =  busPtr->GpsAisLatitudeDegreeMinutes;
+  msgPtr->gps_ais_longitude_degreeMinutes =  busPtr->GpsAisLongitudeDegreeMinutes;
+  msgPtr->gps_ais_magnetic_variation_degrees =  busPtr->GpsAisMagneticVariationDegrees;
+  msgPtr->gps_ais_state =  busPtr->GpsAisState;
+  convertFromBusVariablePrimitiveArray(msgPtr->gps_ais_timestamp_utc, busPtr->GpsAisTimestampUtc, busPtr->GpsAisTimestampUtc_SL_Info);
+  msgPtr->gps_ais_track_made_good_degrees =  busPtr->GpsAisTrackMadeGoodDegrees;
+  msgPtr->gps_ais_true_heading_degrees =  busPtr->GpsAisTrueHeadingDegrees;
+  msgPtr->gps_can_groundspeed_knots =  busPtr->GpsCanGroundspeedKnots;
+  msgPtr->gps_can_latitude_degreeMinutes =  busPtr->GpsCanLatitudeDegreeMinutes;
+  msgPtr->gps_can_longitude_degreeMinutes =  busPtr->GpsCanLongitudeDegreeMinutes;
+  msgPtr->gps_can_magnetic_variation_degrees =  busPtr->GpsCanMagneticVariationDegrees;
+  msgPtr->gps_can_state =  busPtr->GpsCanState;
+  convertFromBusVariablePrimitiveArray(msgPtr->gps_can_timestamp_utc, busPtr->GpsCanTimestampUtc, busPtr->GpsCanTimestampUtc_SL_Info);
+  msgPtr->gps_can_track_made_good_degrees =  busPtr->GpsCanTrackMadeGoodDegrees;
+  msgPtr->gps_can_true_heading_degrees =  busPtr->GpsCanTrueHeadingDegrees;
+  msgPtr->gyroscope_x_velocity_millidegreesps =  busPtr->GyroscopeXVelocityMillidegreesps;
+  msgPtr->gyroscope_y_velocity_millidegreesps =  busPtr->GyroscopeYVelocityMillidegreesps;
+  msgPtr->gyroscope_z_velocity_millidegreesps =  busPtr->GyroscopeZVelocityMillidegreesps;
+  msgPtr->rudder_port_angle_degrees =  busPtr->RudderPortAngleDegrees;
+  msgPtr->rudder_stbd_angle_degrees =  busPtr->RudderStbdAngleDegrees;
+  msgPtr->sailencoder_degrees =  busPtr->SailencoderDegrees;
+  msgPtr->winch_jib_angle_degrees =  busPtr->WinchJibAngleDegrees;
+  msgPtr->winch_main_angle_degrees =  busPtr->WinchMainAngleDegrees;
+  msgPtr->wind_sensor_1_angle_degrees =  busPtr->WindSensor1AngleDegrees;
+  msgPtr->wind_sensor_1_speed_knots =  busPtr->WindSensor1SpeedKnots;
+  msgPtr->wind_sensor_2_angle_degrees =  busPtr->WindSensor2AngleDegrees;
+  msgPtr->wind_sensor_2_speed_knots =  busPtr->WindSensor2SpeedKnots;
+  msgPtr->wind_sensor_3_angle_degrees =  busPtr->WindSensor3AngleDegrees;
+  msgPtr->wind_sensor_3_speed_knots =  busPtr->WindSensor3SpeedKnots;
 }
 
 void convertToBus(SL_Bus_boat_controller_sailbot_msg_Sensors* busPtr, sailbot_msg::Sensors const* msgPtr)
 {
   const std::string rosMessageType("sailbot_msg/Sensors");
 
-  busPtr->AccelerometerXAxisAcceleration =  msgPtr->accelerometer_x_axis_acceleration;
-  busPtr->AccelerometerYAxisAcceleration =  msgPtr->accelerometer_y_axis_acceleration;
-  busPtr->AccelerometerZAxisAcceleration =  msgPtr->accelerometer_z_axis_acceleration;
-  busPtr->BoomAngleSensorAngle =  msgPtr->boom_angle_sensor_angle;
-  busPtr->Gps0Groundspeed =  msgPtr->gps_0_groundspeed;
-  busPtr->Gps0Latitude =  msgPtr->gps_0_latitude;
-  busPtr->Gps0LatitudeLoc =  msgPtr->gps_0_latitude_loc;
-  busPtr->Gps0Longitude =  msgPtr->gps_0_longitude;
-  busPtr->Gps0LongitudeLoc =  msgPtr->gps_0_longitude_loc;
-  busPtr->Gps0MagneticVariation =  msgPtr->gps_0_magnetic_variation;
-  busPtr->Gps0MagneticVariationSense =  msgPtr->gps_0_magnetic_variation_sense;
-  convertToBusVariablePrimitiveArray(busPtr->Gps0Timestamp, busPtr->Gps0Timestamp_SL_Info, msgPtr->gps_0_timestamp, slros::EnabledWarning(rosMessageType, "gps_0_timestamp"));
-  busPtr->Gps0TrackMadeGood =  msgPtr->gps_0_track_made_good;
-  busPtr->Gps0TrueHeading =  msgPtr->gps_0_true_heading;
-  busPtr->Gps1Groundspeed =  msgPtr->gps_1_groundspeed;
-  busPtr->Gps1Latitude =  msgPtr->gps_1_latitude;
-  busPtr->Gps1LatitudeLoc =  msgPtr->gps_1_latitude_loc;
-  busPtr->Gps1Longitude =  msgPtr->gps_1_longitude;
-  busPtr->Gps1LongitudeLoc =  msgPtr->gps_1_longitude_loc;
-  busPtr->Gps1MagneticVariation =  msgPtr->gps_1_magnetic_variation;
-  busPtr->Gps1MagneticVariationSense =  msgPtr->gps_1_magnetic_variation_sense;
-  convertToBusVariablePrimitiveArray(busPtr->Gps1Timestamp, busPtr->Gps1Timestamp_SL_Info, msgPtr->gps_1_timestamp, slros::EnabledWarning(rosMessageType, "gps_1_timestamp"));
-  busPtr->Gps1TrackMadeGood =  msgPtr->gps_1_track_made_good;
-  busPtr->Gps1TrueHeading =  msgPtr->gps_1_true_heading;
-  busPtr->WindSensor0Direction =  msgPtr->wind_sensor_0_direction;
-  busPtr->WindSensor0Reference =  msgPtr->wind_sensor_0_reference;
-  busPtr->WindSensor0Speed =  msgPtr->wind_sensor_0_speed;
-  busPtr->WindSensor1Direction =  msgPtr->wind_sensor_1_direction;
-  busPtr->WindSensor1Reference =  msgPtr->wind_sensor_1_reference;
-  busPtr->WindSensor1Speed =  msgPtr->wind_sensor_1_speed;
-  busPtr->WindSensor2Direction =  msgPtr->wind_sensor_2_direction;
-  busPtr->WindSensor2Reference =  msgPtr->wind_sensor_2_reference;
-  busPtr->WindSensor2Speed =  msgPtr->wind_sensor_2_speed;
+  busPtr->AccelerometerXForceMillig =  msgPtr->accelerometer_x_force_millig;
+  busPtr->AccelerometerYForceMillig =  msgPtr->accelerometer_y_force_millig;
+  busPtr->AccelerometerZForceMillig =  msgPtr->accelerometer_z_force_millig;
+  busPtr->GpsAisGroundspeedKnots =  msgPtr->gps_ais_groundspeed_knots;
+  busPtr->GpsAisLatitudeDegreeMinutes =  msgPtr->gps_ais_latitude_degreeMinutes;
+  busPtr->GpsAisLongitudeDegreeMinutes =  msgPtr->gps_ais_longitude_degreeMinutes;
+  busPtr->GpsAisMagneticVariationDegrees =  msgPtr->gps_ais_magnetic_variation_degrees;
+  busPtr->GpsAisState =  msgPtr->gps_ais_state;
+  convertToBusVariablePrimitiveArray(busPtr->GpsAisTimestampUtc, busPtr->GpsAisTimestampUtc_SL_Info, msgPtr->gps_ais_timestamp_utc, slros::EnabledWarning(rosMessageType, "gps_ais_timestamp_utc"));
+  busPtr->GpsAisTrackMadeGoodDegrees =  msgPtr->gps_ais_track_made_good_degrees;
+  busPtr->GpsAisTrueHeadingDegrees =  msgPtr->gps_ais_true_heading_degrees;
+  busPtr->GpsCanGroundspeedKnots =  msgPtr->gps_can_groundspeed_knots;
+  busPtr->GpsCanLatitudeDegreeMinutes =  msgPtr->gps_can_latitude_degreeMinutes;
+  busPtr->GpsCanLongitudeDegreeMinutes =  msgPtr->gps_can_longitude_degreeMinutes;
+  busPtr->GpsCanMagneticVariationDegrees =  msgPtr->gps_can_magnetic_variation_degrees;
+  busPtr->GpsCanState =  msgPtr->gps_can_state;
+  convertToBusVariablePrimitiveArray(busPtr->GpsCanTimestampUtc, busPtr->GpsCanTimestampUtc_SL_Info, msgPtr->gps_can_timestamp_utc, slros::EnabledWarning(rosMessageType, "gps_can_timestamp_utc"));
+  busPtr->GpsCanTrackMadeGoodDegrees =  msgPtr->gps_can_track_made_good_degrees;
+  busPtr->GpsCanTrueHeadingDegrees =  msgPtr->gps_can_true_heading_degrees;
+  busPtr->GyroscopeXVelocityMillidegreesps =  msgPtr->gyroscope_x_velocity_millidegreesps;
+  busPtr->GyroscopeYVelocityMillidegreesps =  msgPtr->gyroscope_y_velocity_millidegreesps;
+  busPtr->GyroscopeZVelocityMillidegreesps =  msgPtr->gyroscope_z_velocity_millidegreesps;
+  busPtr->RudderPortAngleDegrees =  msgPtr->rudder_port_angle_degrees;
+  busPtr->RudderStbdAngleDegrees =  msgPtr->rudder_stbd_angle_degrees;
+  busPtr->SailencoderDegrees =  msgPtr->sailencoder_degrees;
+  busPtr->WinchJibAngleDegrees =  msgPtr->winch_jib_angle_degrees;
+  busPtr->WinchMainAngleDegrees =  msgPtr->winch_main_angle_degrees;
+  busPtr->WindSensor1AngleDegrees =  msgPtr->wind_sensor_1_angle_degrees;
+  busPtr->WindSensor1SpeedKnots =  msgPtr->wind_sensor_1_speed_knots;
+  busPtr->WindSensor2AngleDegrees =  msgPtr->wind_sensor_2_angle_degrees;
+  busPtr->WindSensor2SpeedKnots =  msgPtr->wind_sensor_2_speed_knots;
+  busPtr->WindSensor3AngleDegrees =  msgPtr->wind_sensor_3_angle_degrees;
+  busPtr->WindSensor3SpeedKnots =  msgPtr->wind_sensor_3_speed_knots;
 }
 
 
@@ -88,16 +88,16 @@ void convertFromBus(sailbot_msg::actuation_angle* msgPtr, SL_Bus_boat_controller
 {
   const std::string rosMessageType("sailbot_msg/actuation_angle");
 
-  msgPtr->rudder =  busPtr->Rudder;
-  msgPtr->winch =  busPtr->Winch;
+  msgPtr->abs_sail_angle_degrees =  busPtr->AbsSailAngleDegrees;
+  msgPtr->rudder_angle_degrees =  busPtr->RudderAngleDegrees;
 }
 
 void convertToBus(SL_Bus_boat_controller_sailbot_msg_actuation_angle* busPtr, sailbot_msg::actuation_angle const* msgPtr)
 {
   const std::string rosMessageType("sailbot_msg/actuation_angle");
 
-  busPtr->Rudder =  msgPtr->rudder;
-  busPtr->Winch =  msgPtr->winch;
+  busPtr->AbsSailAngleDegrees =  msgPtr->abs_sail_angle_degrees;
+  busPtr->RudderAngleDegrees =  msgPtr->rudder_angle_degrees;
 }
 
 

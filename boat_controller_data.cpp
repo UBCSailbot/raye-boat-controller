@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.55
+// Model version                  : 1.62
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Fri Mar 19 13:01:20 2021
+// C/C++ source code generated on : Tue May 18 19:32:54 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -22,24 +22,21 @@
 // Block parameters (default storage)
 P_boat_controller_T boat_controller_P = {
   // Mask Parameter: PIDController_P
-  //  Referenced by: '<S54>/Proportional Gain'
+  //  Referenced by: '<S56>/Proportional Gain'
 
   0.5,
 
   // Computed Parameter: Out1_Y0
-  //  Referenced by: '<S11>/Out1'
+  //  Referenced by: '<S14>/Out1'
 
   {
-    0,                                 // BoomAngleSensorAngle
-    0,                                 // WindSensor0Speed
-    0,                                 // WindSensor0Direction
-    0,                                 // WindSensor0Reference
-    0,                                 // WindSensor1Speed
-    0,                                 // WindSensor1Direction
-    0,                                 // WindSensor1Reference
-    0,                                 // WindSensor2Speed
-    0,                                 // WindSensor2Direction
-    0,                                 // WindSensor2Reference
+    0,                                 // SailencoderDegrees
+    0.0F,                              // WindSensor1SpeedKnots
+    0,                                 // WindSensor1AngleDegrees
+    0.0F,                              // WindSensor2SpeedKnots
+    0,                                 // WindSensor2AngleDegrees
+    0.0F,                              // WindSensor3SpeedKnots
+    0,                                 // WindSensor3AngleDegrees
 
     {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
@@ -49,21 +46,19 @@ P_boat_controller_T boat_controller_P = {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U }
-    ,                                  // Gps0Timestamp
+    ,                                  // GpsCanTimestampUtc
 
     {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
-    },                                 // Gps0Timestamp_SL_Info
-    0.0,                               // Gps0Latitude
-    0.0,                               // Gps0Longitude
-    false,                             // Gps0LatitudeLoc
-    false,                             // Gps0LongitudeLoc
-    0,                                 // Gps0Groundspeed
-    0,                                 // Gps0TrackMadeGood
-    0,                                 // Gps0TrueHeading
-    0,                                 // Gps0MagneticVariation
-    false,                             // Gps0MagneticVariationSense
+    },                                 // GpsCanTimestampUtc_SL_Info
+    0.0F,                              // GpsCanLatitudeDegreeMinutes
+    0.0F,                              // GpsCanLongitudeDegreeMinutes
+    0.0F,                              // GpsCanGroundspeedKnots
+    0.0F,                              // GpsCanTrackMadeGoodDegrees
+    0.0F,                              // GpsCanTrueHeadingDegrees
+    0.0F,                              // GpsCanMagneticVariationDegrees
+    false,                             // GpsCanState
 
     {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
@@ -73,40 +68,42 @@ P_boat_controller_T boat_controller_P = {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U }
-    ,                                  // Gps1Timestamp
+    ,                                  // GpsAisTimestampUtc
 
     {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
-    },                                 // Gps1Timestamp_SL_Info
-    0.0,                               // Gps1Latitude
-    0.0,                               // Gps1Longitude
-    false,                             // Gps1LatitudeLoc
-    false,                             // Gps1LongitudeLoc
-    0,                                 // Gps1Groundspeed
-    0,                                 // Gps1TrackMadeGood
-    0,                                 // Gps1TrueHeading
-    0,                                 // Gps1MagneticVariation
-    false,                             // Gps1MagneticVariationSense
-    0,                                 // AccelerometerXAxisAcceleration
-    0,                                 // AccelerometerYAxisAcceleration
-    0                                  // AccelerometerZAxisAcceleration
+    },                                 // GpsAisTimestampUtc_SL_Info
+    0.0F,                              // GpsAisLatitudeDegreeMinutes
+    0.0F,                              // GpsAisLongitudeDegreeMinutes
+    0.0F,                              // GpsAisGroundspeedKnots
+    0.0F,                              // GpsAisTrackMadeGoodDegrees
+    0.0F,                              // GpsAisTrueHeadingDegrees
+    0.0F,                              // GpsAisMagneticVariationDegrees
+    false,                             // GpsAisState
+    0,                                 // WinchMainAngleDegrees
+    0,                                 // WinchJibAngleDegrees
+    0.0F,                              // RudderPortAngleDegrees
+    0.0F,                              // RudderStbdAngleDegrees
+    0.0F,                              // AccelerometerXForceMillig
+    0.0F,                              // AccelerometerYForceMillig
+    0.0F,                              // AccelerometerZForceMillig
+    0.0F,                              // GyroscopeXVelocityMillidegreesps
+    0.0F,                              // GyroscopeYVelocityMillidegreesps
+    0.0F                               // GyroscopeZVelocityMillidegreesps
   },
 
   // Computed Parameter: Constant_Value
-  //  Referenced by: '<S5>/Constant'
+  //  Referenced by: '<S8>/Constant'
 
   {
-    0,                                 // BoomAngleSensorAngle
-    0,                                 // WindSensor0Speed
-    0,                                 // WindSensor0Direction
-    0,                                 // WindSensor0Reference
-    0,                                 // WindSensor1Speed
-    0,                                 // WindSensor1Direction
-    0,                                 // WindSensor1Reference
-    0,                                 // WindSensor2Speed
-    0,                                 // WindSensor2Direction
-    0,                                 // WindSensor2Reference
+    0,                                 // SailencoderDegrees
+    0.0F,                              // WindSensor1SpeedKnots
+    0,                                 // WindSensor1AngleDegrees
+    0.0F,                              // WindSensor2SpeedKnots
+    0,                                 // WindSensor2AngleDegrees
+    0.0F,                              // WindSensor3SpeedKnots
+    0,                                 // WindSensor3AngleDegrees
 
     {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
@@ -116,21 +113,19 @@ P_boat_controller_T boat_controller_P = {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U }
-    ,                                  // Gps0Timestamp
+    ,                                  // GpsCanTimestampUtc
 
     {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
-    },                                 // Gps0Timestamp_SL_Info
-    0.0,                               // Gps0Latitude
-    0.0,                               // Gps0Longitude
-    false,                             // Gps0LatitudeLoc
-    false,                             // Gps0LongitudeLoc
-    0,                                 // Gps0Groundspeed
-    0,                                 // Gps0TrackMadeGood
-    0,                                 // Gps0TrueHeading
-    0,                                 // Gps0MagneticVariation
-    false,                             // Gps0MagneticVariationSense
+    },                                 // GpsCanTimestampUtc_SL_Info
+    0.0F,                              // GpsCanLatitudeDegreeMinutes
+    0.0F,                              // GpsCanLongitudeDegreeMinutes
+    0.0F,                              // GpsCanGroundspeedKnots
+    0.0F,                              // GpsCanTrackMadeGoodDegrees
+    0.0F,                              // GpsCanTrueHeadingDegrees
+    0.0F,                              // GpsCanMagneticVariationDegrees
+    false,                             // GpsCanState
 
     {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
@@ -140,60 +135,65 @@ P_boat_controller_T boat_controller_P = {
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U,
       0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U }
-    ,                                  // Gps1Timestamp
+    ,                                  // GpsAisTimestampUtc
 
     {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
-    },                                 // Gps1Timestamp_SL_Info
-    0.0,                               // Gps1Latitude
-    0.0,                               // Gps1Longitude
-    false,                             // Gps1LatitudeLoc
-    false,                             // Gps1LongitudeLoc
-    0,                                 // Gps1Groundspeed
-    0,                                 // Gps1TrackMadeGood
-    0,                                 // Gps1TrueHeading
-    0,                                 // Gps1MagneticVariation
-    false,                             // Gps1MagneticVariationSense
-    0,                                 // AccelerometerXAxisAcceleration
-    0,                                 // AccelerometerYAxisAcceleration
-    0                                  // AccelerometerZAxisAcceleration
+    },                                 // GpsAisTimestampUtc_SL_Info
+    0.0F,                              // GpsAisLatitudeDegreeMinutes
+    0.0F,                              // GpsAisLongitudeDegreeMinutes
+    0.0F,                              // GpsAisGroundspeedKnots
+    0.0F,                              // GpsAisTrackMadeGoodDegrees
+    0.0F,                              // GpsAisTrueHeadingDegrees
+    0.0F,                              // GpsAisMagneticVariationDegrees
+    false,                             // GpsAisState
+    0,                                 // WinchMainAngleDegrees
+    0,                                 // WinchJibAngleDegrees
+    0.0F,                              // RudderPortAngleDegrees
+    0.0F,                              // RudderStbdAngleDegrees
+    0.0F,                              // AccelerometerXForceMillig
+    0.0F,                              // AccelerometerYForceMillig
+    0.0F,                              // AccelerometerZForceMillig
+    0.0F,                              // GyroscopeXVelocityMillidegreesps
+    0.0F,                              // GyroscopeYVelocityMillidegreesps
+    0.0F                               // GyroscopeZVelocityMillidegreesps
   },
 
   // Computed Parameter: Constant_Value_f
   //  Referenced by: '<S1>/Constant'
 
   {
-    0.0,                               // Rudder
-    0.0                                // Winch
+    0.0,                               // RudderAngleDegrees
+    0.0                                // AbsSailAngleDegrees
   },
 
   // Computed Parameter: Out1_Y0_f
-  //  Referenced by: '<S12>/Out1'
+  //  Referenced by: '<S13>/Out1'
 
   {
     0.0                                // HeadingDegrees
   },
 
   // Computed Parameter: Constant_Value_m
-  //  Referenced by: '<S6>/Constant'
+  //  Referenced by: '<S7>/Constant'
 
   {
     0.0                                // HeadingDegrees
   },
 
-  // Computed Parameter: WindSensor0SpeedMetersPerSec_Y0
-  //  Referenced by: '<S2>/WindSensor0SpeedMetersPerSec'
+  // Computed Parameter: WindSensor1SpeedMetersPerSec_Y0
+  //  Referenced by: '<S2>/WindSensor1SpeedMetersPerSec'
 
   0.0,
 
-  // Computed Parameter: Gps0TrueHeadingRad_Y0
-  //  Referenced by: '<S2>/Gps0TrueHeadingRad'
+  // Computed Parameter: GpsTrueHeadingRad_Y0
+  //  Referenced by: '<S2>/GpsTrueHeadingRad'
 
   0.0,
 
-  // Computed Parameter: WindSensor0DirectionRad_Y0
-  //  Referenced by: '<S2>/WindSensor0DirectionRad'
+  // Computed Parameter: WindSensor1DirectionRad_Y0
+  //  Referenced by: '<S2>/WindSensor1DirectionRad'
 
   0.0,
 
@@ -203,17 +203,17 @@ P_boat_controller_T boat_controller_P = {
   0.0,
 
   // Expression: pi/180
-  //  Referenced by: '<S10>/Gain1'
+  //  Referenced by: '<S12>/Gain1'
 
   0.017453292519943295,
 
   // Expression: pi/3
-  //  Referenced by: '<S7>/rudder angle saturation'
+  //  Referenced by: '<S9>/rudder angle saturation'
 
   1.0471975511965976,
 
   // Expression: -pi/3
-  //  Referenced by: '<S7>/rudder angle saturation'
+  //  Referenced by: '<S9>/rudder angle saturation'
 
   -1.0471975511965976,
 
@@ -226,6 +226,11 @@ P_boat_controller_T boat_controller_P = {
   //  Referenced by: '<Root>/Saturation'
 
   -1.0471975511965976,
+
+  // Expression: 180/pi
+  //  Referenced by: '<S6>/Gain'
+
+  57.295779513082323,
 
   // Expression: pi/2
   //  Referenced by: '<Root>/Saturation1'
@@ -237,15 +242,20 @@ P_boat_controller_T boat_controller_P = {
 
   0.0,
 
-  // Computed Parameter: Gain1_Gain_l
-  //  Referenced by: '<S9>/Gain1'
+  // Expression: 180/pi
+  //  Referenced by: '<S5>/Gain'
+
+  57.295779513082323,
+
+  // Computed Parameter: Gain1_Gain_n
+  //  Referenced by: '<S10>/Gain1'
 
   0,
 
-  // Computed Parameter: Gain1_Gain_n
-  //  Referenced by: '<S8>/Gain1'
+  // Computed Parameter: Gain1_Gain_l
+  //  Referenced by: '<S11>/Gain1'
 
-  0
+  0.0174532924F
 };
 
 //
