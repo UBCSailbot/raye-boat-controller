@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'boat_controller'.
 //
-// Model version                  : 1.62
+// Model version                  : 1.63
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Tue May 18 19:32:54 2021
+// C/C++ source code generated on : Sun Jun 13 17:43:40 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -52,8 +52,8 @@ P_boat_controller_T boat_controller_P = {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
     },                                 // GpsCanTimestampUtc_SL_Info
-    0.0F,                              // GpsCanLatitudeDegreeMinutes
-    0.0F,                              // GpsCanLongitudeDegreeMinutes
+    0.0F,                              // GpsCanLatitudeDegrees
+    0.0F,                              // GpsCanLongitudeDegrees
     0.0F,                              // GpsCanGroundspeedKnots
     0.0F,                              // GpsCanTrackMadeGoodDegrees
     0.0F,                              // GpsCanTrueHeadingDegrees
@@ -74,8 +74,8 @@ P_boat_controller_T boat_controller_P = {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
     },                                 // GpsAisTimestampUtc_SL_Info
-    0.0F,                              // GpsAisLatitudeDegreeMinutes
-    0.0F,                              // GpsAisLongitudeDegreeMinutes
+    0.0F,                              // GpsAisLatitudeDegrees
+    0.0F,                              // GpsAisLongitudeDegrees
     0.0F,                              // GpsAisGroundspeedKnots
     0.0F,                              // GpsAisTrackMadeGoodDegrees
     0.0F,                              // GpsAisTrueHeadingDegrees
@@ -119,8 +119,8 @@ P_boat_controller_T boat_controller_P = {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
     },                                 // GpsCanTimestampUtc_SL_Info
-    0.0F,                              // GpsCanLatitudeDegreeMinutes
-    0.0F,                              // GpsCanLongitudeDegreeMinutes
+    0.0F,                              // GpsCanLatitudeDegrees
+    0.0F,                              // GpsCanLongitudeDegrees
     0.0F,                              // GpsCanGroundspeedKnots
     0.0F,                              // GpsCanTrackMadeGoodDegrees
     0.0F,                              // GpsCanTrueHeadingDegrees
@@ -141,8 +141,8 @@ P_boat_controller_T boat_controller_P = {
       0U,                              // CurrentLength
       0U                               // ReceivedLength
     },                                 // GpsAisTimestampUtc_SL_Info
-    0.0F,                              // GpsAisLatitudeDegreeMinutes
-    0.0F,                              // GpsAisLongitudeDegreeMinutes
+    0.0F,                              // GpsAisLatitudeDegrees
+    0.0F,                              // GpsAisLongitudeDegrees
     0.0F,                              // GpsAisGroundspeedKnots
     0.0F,                              // GpsAisTrackMadeGoodDegrees
     0.0F,                              // GpsAisTrueHeadingDegrees
