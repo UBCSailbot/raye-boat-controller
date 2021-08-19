@@ -9,7 +9,7 @@
 //
 // Model version                  : 1.63
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sun Jun 13 17:43:40 2021
+// C/C++ source code generated on : Tue Aug 10 16:45:42 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Intel->x86-64 (Linux 64)
@@ -86,6 +86,7 @@ typedef struct {
   real_T c_x_data[101];
   real_T b[101];
   SL_Bus_boat_controller_sailbot_msg_Sensors b_varargout_2;
+  char_T cv[30];
   SL_Bus_boat_controller_sailbot_msg_actuation_angle BusAssignment;// '<Root>/Bus Assignment' 
   real_T rudderanglesaturation;        // '<S9>/rudder angle saturation'
   real_T error;                        // '<S9>/MATLAB Function'
