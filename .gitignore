@@ -1,0 +1,10 @@
+
+*.pyc
+
+build/CMakeFiles/CMakeOutput.log
+
+.vscode/
+
+build/.cmake/api/v1/query/client-integration-vscode/
+
+build/

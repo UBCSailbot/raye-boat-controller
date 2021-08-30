@@ -1,0 +1,5 @@
+<launch>
+    <node name = "mock_desiredHeadingAndSensors" pkg = "boat_controller" type = "mock_desiredHeadingAndSensors.py"/>
+    <node name = "boat_controller_node" pkg = "boat_controller" type = "boat_controller_node.py"/>
+    <test test-name="test_boat_controller" pkg="boat_controller" type="test_controller_integration.py" />
+</launch>
