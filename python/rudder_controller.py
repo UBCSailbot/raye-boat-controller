@@ -7,7 +7,7 @@ class RudderController:
         pass
 
     @staticmethod
-    # How feed back gain is calculated is taken from page 31 of this paper:
+    # How feed back gain is calculated is taken from equation 5.2 on page 25 of this paper:
     # https://core.ac.uk/download/pdf/79618904.pdf
     def get_feed_back_gain(heading_error):
         if heading_error > 2*math.pi or heading_error < -2*math.pi:
