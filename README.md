@@ -2,9 +2,9 @@
 
 [![CircleCI](https://circleci.com/gh/UBCSailbot/boat_controller.svg?style=svg)](https://circleci.com/gh/UBCSailbot/boat_controller)
 
-The main controller code can be found in the `python` directory.
+The purpose of the boat controller is to get the boat from point A to point B on a local scale (~1km). We achieve this by adjusting sail and rudder angles based. 
 
-Our ROS node subscribes to the `/sensors` topic and `/desired_heading_degrees` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details.
+The main controller code can be found in the `python` directory. The boat_controller_node subscribes to the `/sensors` topic and `/desired_heading_degrees` topic, and publishes to the `/rudder_winch_actuation_angle` topic. See [this](https://ubcsailbot.atlassian.net/wiki/spaces/ADA2/pages/1195147292/ROS+Topic+Names) confluence page for more details.
 
 ## How to run
 
@@ -41,7 +41,3 @@ To ensure that the codebase stays clean, we will be using [flake8](https://flake
 `autopep8 --in-place --aggressive --max-line-length 120 --aggressive <path_to_file>`
 
 `flake8 --statistics --max-line-length 120 <path_to_file>`
-
-### Continuous Integration
-
-To ensure that the code continues to work as we make changes, we have setup continuous integration with CircleCI. It pulls the Dockerhub image for ROS and OMPL, sets up the workspace, and runs the lint and tests. Click [here](.circleci/config.yml) to see how this is done.
