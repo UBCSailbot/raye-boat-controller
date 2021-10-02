@@ -3,15 +3,11 @@
 # Need this because in Python2 regular division (/) is integer division. I.e. 3/2==1
 from __future__ import division
 
-import local_imports
 import rostest
 import unittest
 import math
 import sailbot_constants
 from sail_controller import SailController
-
-# Do something with local_imports to avoid lint errors
-local_imports.printMessage()
 
 
 class Test_SailController(unittest.TestCase):
@@ -43,22 +39,22 @@ class Test_SailController(unittest.TestCase):
 
     def test_getSailAngle_apparentWindAngle_boundedBetweenPiAnd2Pi(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(3/2*math.pi),
+            SailController.get_sail_angle(3 / 2 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE /
-            (-math.pi) * (math.pi/2)
+            (-math.pi) * (math.pi / 2)
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAngleNegativeNotBounded(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(-2 + 10*math.pi),
+            SailController.get_sail_angle(-2 + 10 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAnglePositiveNotBounded(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(2 + 10*math.pi),
+            SailController.get_sail_angle(2 + 10 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )

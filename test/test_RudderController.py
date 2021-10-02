@@ -1,13 +1,9 @@
 #!/usr/bin/env python
-import local_imports
 import rostest
 import unittest
 import sailbot_constants
 from rudder_controller import RudderController
 from math import pi
-
-# Do something with local_imports to avoid lint errors
-local_imports.printMessage()
 
 
 class Test_RudderController(unittest.TestCase):
@@ -25,23 +21,23 @@ class Test_RudderController(unittest.TestCase):
 
     def test_getFeedBackGain_headingErrorBetweenPiAnd2Pi(self):
         self.assertEqual(
-            RudderController.get_feed_back_gain(pi+0.5),
-            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(pi+0.5)),
+            RudderController.get_feed_back_gain(pi + 0.5),
+            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(pi + 0.5)),
         )
 
     def test_getFeedBackGain_headingErrorBetweenNegativePiAndNegative2Pi(self):
         self.assertEqual(
-            RudderController.get_feed_back_gain(-pi-0.5),
-            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-pi-0.5)),
+            RudderController.get_feed_back_gain(-pi - 0.5),
+            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-pi - 0.5)),
         )
 
     def test_getFeedBackGain_headingErrorGreaterThan2Pi_valueErrorRaised(self):
         self.assertRaises(
-            ValueError, RudderController.get_feed_back_gain, 4*pi)
+            ValueError, RudderController.get_feed_back_gain, 4 * pi)
 
     def test_getFeedBackGain_headingErrorBelowNegative2Pi_valueErrorRaised(self):
         self.assertRaises(
-            ValueError, RudderController.get_feed_back_gain, -4*pi)
+            ValueError, RudderController.get_feed_back_gain, -4 * pi)
 
     def test_getHeadingErrorTackable(self):
         self.assertAlmostEqual(

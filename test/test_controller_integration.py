@@ -1,13 +1,10 @@
 #! /usr/bin/env python
-import local_imports
 import unittest
 import rospy
 from time import sleep
 import rostest
 from sailbot_msg.msg import actuation_angle
 
-# Do something with local_imports to avoid lint errors
-local_imports.printMessage()
 
 SLEEP_SECONDS = 1
 
