@@ -18,7 +18,11 @@ The main controller code can be found in the `python` directory. The boat_contro
 
 5. Clone the sailbot-msgs repository in the src folder: `git clone https://github.com/UBCSailbot/sailbot-msg.git`.
 
-6. Go back to catkin\_ws and build and source. `cd ..` `catkin_make` `source devel/setup.bash`.
+6. Go to the boat_controller directory `cd boat_controller` and then add the python directory to your PYTHONPATH `echo -e "export PYTHONPATH=$PWD/python:\${PYTHONPATH}" >> ~/.profile`
+
+7. Run your .profile again `source ~/.profile`. You may also restart your bash session instead.
+
+8. Go back to catkin\_ws and build and source. `catkin_make` `source devel/setup.bash`.
 
 ### Running boat_controller main loop
 
