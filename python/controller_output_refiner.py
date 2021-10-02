@@ -27,7 +27,7 @@ class ControllerOutputRefiner:
         float
             The saturated signal bounded between the upper and lower bound.
         """
-        
+
         # Check for bad inputs
         assert(upperBound >= lowerBound)
 
