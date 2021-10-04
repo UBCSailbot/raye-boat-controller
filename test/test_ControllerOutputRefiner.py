@@ -4,7 +4,6 @@ import rostest
 import unittest
 from controller_output_refiner import ControllerOutputRefiner
 import math
-
 # Do something with local_imports to avoid lint errors
 local_imports.printMessage()
 
@@ -59,11 +58,8 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
 
     # Assertion error check when lowerBound > upperBound
     def test_saturate_badBoundInputs(self):
-        try:
-            ControllerOutputRefiner.saturate(0, 10, 10.00000000001)
-            self.fail("Didn't raise assertion")
-        except AssertionError:
-            self.assertTrue(True)
+        with self.assertRaises(AssertionError):
+            ControllerOutputRefiner.saturate(0, 10, 10.0000001)
 
     # Case where upperBound == lowerBound
     def test_saturate_equalUpperAndLower1(self):
