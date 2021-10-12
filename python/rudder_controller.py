@@ -1,8 +1,9 @@
+from heading_controller import HeadingController
 import sailbot_constants
 import math
 
 
-class RudderController:
+class RudderController(HeadingController):
     def __init__(self):
         pass
 
