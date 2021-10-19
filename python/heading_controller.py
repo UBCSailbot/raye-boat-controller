@@ -1,16 +1,18 @@
+from control_modes import ControlModes
+
+MIN_TACKING_SPEED = 0.5
+
 class HeadingController:
-    def __init__(self):
+
+    def __init__(self, initialControlMode=ControlModes.UNKNOWN):
+        pass
+        
+
+    def getControlMode(self):
+        return self.controlMode
+    
+    def switchControlMode(self, sensors):
         pass
 
-    @staticmethod
-    def get_feed_back_gain(heading_error):
-        raise NotImplementedError()
-
-    # implementation taken from: https://stackoverflow.com/a/2007279
-    @staticmethod
-    def get_heading_error_tackable(setPoint, measure):
-        raise NotImplementedError()
-
-    @staticmethod
-    def get_feed_back_gain(setPoint, measure):
-        raise NotImplementedError()
+    def switchControlModeByID(self, modeID):
+        pass
