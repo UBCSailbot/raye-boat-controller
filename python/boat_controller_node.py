@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from sail_controller import SailController
 from rudder_controller import RudderController
+from controller_output_refiner import ControllerOutputRefiner
+import sailbot_constants
 import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, Sensors
@@ -64,7 +66,12 @@ def publishRudderWinchAngle():
         )
 
         rudder_winch_actuation_angle_pub.publish(
-            rudderAngleDegrees, sailAngleDegrees)
+            ControllerOutputRefiner.saturate(
+                rudderAngleDegrees, sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG, -sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG),
+
+            ControllerOutputRefiner.saturate(
+                sailAngleDegrees, sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG, -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG)
+        )
 
 
 def main():
