@@ -67,10 +67,14 @@ def publishRudderWinchAngle():
 
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
-                rudderAngleDegrees, sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG, -sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG),
+                rudderAngleDegrees,
+                sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG,
+                -sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG),
 
             ControllerOutputRefiner.saturate(
-                sailAngleDegrees, sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG, -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG)
+                sailAngleDegrees,
+                sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG,
+                -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG)
         )
 
 
