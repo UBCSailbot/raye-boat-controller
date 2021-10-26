@@ -9,19 +9,19 @@ from sailbot_msg.msg import actuation_angle, heading, Sensors
 
 class ControllerSelector:
 
-     self.controllerMappings = {
-        ControlModes.JIBE_ONLY : JibeController.
+    controllerMappings = {
+        ControlModes.JIBE_ONLY : JibeController,
         ControlModes.TACKABLE : RudderController
     }
 
     # A class reference to the current rudder controller
-    self.__controlMode = None
+    __controlMode = None
 
     # An ID indicating the current rudder controller
-    self.__controlModeID = None
+    __controlModeID = None
 
     # The time of the latest controller switch
-    self.__lastSwitchTime = None
+    __lastSwitchTime = None
 
     def __init__(self, init_boat_speed, unix_timestamp, initialControlMode=ControlModes.TACKABLE):
         """
@@ -61,6 +61,7 @@ class ControllerSelector:
 
         self.__controlModeID = ControlModes(self.__controlMode)
         self.__lastSwitchTime = int(unix_timestamp)
+        return
 
     def switchControlMode(self, sensors):
         """
@@ -87,17 +88,17 @@ class ControllerSelector:
             self.__switchFromTacking(boat_speed, current_time)
 
         # Currently jibing
-        else if (self.__controlModeID == ControlModes.JIBE_ONLY):
+        elif (self.__controlModeID == ControlModes.JIBE_ONLY):
             self.__switchFromJibing(current_time)
 
         # Switch from jibe controller may result in an unknown control mode
         # Mode may also be currently unknown by default
-        if (self.__controlModeID == ControlModes.UNKNOWN)
+        if (self.__controlModeID == ControlModes.UNKNOWN):
             self.__switchFromUnknown(boat_speed, current_time)
 
         return self.__controlMode
 
-    def getController(self):
+    def getControlMode(self):
         """
         Returns
         -------
@@ -121,13 +122,13 @@ class ControllerSelector:
             The current unix timestamp.
 
         """
-        if(boat_speed > SPEED_THRSHOLD_FOR_JIBING_KNOTS):
+        if(boat_speed > sailbot_constants.SPEED_THRSHOLD_FOR_JIBING_KNOTS):
             self.__controlModeID = ControlModes.TACKABLE
 
         else:
             self.__controlModeID = ControlModes.JIBE_ONLY
             
-        self.__controlMode = self.controllerMappings.get(__controlModeID, RudderController)
+        self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
         self.__lastSwitchTime = current_time
         return
 
@@ -146,9 +147,9 @@ class ControllerSelector:
             The current unix timestamp.
 
         """
-        if(boat_speed <= SPEED_THRSHOLD_FOR_JIBING_KNOTS):
+        if(boat_speed <= sailbot_constants.SPEED_THRSHOLD_FOR_JIBING_KNOTS):
             self.__controlModeID = ControlModes.JIBE_ONLY
-            self.__controlMode = self.controllerMappings.get(__controlModeID, RudderController)
+            self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
 
         self.__lastSwitchTime = current_time
         return
@@ -170,7 +171,7 @@ class ControllerSelector:
 
         """
         #TODO: How to check if the boat reaches waypoint
-        if(current_time - self.__lastSwitchTime >= MAX_TIME_FOR_JIBING):
+        if(current_time - self.__lastSwitchTime >= sailbot_constants.MAX_TIME_FOR_JIBING):
             self.__controlModeID = ControlModes.UNKNOWN
             self.__controlMode = self.controllerMappings(self.__controlModeID, RudderController)
             self.__lastSwitchTime = current_time
@@ -192,5 +193,4 @@ class ControllerSelector:
             Returns True if the mode ID is valid, and false otherwise.
         
         """
-        return (ControlModes.JIBE_ONLY <= modeID <= ControlModes.UNKNOWN) and
-               (isinstance(modeID, int))
+        return (ControlModes.JIBE_ONLY <= modeID <= ControlModes.UNKNOWN) and (isinstance(modeID, int))

@@ -3,7 +3,7 @@ import sailbot_constants
 import math
 
 
-class RudderController(HeadingController):
+class RudderController():
     def __init__(self):
         pass
 

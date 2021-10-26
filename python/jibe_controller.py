@@ -3,7 +3,7 @@ import sailbot_constants
 import math
 
 
-class JibeController(HeadingController):
+class JibeController():
     def __init__(self):
         pass
 
