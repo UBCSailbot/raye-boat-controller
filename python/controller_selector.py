@@ -6,6 +6,7 @@ import math
 from sailbot_msg.msg import actuation_angle, heading, Sensors
 
 #TODO: Determine appropriate constants for controller switching conditions
+#TODO: Only switch after a specified time interval
 
 class ControllerSelector:
 
@@ -157,7 +158,7 @@ class ControllerSelector:
     def __switchFromJibing(self, current_time):
         """
         Switches the controller mode from the JIBE_ONLY controller to another controller.
-        If the boat has reached the current way point, or the boat has been jibing beyond
+        If the boat has reached the current heading, or the boat has been jibing beyond
         a specified time limit, then the controller switches to the UNKNOWN controller.
         Otherwise, the control mode remains the same.
 
@@ -170,7 +171,7 @@ class ControllerSelector:
             The current unix timestamp.
 
         """
-        #TODO: How to check if the boat reaches waypoint
+        #TODO: How to check if the boat reaches heading
         if(current_time - self.__lastSwitchTime >= sailbot_constants.MAX_TIME_FOR_JIBING):
             self.__controlModeID = ControlModes.UNKNOWN
             self.__controlMode = self.controllerMappings(self.__controlModeID, RudderController)
