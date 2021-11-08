@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import local_imports
-import rostest
+# import rostest
 import unittest
-import sailbot_constants
+# import sailbot_constants
 from rudder_controller import RudderController
-from math import pi
+# from math import pi
 from controller_selector import ControllerSelector
-from sailbot_msg.msg import actuation_angle, heading, Sensors
+# from sailbot_msg.msg import actuation_angle
+from sailbot_msg.msg import heading, Sensors
 from control_modes import ControlModes
 from jibe_controller import JibeController
 

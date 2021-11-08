@@ -2,17 +2,18 @@ from jibe_controller import JibeController
 from rudder_controller import RudderController
 from control_modes import ControlModes
 import sailbot_constants
-import math
-from sailbot_msg.msg import actuation_angle, heading, Sensors
+# import math
+# from sailbot_msg.msg import actuation_angle, heading, Sensors
 
-#TODO: Determine appropriate constants for controller switching conditions
-#TODO: Only switch after a specified time interval
+# TODO: Determine appropriate constants for controller switching conditions
+# TODO: Only switch after a specified time interval
+
 
 class ControllerSelector:
 
     controllerMappings = {
-        ControlModes.JIBE_ONLY : JibeController,
-        ControlModes.TACKABLE : RudderController
+        ControlModes.JIBE_ONLY: JibeController,
+        ControlModes.TACKABLE: RudderController
     }
 
     # A class reference to the current rudder controller
@@ -31,7 +32,7 @@ class ControllerSelector:
         Arguments
         ---------
         float : init_boat_speed
-            The initial speed of the boat in knots. Can be found from the sensor readings 
+            The initial speed of the boat in knots. Can be found from the sensor readings
             from sailbot-msg.
 
         string, int : unix_timestamp
@@ -50,10 +51,10 @@ class ControllerSelector:
             in control_modes.py or the initialization will fail.
 
         """
-    
+
         if (not self.isValidModeID(initialControlMode)):
-           raise ValueError("An invalid control mode was passed as an argument to the heading controller")
-        
+            raise ValueError("An invalid control mode was passed as an argument to the heading controller")
+
         if(initialControlMode == ControlModes.UNKNOWN):
             self.__switchFromUnknown(init_boat_speed, int(unix_timestamp))
 
@@ -137,7 +138,7 @@ class ControllerSelector:
 
         else:
             self.__controlModeID = ControlModes.JIBE_ONLY
-            
+
         self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
         return
 
@@ -145,8 +146,8 @@ class ControllerSelector:
         """
         Switches the controller mode from the TACKABLE controller to another controller.
         The controller switches to the JIBE_ONLY controller if the boat speed is below
-        jibing speed threshold. If the boat has been tacking beyond a specified time limit, 
-        then the controller switches to the UNKNOWN controller. Otherwise, the control 
+        jibing speed threshold. If the boat has been tacking beyond a specified time limit,
+        then the controller switches to the UNKNOWN controller. Otherwise, the control
         mode remains the same.
 
         Arguments
@@ -163,7 +164,7 @@ class ControllerSelector:
         """
         timeout = current_time - latest_switch_time >= sailbot_constants.MAX_TIME_FOR_TACKING
 
-        #TODO: Do we need to check if we are at the setpoint?
+        # TODO: Do we need to check if we are at the setpoint?
         if(boat_speed <= sailbot_constants.SPEED_THRSHOLD_FOR_JIBING_KNOTS):
             self.__controlModeID = ControlModes.JIBE_ONLY
             self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
@@ -219,6 +220,6 @@ class ControllerSelector:
         -------
         bool
             Returns True if the mode ID is valid, and false otherwise.
-        
+
         """
         return (ControlModes.JIBE_ONLY <= modeID <= ControlModes.UNKNOWN) and (isinstance(modeID, int))

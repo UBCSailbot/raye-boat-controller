@@ -1,7 +1,8 @@
 from control_modes import ControlModes
 from controller_selector import ControllerSelector
 
-#TODO: Add class methods to get error and feedback gain
+# TODO: Add class methods to get error and feedback gain
+
 
 class HeadingController:
 
@@ -32,15 +33,15 @@ class HeadingController:
             A ValueError exception is thrown when the initialControlMode is incorrectly specified.
             The control mode ID must adhere to the existing values in the ControlModes class found
             in control_modes.py or the initialization will fail.
-            
+
         """
         boat_speed = sensors.gps_can_groundspeed_knots
         current_time = sensors.gps_ais_timestamp_utc
 
-        self.ctrl_selector = ControllerSelector (
-            init_boat_speed      = boat_speed,
-            unix_timestamp       = current_time,
-            initialControlMode   = initialControlMode
+        self.ctrl_selector = ControllerSelector(
+            init_boat_speed=boat_speed,
+            unix_timestamp=current_time,
+            initialControlMode=initialControlMode
         )
 
         self.controller = self.ctrl_selector.getControlMode()
@@ -54,7 +55,7 @@ class HeadingController:
 
         """
         return self.controller
-    
+
     def switchControlMode(self, sensors):
         """
         Switches the rudder controller depending on the sensor readings. The
@@ -73,5 +74,5 @@ class HeadingController:
         Returns a class reference to the current control mode used by the rudder.
 
         """
-        self.controller = self.ctrl_selector.switchControlMode(sensors = sensors)
+        self.controller = self.ctrl_selector.switchControlMode(sensors=sensors)
         return self.controller
