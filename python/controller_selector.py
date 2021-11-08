@@ -64,10 +64,14 @@ class ControllerSelector:
         self.__lastSwitchTime = int(unix_timestamp)
         return
 
-    def switchControlMode(self, sensors):
+    def switchControlMode(self, sensors, heading_error):
         """
         Switches the current rudder controller depending on the current sensor readings
-        and the current control mode.
+        and the current control mode. A switch only occurs when the switching interval
+        has timed out (see the sailbot constants). Upon a successful switch, the time
+        since the last switch should be updated to the current time and the control mode
+        should be updated according to the current conditions. If the switch interval has
+        not timed out, then this method has no effects.
 
         Arguments
         ---------
@@ -75,6 +79,9 @@ class ControllerSelector:
             An object representing the sensors that contain the sensor readings. Refer to
             the following page for the possible values that can be obtained from these sensors:
             https://github.com/UBCSailbot/sailbot-msg/blob/master/msg/Sensors.msg
+
+        float : heading_error
+            The current heading error from the setpoint. Should be in radians.
 
         Returns
         -------
@@ -84,18 +91,23 @@ class ControllerSelector:
         boat_speed = sensors.gps_can_groundspeed_knots
         current_time = int(sensors.gps_ais_timestamp_utc)
 
-        # Currently tacking
-        if (self.__controlModeID == ControlModes.TACKABLE):
-            self.__switchFromTacking(boat_speed, current_time)
+        # Only switch if the switch interval has timed out
+        if(current_time - self.__lastSwitchTime > sailbot_constants.SWITCH_INTERVAL):
 
-        # Currently jibing
-        elif (self.__controlModeID == ControlModes.JIBE_ONLY):
-            self.__switchFromJibing(current_time)
+            # Currently tacking
+            if (self.__controlModeID == ControlModes.TACKABLE):
+                self.__switchFromTacking(boat_speed, current_time, self.__lastSwitchTime)
 
-        # Switch from jibe controller may result in an unknown control mode
-        # Mode may also be currently unknown by default
-        if (self.__controlModeID == ControlModes.UNKNOWN):
-            self.__switchFromUnknown(boat_speed, current_time)
+            # Currently jibing
+            elif (self.__controlModeID == ControlModes.JIBE_ONLY):
+                self.__switchFromJibing(current_time, self.__lastSwitchTime, heading_error)
+
+            # Switch from jibe controller may result in an unknown control mode
+            # Mode may also be currently unknown by default
+            if (self.__controlModeID == ControlModes.UNKNOWN):
+                self.__switchFromUnknown(boat_speed, current_time)
+
+            self.__lastSwitchTime = current_time
 
         return self.__controlMode
 
@@ -108,7 +120,7 @@ class ControllerSelector:
         """
         return self.__controlMode
 
-    def __switchFromUnknown(self, boat_speed, current_time):
+    def __switchFromUnknown(self, boat_speed):
         """
         Switches the controller mode from the UNKNOWN controller to another controller.
         The boat switches to the TACKABLE controller if the boat speed is above the
@@ -119,9 +131,6 @@ class ControllerSelector:
         float : boat_speed
             The current boat speed in knots.
 
-        int : current_time
-            The current unix timestamp.
-
         """
         if(boat_speed > sailbot_constants.SPEED_THRSHOLD_FOR_JIBING_KNOTS):
             self.__controlModeID = ControlModes.TACKABLE
@@ -130,14 +139,15 @@ class ControllerSelector:
             self.__controlModeID = ControlModes.JIBE_ONLY
             
         self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
-        self.__lastSwitchTime = current_time
         return
 
-    def __switchFromTacking(self, boat_speed, current_time):
+    def __switchFromTacking(self, boat_speed, current_time, latest_switch_time):
         """
         Switches the controller mode from the TACKABLE controller to another controller.
         The controller switches to the JIBE_ONLY controller if the boat speed is below
-        jibing speed threshold, and remains the same otherwise.
+        jibing speed threshold. If the boat has been tacking beyond a specified time limit, 
+        then the controller switches to the UNKNOWN controller. Otherwise, the control 
+        mode remains the same.
 
         Arguments
         ---------
@@ -145,17 +155,27 @@ class ControllerSelector:
             The current boat speed in knots.
 
         int : current_time
-            The current unix timestamp.
+            The current time (unix timestamp)
+
+        int : latest_switch_time
+            The time of the latest switch of the controller mode
 
         """
+        timeout = current_time - latest_switch_time >= sailbot_constants.MAX_TIME_FOR_TACKING
+
+        #TODO: Do we need to check if we are at the setpoint?
         if(boat_speed <= sailbot_constants.SPEED_THRSHOLD_FOR_JIBING_KNOTS):
             self.__controlModeID = ControlModes.JIBE_ONLY
             self.__controlMode = self.controllerMappings.get(self.__controlModeID, RudderController)
+            return
 
-        self.__lastSwitchTime = current_time
+        elif(timeout):
+            self.__controlModeID = ControlModes.UNKNOWN
+            self.__controlMode = self.controllerMappings(self.__controlModeID, RudderController)
+
         return
 
-    def __switchFromJibing(self, current_time):
+    def __switchFromJibing(self, current_time, latest_switch_time, heading_error):
         """
         Switches the controller mode from the JIBE_ONLY controller to another controller.
         If the boat has reached the current heading, or the boat has been jibing beyond
@@ -168,14 +188,21 @@ class ControllerSelector:
             The current boat speed in knots.
 
         int : current_time
-            The current unix timestamp.
+            The current time (unix timestamp)
+
+        int : latest_switch_time
+            The time of the latest switch of the controller mode
+
+        float : heading_error
+            The current heading error in radians
 
         """
-        #TODO: How to check if the boat reaches heading
-        if(current_time - self.__lastSwitchTime >= sailbot_constants.MAX_TIME_FOR_JIBING):
+        timeout = current_time - latest_switch_time >= sailbot_constants.MAX_TIME_FOR_JIBING
+        reached_heading = abs(heading_error) <= sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        if(timeout or reached_heading):
             self.__controlModeID = ControlModes.UNKNOWN
             self.__controlMode = self.controllerMappings(self.__controlModeID, RudderController)
-            self.__lastSwitchTime = current_time
         return
 
     @staticmethod
