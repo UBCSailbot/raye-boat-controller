@@ -4,7 +4,7 @@
 from __future__ import division
 
 import local_imports
-#import rostest
+import rostest
 import unittest
 import math
 import sailbot_constants
