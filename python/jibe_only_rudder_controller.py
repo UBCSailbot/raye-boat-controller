@@ -7,11 +7,11 @@ class JibeOnlySailController:
         pass
 
     @staticmethod
-
     #Private Helper method to return the sign of a given number
     def __getSign(inNumber):
         return (inNumber / abs(inNumber))
 
+    @staticmethod
     #Takes as Parameters the current_heading and desired_heading in absolute coordinates (I.E. relative to north)
     #And takes the apparent_wind_angle as the angle of the wind vector relative to the heading of the boat.
     #Returns an integer value representing the direction the boat should turn to jibe
