@@ -2,14 +2,20 @@ import sailbot_constants
 import math
 
 class JibeOnlySailController:
+    #Constructor
     def __init__(self):
         pass
 
     @staticmethod
 
+    #Private Helper method to return the sign of a given number
     def __getSign(inNumber):
         return (inNumber / abs(inNumber))
 
+    #Takes as Parameters the current_heading and desired_heading in absolute coordinates (I.E. relative to north)
+    #And takes the apparent_wind_angle as the angle of the wind vector relative to the heading of the boat.
+    #Returns an integer value representing the direction the boat should turn to jibe
+    #where 1 is counterclockwise and -1 is clockwise
     def get_jibe_controller_direction(current_heading, desired_heading, apparent_wind_angle):
 
         #Bind all values between 0 and 2Pi for ease of calculation
@@ -28,7 +34,8 @@ class JibeOnlySailController:
         return JibeOnlySailController.__getSign(error)
 
     @staticmethod
-
+    #Takes as Parameters desired_heading and current_heading as absolute coordinates  (I.E. relative to north)
+    #and the jibe_direction as a value of either -1 or 1, where 1 is to turn the boat counter clockwise and vice versa for -1
     def get_jibe_controller_error(current_heading, desired_heading, jibe_direction):
         
         current_heading %= 2 * math.pi 
