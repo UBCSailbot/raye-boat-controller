@@ -1,7 +1,7 @@
 import sailbot_constants
 import math
 
-class JibeOnlySailController:
+class JibeOnlyRudderController:
     #Constructor
     def __init__(self):
         pass
