@@ -22,10 +22,10 @@ class JibeOnlySailController:
         wind_relative_desired_heading  = (desired_heading - apparent_wind_angle) % 2 * math.pi
 
         #find error term
-        error = wind_relative_desired_heading - wind_relative_current_heading
+        error = -wind_relative_desired_heading + wind_relative_current_heading
 
         #get jibe direction, 1 is counterclockwise, -1 is clockwise
-        return JibeOnlySailController.getSign(error)
+        return JibeOnlySailController.__getSign(error)
 
     @staticmethod
 
@@ -37,6 +37,6 @@ class JibeOnlySailController:
         error_one_way = desired_heading - current_heading
 
         if jibe_direction > 0:
-            return max((2 * math.pi  - abs(error_one_way)) * -JibeOnlySailController.getSign(error_one_way), error_one_way)
+            return max((2 * math.pi  - abs(error_one_way)) * -JibeOnlySailController.__getSign(error_one_way), error_one_way)
         else:
-            return min((2 * math.pi  - abs(error_one_way)) * -JibeOnlySailController.getSign(error_one_way), error_one_way)
+            return min((2 * math.pi  - abs(error_one_way)) * -JibeOnlySailController.__getSign(error_one_way), error_one_way)
