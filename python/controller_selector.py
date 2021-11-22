@@ -1,5 +1,5 @@
 from jibe_controller import JibeController
-from rudder_controller import RudderController
+from tack_controller import TackController
 from control_modes import ControlModes
 import sailbot_constants
 # import math
@@ -12,11 +12,11 @@ class ControllerSelector:
 
     controllerMappings = {
         ControlModes.JIBE_ONLY: JibeController,
-        ControlModes.TACKABLE: RudderController
+        ControlModes.TACKABLE: TackController
     }
 
     # A class reference to the current rudder controller
-    __controlMode = RudderController
+    __controlMode = TackController
 
     # An ID indicating the current rudder controller
     __controlModeID = ControlModes.UNKNOWN
@@ -232,12 +232,12 @@ class ControllerSelector:
         # Control mode is valid
         if(self.isValidModeID(control_mode_id)):
             self.__controlModeID = control_mode_id
-            self.__controlMode = self.controllerMappings(self.__controlModeID, RudderController)
+            self.__controlMode = self.controllerMappings(self.__controlModeID, TackController)
 
         # Invalid control mode passed. Assigning a default value
         else:
             self.__controlModeID = ControlModes.UNKNOWN
-            self.__controlMode = RudderController
+            self.__controlMode = TackController
 
         return
 
