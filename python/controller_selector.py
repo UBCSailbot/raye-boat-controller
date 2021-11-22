@@ -56,7 +56,6 @@ class ControllerSelector:
             self.__assignMode(initialControlMode)
 
         self.__lastSwitchTime = int(unix_timestamp)
-        return
 
     def switchControlMode(self, heading_error):
         """

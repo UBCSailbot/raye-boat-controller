@@ -7,23 +7,18 @@ from controller_selector import ControllerSelector
 class HeadingController:
 
     # The controller selector
-    ctrl_selector = None
+    __ctrl_selector = None
 
     # A class reference to the current controller
-    controller = None
+    __controller = None
 
-    def __init__(self, sensors, initialControlMode=ControlModes.TACKABLE):
+    def __init__(self, initialControlMode=ControlModes.UNKNOWN):
         """
         Initializes a HeadingController object with a specified control mode.
 
         Arguments
         ---------
-        sensors
-            An object representing the sensors that contain the sensor readings. Refer to
-            the following page for the possible values that can be obtained from these sensors:
-            https://github.com/UBCSailbot/sailbot-msg/blob/master/msg/Sensors.msg
-
-        int : initialControlMode
+        int : initialControlMode (optional)
             The ID of the initial control mode that the rudder controller. This parameter must
             adhere to the existing values in the ControlModes class found in control_modes.py.
 
@@ -35,17 +30,8 @@ class HeadingController:
             in control_modes.py or the initialization will fail.
 
         """
-        boat_speed = sensors.gps_can_groundspeed_knots
-        current_time = sensors.gps_ais_timestamp_utc
-
-        self.ctrl_selector = ControllerSelector(
-            init_boat_speed=boat_speed,
-            unix_timestamp=current_time,
-            initialControlMode=initialControlMode
-        )
-
-        self.controller = self.ctrl_selector.getControlMode()
-        return
+        self.__ctrl_selector = ControllerSelector(initialControlMode=initialControlMode)
+        self.__controller = self.__ctrl_selector.getControlMode()
 
     def getController(self):
         """
@@ -54,9 +40,9 @@ class HeadingController:
         Returns a class reference to the current controller used by the rudder.
 
         """
-        return self.controller
+        return self.__controller
 
-    def switchControlMode(self, sensors):
+    def switchControlMode(self, heading_error):
         """
         Switches the rudder controller depending on the sensor readings. The
         controller selector is invoked and contains most of the logic for
@@ -64,15 +50,18 @@ class HeadingController:
 
         Arguments
         ---------
-        sensors
-            An object representing the sensors that contain the sensor readings. Refer to
-            the following page for the possible values that can be obtained from these sensors:
-            https://github.com/UBCSailbot/sailbot-msg/blob/master/msg/Sensors.msg
+        float : heading_error
+            The current heading error from the setpoint. Should be in radians.
 
         Returns
         -------
-        Returns a class reference to the current control mode used by the rudder.
+        bool
+            Returns True if the switch was successful, and False if no switch
+            occurred.
 
         """
-        self.controller = self.ctrl_selector.switchControlMode(sensors=sensors)
-        return self.controller
+        if(self.__ctrl_selector.switchControlMode(heading_error)):
+            self.__controller = self.__ctrl_selector.getControlMode()
+            return True
+
+        return False
