@@ -59,4 +59,3 @@ class JibeOnlyRudderController:
         else:
             return min((2 * math.pi - abs(error_one_way)) * -
                        JibeOnlyRudderController.__getSign(error_one_way), error_one_way)
-                       
