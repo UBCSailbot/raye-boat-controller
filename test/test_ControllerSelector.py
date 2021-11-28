@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import local_imports
-# import rostest
+import rostest
 import unittest
 import sailbot_constants
 from controller_selector import ControllerSelector
@@ -351,4 +351,4 @@ class Test_ControllerSelector(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    rostest.rosrun("boat_controller", "Test_ControllerSelector", Test_ControllerSelector)
