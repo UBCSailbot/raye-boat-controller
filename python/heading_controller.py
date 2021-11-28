@@ -12,7 +12,7 @@ class HeadingController:
     # A class reference to the current controller
     __controller = None
 
-    def __init__(self, initialControlMode=ControlModes.UNKNOWN):
+    def __init__(self, initialControlMode=ControlModes.UNKNOWN.value):
         """
         Initializes a HeadingController object with a specified control mode.
 
