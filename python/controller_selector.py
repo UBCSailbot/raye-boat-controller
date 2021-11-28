@@ -87,7 +87,7 @@ class ControllerSelector:
             Returns true if a switch successfully occurred, and false if no switch
             occurred (i.e. we did not enter UNKNOWN at any point).
         """
-        
+
         # Only switch if the switch interval has timed out
         if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL):
 

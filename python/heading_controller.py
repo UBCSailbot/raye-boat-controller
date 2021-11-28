@@ -4,6 +4,7 @@ from sailbot_msg.msg import Sensors
 
 # TODO: Add class methods to get error and feedback gain
 
+
 class HeadingController:
 
     # The controller selector
@@ -34,9 +35,9 @@ class HeadingController:
         current_time = Sensors.gps_ais_timestamp_utc
 
         self.__ctrl_selector = ControllerSelector(
-            init_boat_speed     = boat_speed,
-            unix_timestamp      = current_time,
-            initialControlMode  = initialControlMode
+            init_boat_speed=boat_speed,
+            unix_timestamp=current_time,
+            initialControlMode=initialControlMode
         )
 
         self.__controller = self.__ctrl_selector.getControlMode()
