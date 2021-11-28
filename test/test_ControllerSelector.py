@@ -2,7 +2,6 @@
 import local_imports
 # import rostest
 import unittest
-from python.sailbot_constants import SWITCH_INTERVAL
 import sailbot_constants
 from rudder_controller import RudderController
 from controller_selector import ControllerSelector
@@ -16,6 +15,74 @@ local_imports.printMessage()
 
 
 class Test_ControllerSelector(unittest.TestCase):
+
+    # Test for bad ControlMode input
+    def test_bad_controlMode(self):
+        with self.assertRaises(ValueError):
+            cs = ControllerSelector(0.1, 0, -1)
+
+    # Test for switching on the switch interval
+    def test_switch_interval(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
+        mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+        
+        # Enter TACKABLE mode from UNKNOWN
+        cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+
+        # No switch
+        self.assertFalse(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
+        # Adjust parameters
+        mock_time = 0.5 * sailbot_constants.SWITCH_INTERVAL
+        mock_heading_error = 0.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # Even if exit condition is met for TACKABLE, no switch until switch interval timeout
+        self.assertFalse(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
+        # Adjust parameters
+        mock_time = sailbot_constants.SWITCH_INTERVAL
+
+        # Switch occurs
+        self.assertTrue(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
+        # Adjust time
+        mock_time = 1.5 * sailbot_constants.SWITCH_INTERVAL
+
+        # Even if exit condition is met for TACKABLE, no switch until switch interval timeout
+        self.assertFalse(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
+        # Adjust parameters
+        mock_time = 2 * sailbot_constants.SWITCH_INTERVAL
+
+        # Switch occurs
+        self.assertTrue(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
     
     # TACKABLE tests
     
@@ -47,7 +114,7 @@ class Test_ControllerSelector(unittest.TestCase):
         # Adjust parameters
         mock_speed *= 2
         mock_time += 0.5 * sailbot_constants.SWITCH_INTERVAL
-        mock_heading_error = 1.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWTICH
+        mock_heading_error = 1.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # No switch
         self.assertFalse(cs.switchControlMode(
@@ -122,7 +189,6 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         mock_time += sailbot_constants.MAX_TIME_FOR_TACKING
-        print(mock_time)
 
         # A switch should occur
         self.assertTrue(cs.switchControlMode(
