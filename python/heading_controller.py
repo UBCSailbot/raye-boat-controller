@@ -1,8 +1,8 @@
 from control_modes import ControlModes
 from controller_selector import ControllerSelector
+from sailbot_msg.msg import Sensors
 
 # TODO: Add class methods to get error and feedback gain
-
 
 class HeadingController:
 
@@ -30,7 +30,15 @@ class HeadingController:
             in control_modes.py or the initialization will fail.
 
         """
-        self.__ctrl_selector = ControllerSelector(initialControlMode=initialControlMode)
+        boat_speed = Sensors.gps_ais_groundspeed_knots
+        current_time = Sensors.gps_ais_timestamp_utc
+
+        self.__ctrl_selector = ControllerSelector(
+            init_boat_speed     = boat_speed,
+            unix_timestamp      = current_time,
+            initialControlMode  = initialControlMode
+        )
+
         self.__controller = self.__ctrl_selector.getControlMode()
 
     def getController(self):
@@ -60,7 +68,11 @@ class HeadingController:
             occurred.
 
         """
-        if(self.__ctrl_selector.switchControlMode(heading_error)):
+
+        boat_speed = Sensors.gps_ais_groundspeed_knots
+        current_time = int(Sensors.gps_ais_timestamp_utc)
+
+        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, current_time)):
             self.__controller = self.__ctrl_selector.getControlMode()
             return True
 

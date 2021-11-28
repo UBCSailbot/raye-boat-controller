@@ -3,7 +3,6 @@ from tack_controller import TackController
 from control_modes import ControlModes
 import sailbot_constants
 # import math
-from sailbot_msg.msg import Sensors
 
 # TODO: Determine appropriate constants for controller switching conditions
 
@@ -24,12 +23,18 @@ class ControllerSelector:
     # The time of the latest controller switch
     __lastSwitchTime = 0
 
-    def __init__(self, initialControlMode=ControlModes.UNKNOWN):
+    def __init__(self, init_boat_speed, unix_timestamp, initialControlMode=ControlModes.UNKNOWN):
         """
         Initializes a ControllerSelector object.
 
         Arguments
         ---------
+        float : init_boat_speed
+            The current boat speed in knots
+
+        int : unix_timestamp
+            The current time in seconds (unix timestamp)
+
         int : initialControlMode (optional)
             The ID of the initial control mode that the rudder controller. This parameter must
             adhere to the existing values in the ControlModes class found in control_modes.py.
@@ -42,8 +47,6 @@ class ControllerSelector:
             in control_modes.py or the initialization will fail.
 
         """
-        init_boat_speed = Sensors.gps_ais_groundspeed_knots
-        unix_timestamp = Sensors.gps_ais_timestamp_utc
 
         # Check if the input is valid
         if (not self.isValidModeID(initialControlMode)):
@@ -57,7 +60,7 @@ class ControllerSelector:
 
         self.__lastSwitchTime = int(unix_timestamp)
 
-    def switchControlMode(self, heading_error):
+    def switchControlMode(self, heading_error, boat_speed, current_time):
         """
         Switches the current rudder controller depending on the current sensor readings
         and the current control mode. A switch only occurs when the switching interval
@@ -71,16 +74,19 @@ class ControllerSelector:
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
 
+        float : boat_speed
+            The current boat speed in knots
+
+        int : current_time
+            The current time in seconds (unix timestamp)
+
         Returns
         -------
         bool
             Returns true if a switch successfully occurred, and false if no switch
             occurred.
-
         """
-        boat_speed = Sensors.gps_can_groundspeed_knots
-        current_time = int(Sensors.gps_ais_timestamp_utc)
-
+        
         # Only switch if the switch interval has timed out
         if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL):
 
