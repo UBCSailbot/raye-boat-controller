@@ -63,10 +63,12 @@ class ControllerSelector:
         """
         Switches the current rudder controller depending on the current sensor readings
         and the current control mode. A switch only occurs when the switching interval
-        has timed out (see the sailbot constants). Upon a successful switch, the time
-        since the last switch should be updated to the current time and the control mode
+        has timed out (see the sailbot constants). Upon a successful switch, the control mode
         should be updated according to the current conditions. If the switch interval has
         not timed out, then this method has no effects.
+
+        The time since the last switch is only updated when the switch interval has timed out
+        and a switch is *attempted*. It is not required that a switch be successful.
 
         Arguments
         ---------
@@ -89,8 +91,6 @@ class ControllerSelector:
         # Only switch if the switch interval has timed out
         if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL):
 
-            self.__lastSwitchTime = current_time
-
             # Currently tacking
             if (self.__controlModeID == ControlModes.TACKABLE.value):
                 self.__switchFromTacking(boat_speed, current_time, self.__lastSwitchTime, heading_error)
@@ -98,6 +98,9 @@ class ControllerSelector:
             # Currently jibing
             elif (self.__controlModeID == ControlModes.JIBE_ONLY.value):
                 self.__switchFromJibing(current_time, self.__lastSwitchTime, heading_error)
+
+            # Update the latest switch time since a switch was attempted
+            self.__lastSwitchTime = current_time
 
             # If in UNKNOWN mode, we must resolve to a new control mode
             if (self.__controlModeID == ControlModes.UNKNOWN.value):
