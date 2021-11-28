@@ -2,7 +2,6 @@ from jibe_controller import JibeController
 from tack_controller import TackController
 from control_modes import ControlModes
 import sailbot_constants
-# import math
 
 # TODO: Determine appropriate constants for controller switching conditions
 
