@@ -298,9 +298,60 @@ class Test_ControllerSelector(unittest.TestCase):
             current_time   = mock_time
         ))
 
-        # Should still remain in TACKABLE
+        # Should still remain in JIBE_ONLY
         self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
 
+
+    # Integration tests
+
+    # Enter TACKABLE mode and then swtich to JIBE_ONLY
+    def test_tack_to_jibe(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
+        mock_time = 0
+
+        # Enter TACKABLE from UNKNOWN
+        cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+
+        # Adjust parameters to switch to JIBE_ONLY
+        mock_time += sailbot_constants.SWITCH_INTERVAL
+        mock_speed = 0.5 * sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
+
+        # A switch should occur
+        self.assertTrue(cs.switchControlMode(
+            heading_error  = 0.5,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+
+        # Should now be in JIBE_ONLY mode
+        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+    
+
+    # Enter JIBE_ONLY mode and then switch to TACKABLE
+    def test_jibe_to_tack(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+        mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # Enter JIBE_ONLY from UNKNOWN
+        cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+
+        # Adjust parameters to switch to TACKABLE
+        mock_time += sailbot_constants.SWITCH_INTERVAL
+        mock_speed = 2 * sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
+        mock_heading_error = 0.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # A switch should occur
+        self.assertTrue(cs.switchControlMode(
+            heading_error  = mock_heading_error,
+            boat_speed     = mock_speed,
+            current_time   = mock_time
+        ))
+
+        # Should now be in JIBE_ONLY mode
+        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
        
 
 if __name__ == "__main__":
