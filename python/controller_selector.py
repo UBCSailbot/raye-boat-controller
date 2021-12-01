@@ -1,6 +1,3 @@
-from io import RawIOBase
-from jibe_only_rudder_controller import JibeOnlyRudderController
-from tack_controller import TackController
 from control_modes import ControlModes
 import sailbot_constants
 
@@ -8,14 +5,6 @@ import sailbot_constants
 
 
 class ControllerSelector:
-
-    controllerMappings = {
-        ControlModes.JIBE_ONLY.value: JibeOnlyRudderController,
-        ControlModes.TACKABLE.value: TackController
-    }
-
-    # A class reference to the current rudder controller
-    __controlMode = TackController
 
     # An ID indicating the current rudder controller
     __controlModeID = ControlModes.UNKNOWN.value
@@ -113,15 +102,6 @@ class ControllerSelector:
                 return True
 
         return False
-
-    def getControlMode(self):
-        """
-        Returns
-        -------
-        Returns a class reference to the current control mode used by the rudder.
-
-        """
-        return self.__controlMode
 
     def getControlModeID(self):
         """
@@ -247,7 +227,6 @@ class ControllerSelector:
         # Control mode is valid
         if(self.isValidModeID(control_mode_id)):
             self.__controlModeID = control_mode_id
-            self.__controlMode = self.controllerMappings.get(self.__controlModeID, TackController)
 
         # Invalid control mode passed. Raise ValueError
         else:

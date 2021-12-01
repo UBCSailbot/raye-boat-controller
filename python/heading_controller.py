@@ -1,11 +1,17 @@
 from control_modes import ControlModes
 from controller_selector import ControllerSelector
-from sailbot_msg.msg import Sensors
+from tack_controller import TackController
+from jibe_only_rudder_controller import JibeOnlyRudderController
 
 # TODO: Add class methods to get error and feedback gain
 
 
 class HeadingController:
+
+    controllerMappings = {
+        ControlModes.JIBE_ONLY.value: JibeOnlyRudderController,
+        ControlModes.TACKABLE.value: TackController
+    }
 
     # The controller selector
     __ctrl_selector = None
