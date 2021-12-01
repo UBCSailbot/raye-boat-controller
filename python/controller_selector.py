@@ -210,7 +210,7 @@ class ControllerSelector:
         """
         Changes the control mode according to the control mode ID. Refer to
         control_modes.py for the control mode IDs and how they are encoded.
-        
+
         Arguments
         ---------
         control_mode_id : int
@@ -230,7 +230,7 @@ class ControllerSelector:
 
         # Invalid control mode passed. Raise ValueError
         else:
-           raise ValueError("An invalid control mode was attempted to be set") 
+            raise ValueError("An invalid control mode was attempted to be set")
 
         return
 

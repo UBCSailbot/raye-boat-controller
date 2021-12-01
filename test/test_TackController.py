@@ -6,7 +6,7 @@ import sailbot_constants
 from rudder_controller import RudderController
 from math import pi
 
-#TODO: Remove RudderController class
+# TODO: Remove RudderController class
 
 # Do something with local_imports to avoid lint errors
 local_imports.printMessage()
