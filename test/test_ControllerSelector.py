@@ -33,7 +33,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust parameters
         mock_time = 0.5 * sailbot_constants.SWITCH_INTERVAL
@@ -45,7 +45,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust parameters
         mock_time = sailbot_constants.SWITCH_INTERVAL
@@ -56,7 +56,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust time
         mock_time = 1.5 * sailbot_constants.SWITCH_INTERVAL
@@ -67,7 +67,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust parameters
         mock_time = 2 * sailbot_constants.SWITCH_INTERVAL
@@ -78,7 +78,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
     # TACKABLE tests
 
@@ -89,7 +89,7 @@ class Test_ControllerSelector(unittest.TestCase):
         mock_time = 0
 
         cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
     # Remain in TACKABLE since exit condition is not met
 
@@ -107,7 +107,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust parameters
         mock_speed *= 2
@@ -120,7 +120,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
     # Exit TACKABLE due to slow speed
 
@@ -166,7 +166,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should not have changed modes
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
     # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
@@ -198,7 +198,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should still remain in TACKABLE
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
     # JIBE_ONLY tests
 
@@ -209,7 +209,7 @@ class Test_ControllerSelector(unittest.TestCase):
         mock_time = 0
 
         cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
     # Remain in JIBE_ONLY since exit condition is not met
 
@@ -227,7 +227,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
         # Adjust parameters
         mock_speed /= 2
@@ -240,7 +240,7 @@ class Test_ControllerSelector(unittest.TestCase):
             boat_speed=mock_speed,
             current_time=mock_time
         ))
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
     # Exit JIBE_ONLY mode due to reaching the heading
 
@@ -263,7 +263,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should not have changed modes
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
     # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
@@ -295,7 +295,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should still remain in JIBE_ONLY
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
     # Integration tests
 
@@ -307,7 +307,7 @@ class Test_ControllerSelector(unittest.TestCase):
 
         # Enter TACKABLE from UNKNOWN
         cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
         # Adjust parameters to switch to JIBE_ONLY
         mock_time += sailbot_constants.SWITCH_INTERVAL
@@ -321,7 +321,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should now be in JIBE_ONLY mode
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
     # Enter JIBE_ONLY mode and then switch to TACKABLE
 
@@ -332,7 +332,7 @@ class Test_ControllerSelector(unittest.TestCase):
 
         # Enter JIBE_ONLY from UNKNOWN
         cs = ControllerSelector(mock_speed, mock_time, ControlModes.UNKNOWN.value)
-        self.assertTrue(cs.getControlModeID() == ControlModes.JIBE_ONLY.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
         # Adjust parameters to switch to TACKABLE
         mock_time += sailbot_constants.SWITCH_INTERVAL
@@ -347,7 +347,7 @@ class Test_ControllerSelector(unittest.TestCase):
         ))
 
         # Should now be in JIBE_ONLY mode
-        self.assertTrue(cs.getControlModeID() == ControlModes.TACKABLE.value)
+        self.assertEqual(cs.getControlModeID(), ControlModes.TACKABLE.value)
 
 
 if __name__ == "__main__":
