@@ -13,7 +13,7 @@ local_imports.printMessage()
 class Test_HeadingController(unittest.TestCase):
 
     # Test for bad ControlMode input
-    def test_bad_controlMode(self):
+    def test_badControlModeInput_ValueError(self):
         with self.assertRaises(ValueError):
             HeadingController(0.1, 0, -1)
 
@@ -84,7 +84,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Entry to TACKABLE from UNKNOWN
 
-    def test_enter_tack_initialzation(self):
+    def test_initialize_tackableMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
 
@@ -93,7 +93,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Remain in TACKABLE since exit condition is not met
 
-    def test_remain_tack(self):
+    def test_noExit_tackableMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
         mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
@@ -124,7 +124,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Exit TACKABLE due to slow speed
 
-    def test_exit_tack_tooSlow(self):
+    def test_slowSpeed_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
 
@@ -147,7 +147,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Exit TACKABLE due to reaching the heading
 
-    def test_exit_tack_reachedHeading(self):
+    def test_reachedHeading_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
 
@@ -171,7 +171,7 @@ class Test_HeadingController(unittest.TestCase):
     # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
 
-    def test_exit_tack_timeout(self):
+    def test_timeout_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
 
@@ -204,7 +204,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Entry to JIBE_ONLY from UNKNOWN
 
-    def test_enter_jibe_initialzation(self):
+    def test_initialize_jibeMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
 
@@ -213,7 +213,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Remain in JIBE_ONLY since exit condition is not met
 
-    def test_remain_jibe(self):
+    def test_noExit_jibeMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
         mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
@@ -244,7 +244,7 @@ class Test_HeadingController(unittest.TestCase):
 
     # Exit JIBE_ONLY mode due to reaching the heading
 
-    def test_exit_jibe_reachedHeading(self):
+    def test_reachedHeading_exitJibe(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
 
@@ -268,7 +268,7 @@ class Test_HeadingController(unittest.TestCase):
     # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
 
-    def test_exit_JIBE_timeout(self):
+    def test_timeout_exitJibe(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
 
