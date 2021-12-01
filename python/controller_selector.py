@@ -1,3 +1,4 @@
+from io import RawIOBase
 from jibe_only_rudder_controller import JibeOnlyRudderController
 from tack_controller import TackController
 from control_modes import ControlModes
@@ -225,15 +226,17 @@ class ControllerSelector:
         """
         Changes the control mode according to the control mode ID. Refer to
         control_modes.py for the control mode IDs and how they are encoded.
-        If an invalid control mode ID is passed, then the default control mode
-        is tacking, but the control mode ID is assigned to UNKNOWN. Note that an
-        invalid control mode ID is not ideal and should be avoided.
-
+        
         Arguments
         ---------
         control_mode_id : int
             The ID of the new control mode. Refer to control_mode.py for the possible
             control mode IDs and what control modes they map to.
+
+        Raises
+        ------
+        ValueError
+            Raises a value error when an invalid control mode is passed
 
         """
 
@@ -242,10 +245,9 @@ class ControllerSelector:
             self.__controlModeID = control_mode_id
             self.__controlMode = self.controllerMappings.get(self.__controlModeID, TackController)
 
-        # Invalid control mode passed. Assigning a default value
+        # Invalid control mode passed. Raise ValueError
         else:
-            self.__controlModeID = ControlModes.UNKNOWN.value
-            self.__controlMode = TackController
+           raise ValueError("An invalid control mode was attempted to be set") 
 
         return
 
