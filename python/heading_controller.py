@@ -51,7 +51,7 @@ class HeadingController:
         """
         return self.__controller
 
-    def switchControlMode(self, heading_error):
+    def switchControlMode(self, heading_error, boat_speed, current_time):
         """
         Switches the rudder controller depending on the sensor readings. The
         controller selector is invoked and contains most of the logic for
@@ -73,9 +73,6 @@ class HeadingController:
             occurred.
 
         """
-
-        boat_speed = Sensors.gps_ais_groundspeed_knots
-        current_time = int(Sensors.gps_ais_timestamp_utc)
 
         if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, current_time)):
             self.__controller = self.__ctrl_selector.getControlMode()
