@@ -62,6 +62,10 @@ class HeadingController:
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
 
+        Modifies
+        --------
+        - The control mode is modified upon calling this method
+
         Returns
         -------
         bool

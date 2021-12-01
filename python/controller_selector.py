@@ -82,6 +82,10 @@ class ControllerSelector:
         int : current_time
             The current time in seconds (unix timestamp)
 
+        Modifies
+        --------
+        - Modifies the current control mode ID
+
         Returns
         -------
         bool
