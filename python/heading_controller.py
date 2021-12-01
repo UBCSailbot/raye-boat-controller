@@ -11,9 +11,9 @@ class HeadingController:
     __ctrl_selector = None
 
     # A class reference to the current controller
-    __controller = None
+    __controlModeID = 0
 
-    def __init__(self, initialControlMode=ControlModes.UNKNOWN.value):
+    def __init__(self, boat_speed, current_time, initialControlMode=ControlModes.UNKNOWN.value):
         """
         Initializes a HeadingController object with a specified control mode.
 
@@ -23,6 +23,12 @@ class HeadingController:
             The ID of the initial control mode that the rudder controller. This parameter must
             adhere to the existing values in the ControlModes class found in control_modes.py.
 
+        float : boat_speed
+            The current boat speed in knots
+
+        int : current_time
+            The current time in seconds (unix timestamp)
+
         Throws
         ------
         ValueError
@@ -31,25 +37,22 @@ class HeadingController:
             in control_modes.py or the initialization will fail.
 
         """
-        boat_speed = Sensors.gps_ais_groundspeed_knots
-        current_time = Sensors.gps_ais_timestamp_utc
-
         self.__ctrl_selector = ControllerSelector(
             init_boat_speed=boat_speed,
             unix_timestamp=current_time,
             initialControlMode=initialControlMode
         )
 
-        self.__controller = self.__ctrl_selector.getControlMode()
+        self.__controlModeID = self.__ctrl_selector.getControlModeID()
 
-    def getController(self):
+    def getControlModeID(self):
         """
         Returns
         -------
-        Returns a class reference to the current controller used by the rudder.
-
+        int
+            Returns an integer representing the control mode ID
         """
-        return self.__controller
+        return self.__controlModeID
 
     def switchControlMode(self, heading_error, boat_speed, current_time):
         """
@@ -75,7 +78,7 @@ class HeadingController:
         """
 
         if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, current_time)):
-            self.__controller = self.__ctrl_selector.getControlMode()
+            self.__controlModeID = self.__ctrl_selector.getControlModeID()
             return True
 
         return False
