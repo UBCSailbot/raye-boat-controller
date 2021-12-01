@@ -10,7 +10,7 @@ from control_modes import ControlModes
 local_imports.printMessage()
 
 
-class Test_ControllerSelector(unittest.TestCase):
+class Test_HeadingController(unittest.TestCase):
 
     # Test for bad ControlMode input
     def test_bad_controlMode(self):
@@ -351,4 +351,4 @@ class Test_ControllerSelector(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    rostest.rosrun("boat_controller", "Test_ControllerSelector", Test_ControllerSelector)
+    rostest.rosrun("boat_controller", "Test_HeadingController", Test_HeadingController)

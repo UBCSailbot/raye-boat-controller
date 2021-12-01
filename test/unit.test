@@ -4,5 +4,5 @@
   <test test-name="test_SailController" pkg="boat_controller" type="test_SailController.py" />
   <test test-name="test_ControllerOutputRefiner" pkg="boat_controller" type="test_ControllerOutputRefiner.py" />
   <test test-name="test_JibeController" pkg="boat_controller" type="test_JibeController.py" />
-  <test test-name="test_ControllerSelector" pkg="boat_controller" type="test_ControllerSelector.py" />
+  <test test-name="test_HeadingController" pkg="boat_controller" type="test_HeadingController.py" />
 </launch>
