@@ -12,12 +12,9 @@ local_imports.printMessage()
 
 class Test_HeadingController(unittest.TestCase):
 
-    # Test for bad ControlMode input
     def test_badControlModeInput_ValueError(self):
         with self.assertRaises(ValueError):
             HeadingController(0.1, 0, -1)
-
-    # Test for switching on the switch interval
 
     def test_switch_interval(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
@@ -82,16 +79,12 @@ class Test_HeadingController(unittest.TestCase):
 
     # TACKABLE tests
 
-    # Entry to TACKABLE from UNKNOWN
-
     def test_initialize_tackableMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
 
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
-
-    # Remain in TACKABLE since exit condition is not met
 
     def test_noExit_tackableMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
@@ -122,11 +115,10 @@ class Test_HeadingController(unittest.TestCase):
         ))
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
 
-    # Exit TACKABLE due to slow speed
-
     def test_slowSpeed_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # Enter TACKABLE from UNKNOWN
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
@@ -136,16 +128,14 @@ class Test_HeadingController(unittest.TestCase):
         mock_time += sailbot_constants.SWITCH_INTERVAL
 
         self.assertTrue(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
 
         # Should not be in TACKABLE or UNKNOWN
-        self.assertTrue(hc.getControlModeID() != ControlModes.TACKABLE.value)
-        self.assertTrue(hc.getControlModeID() != ControlModes.UNKNOWN.value)
-
-    # Exit TACKABLE due to reaching the heading
+        self.assertNotEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+        self.assertNotEqual(hc.getControlModeID(), ControlModes.UNKNOWN.value)
 
     def test_reachedHeading_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
@@ -168,12 +158,12 @@ class Test_HeadingController(unittest.TestCase):
         # Should not have changed modes
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
 
-    # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
 
     def test_timeout_exitTackable(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # Enter TACKABLE from UNKNOWN
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
@@ -183,7 +173,7 @@ class Test_HeadingController(unittest.TestCase):
 
         # A switch should NOT occur
         self.assertFalse(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
@@ -192,7 +182,7 @@ class Test_HeadingController(unittest.TestCase):
 
         # A switch should occur
         self.assertTrue(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
@@ -202,16 +192,12 @@ class Test_HeadingController(unittest.TestCase):
 
     # JIBE_ONLY tests
 
-    # Entry to JIBE_ONLY from UNKNOWN
-
     def test_initialize_jibeMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
 
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
-
-    # Remain in JIBE_ONLY since exit condition is not met
 
     def test_noExit_jibeMode(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
@@ -242,8 +228,6 @@ class Test_HeadingController(unittest.TestCase):
         ))
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
-    # Exit JIBE_ONLY mode due to reaching the heading
-
     def test_reachedHeading_exitJibe(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
@@ -265,14 +249,14 @@ class Test_HeadingController(unittest.TestCase):
         # Should not have changed modes
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
-    # Exit TACKABLE due to timeout
     # This test assumes that the timeout interval is larger than the switch interval
 
     def test_timeout_exitJibe(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
         mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
-        # Enter TACKABLE from UNKNOWN
+        # Enter JIBE_ONLY from UNKNOWN
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
 
         # Adjust time to meet the switch interval
@@ -280,7 +264,7 @@ class Test_HeadingController(unittest.TestCase):
 
         # A switch should NOT occur
         self.assertFalse(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
@@ -289,7 +273,7 @@ class Test_HeadingController(unittest.TestCase):
 
         # A switch should occur
         self.assertTrue(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
@@ -299,11 +283,10 @@ class Test_HeadingController(unittest.TestCase):
 
     # Integration tests
 
-    # Enter TACKABLE mode and then swtich to JIBE_ONLY
-
     def test_tack_to_jibe(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_time = 0
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # Enter TACKABLE from UNKNOWN
         hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
@@ -315,15 +298,13 @@ class Test_HeadingController(unittest.TestCase):
 
         # A switch should occur
         self.assertTrue(hc.switchControlMode(
-            heading_error=0.5,
+            heading_error=mock_heading_error,
             boat_speed=mock_speed,
             current_time=mock_time
         ))
 
         # Should now be in JIBE_ONLY mode
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
-
-    # Enter JIBE_ONLY mode and then switch to TACKABLE
 
     def test_jibe_to_tack(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
