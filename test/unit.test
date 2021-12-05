@@ -1,6 +1,8 @@
 <launch>
   <test test-name="test_RudderController" pkg="boat_controller" type="test_RudderController.py" />
+  <test test-name="test_TackController" pkg="boat_controller" type="test_TackController.py" />
   <test test-name="test_SailController" pkg="boat_controller" type="test_SailController.py" />
   <test test-name="test_ControllerOutputRefiner" pkg="boat_controller" type="test_ControllerOutputRefiner.py" />
   <test test-name="test_JibeController" pkg="boat_controller" type="test_JibeController.py" />
+  <test test-name="test_HeadingController" pkg="boat_controller" type="test_HeadingController.py" />
 </launch>

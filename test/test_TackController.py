@@ -6,11 +6,13 @@ import sailbot_constants
 from rudder_controller import RudderController
 from math import pi
 
+# TODO: Remove RudderController class
+
 # Do something with local_imports to avoid lint errors
 local_imports.printMessage()
 
 
-class Test_RudderController(unittest.TestCase):
+class Test_TackController(unittest.TestCase):
     def test_getFeedBackGain_headingErrorPositive(self):
         self.assertEqual(
             RudderController.get_feed_back_gain(1.2),
@@ -88,5 +90,5 @@ class Test_RudderController(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    rostest.rosrun("boat_controller", "Test_RudderController",
-                   Test_RudderController)
+    rostest.rosrun("boat_controller", "Test_TackController",
+                   Test_TackController)

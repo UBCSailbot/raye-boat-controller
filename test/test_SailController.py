@@ -43,22 +43,22 @@ class Test_SailController(unittest.TestCase):
 
     def test_getSailAngle_apparentWindAngle_boundedBetweenPiAnd2Pi(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(3/2*math.pi),
+            SailController.get_sail_angle(3 / 2 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE /
-            (-math.pi) * (math.pi/2)
+            (-math.pi) * (math.pi / 2)
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAngleNegativeNotBounded(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(-2 + 10*math.pi),
+            SailController.get_sail_angle(-2 + 10 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAnglePositiveNotBounded(self):
         self.assertAlmostEqual(
-            SailController.get_sail_angle(2 + 10*math.pi),
+            SailController.get_sail_angle(2 + 10 * math.pi),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
