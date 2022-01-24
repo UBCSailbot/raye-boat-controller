@@ -122,7 +122,7 @@ class HeadingController:
                 jibe_direction=jibe_direction
             )
             return error
-        
+
         # Either UNKNOWN or TACKABLE
         else:
             error = TackController.get_heading_error_tackable(
