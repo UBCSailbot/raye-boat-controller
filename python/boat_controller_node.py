@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from jib_controlller import JibController
 from sail_controller import SailController
 from rudder_controller import RudderController
 from controller_output_refiner import ControllerOutputRefiner
@@ -15,6 +16,7 @@ headingMeasureRad = None
 apparentWindAngleRad = None
 rudderAngleDegrees = 0
 sailAngleDegrees = 0
+jibAngleDegrees = 0
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
@@ -65,6 +67,11 @@ def publishRudderWinchAngle():
             SailController.get_sail_angle(apparentWindAngleRad) * 180 / math.pi
         )
 
+        global jibAngleDegrees 
+        jibAngleDegrees = (
+            JibController.get_jib_angle(apparentWindAngleRad) * 180 / math.pi
+        )
+
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
                 rudderAngleDegrees,
@@ -74,7 +81,12 @@ def publishRudderWinchAngle():
             ControllerOutputRefiner.saturate(
                 sailAngleDegrees,
                 sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG,
-                -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG)
+                -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG),
+            ControllerOutputRefiner.saturate(
+                jibAngleDegrees,
+                sailbot_constants.MAX_ABS_JIB_ANGLE_DEG
+                -sailbot_constants.MAX_ABS_JIB_ANGLE_DEG
+            )
         )
 
 
