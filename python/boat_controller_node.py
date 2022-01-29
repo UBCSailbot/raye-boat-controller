@@ -84,9 +84,8 @@ def publishRudderWinchAngle():
                 -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG),
             ControllerOutputRefiner.saturate(
                 jibAngleDegrees,
-                sailbot_constants.MAX_ABS_JIB_ANGLE_DEG
-                -sailbot_constants.MAX_ABS_JIB_ANGLE_DEG
-            )
+                sailbot_constants.MAX_ABS_JIB_ANGLE_DEG,
+                -sailbot_constants.MAX_ABS_JIB_ANGLE_DEG)
         )
 
 
