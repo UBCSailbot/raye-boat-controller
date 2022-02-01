@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# Need this because in Python2 regular division (/) is integer division. I.e. 3/2==1
+# Need this because in Python2 regular division (/)
+# is integer division. I.e. 3/2==1
 from __future__ import division
 
 import local_imports
