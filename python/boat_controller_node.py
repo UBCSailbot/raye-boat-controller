@@ -67,7 +67,7 @@ def publishRudderWinchAngle():
             SailController.get_sail_angle(apparentWindAngleRad) * 180 / math.pi
         )
 
-        global jibAngleDegrees 
+        global jibAngleDegrees
         jibAngleDegrees = (
             JibController.get_jib_angle(apparentWindAngleRad) * 180 / math.pi
         )

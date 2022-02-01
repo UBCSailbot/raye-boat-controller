@@ -8,7 +8,7 @@ import rostest
 import unittest
 import math
 import sailbot_constants
-from jib_controlller import JibController
+from jib_controller import JibController
 
 # Do something with local_imports to avoid lint errors
 local_imports.printMessage()
@@ -66,4 +66,4 @@ class Test_JibController(unittest.TestCase):
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_JibController",
-                  Test_JibController)
+                   Test_JibController)
