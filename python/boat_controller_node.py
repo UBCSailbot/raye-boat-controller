@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from jib_controlller import JibController
+from jib_controller import JibController
 from sail_controller import SailController
 from rudder_controller import RudderController
 from controller_output_refiner import ControllerOutputRefiner
