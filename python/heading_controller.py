@@ -3,15 +3,13 @@ from controller_selector import ControllerSelector
 from tack_controller import TackController
 from jibe_only_rudder_controller import JibeOnlyRudderController
 
+import sailbot_constants
+import math
+
 # TODO: Add class methods to get error and feedback gain
 
 
 class HeadingController:
-
-    controllerMappings = {
-        ControlModes.JIBE_ONLY.value: JibeOnlyRudderController,
-        ControlModes.TACKABLE.value: TackController
-    }
 
     # The controller selector
     __ctrl_selector = None
@@ -88,3 +86,75 @@ class HeadingController:
             return True
 
         return False
+
+    def get_heading_error(self, current_heading, desired_heading, apparent_wind_angle):
+        """
+        Calculates the heading error. The heading error varies depending on the current control
+        mode of the boat.
+
+        Arguments
+        ---------
+        float : current_heading
+            The current direction of the boat in radians.
+
+        float : desired_heading
+            The desired direction of the boat in radians.
+
+        float : apparent_wind_angle
+            The apparent wind angle in radians.
+
+        Returns
+        -------
+        float
+            Returns the heading error depending on the current control mode in radians.
+
+        """
+
+        if(self.__controlModeID == ControlModes.JIBE_ONLY.value):
+            jibe_direction = JibeOnlyRudderController.get_jibe_controller_direction(
+                current_heading=current_heading,
+                desired_heading=desired_heading,
+                apparent_wind_angle=apparent_wind_angle
+            )
+            error = JibeOnlyRudderController.get_jibe_controller_error(
+                current_heading=current_heading,
+                desired_heading=desired_heading,
+                jibe_direction=jibe_direction
+            )
+            return error
+
+        # Either UNKNOWN or TACKABLE
+        else:
+            error = TackController.get_heading_error_tackable(
+                setPoint=desired_heading,
+                measure=current_heading
+            )
+            return error
+
+    def get_feed_back_gain(self, heading_error):
+        """
+        Calculates the feedback gain depending on the current heading error.
+
+        How feedback gain is calculated is take from equation 5.2 on page 25 of this paper:
+        https://core.ac.uk/download/pdf/79618904.pdf
+
+        Arguments
+        ---------
+        float : heading_error
+            The current heading error from the setpoint. Should be in radians.
+
+        Returns
+        -------
+        float
+            Returns the feedback gain.
+
+        """
+
+        if (abs(heading_error) > 2 * math.pi):
+            raise ValueError("heading_error must be between -2pi and 2pi")
+
+        # Bound the heading error between -2pi and 2pi
+        if (abs(heading_error) >= 2 * math.pi):
+            heading_error %= 2 * math.pi
+
+        return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))

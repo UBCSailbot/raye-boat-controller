@@ -3,8 +3,11 @@ import local_imports
 import rostest
 import unittest
 import sailbot_constants
+import math
 from heading_controller import HeadingController
 from control_modes import ControlModes
+from jibe_only_rudder_controller import JibeOnlyRudderController
+from tack_controller import TackController
 
 # Do something with local_imports to avoid lint errors
 local_imports.printMessage()
@@ -329,6 +332,70 @@ class Test_HeadingController(unittest.TestCase):
 
         # Should now be in JIBE_ONLY mode
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+
+    def test_tack_error_function(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
+        mock_time = 0
+
+        # Enter TACKABLE mode from UNKNOWN
+        hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+
+        mock_current_heading = math.pi
+        mock_desired_heading = math.pi / 2
+        mock_wind_angle = math.pi / 4
+
+        # Error function in heading controller should be the same as tack controller error functions
+        self.assertAlmostEqual(hc.get_heading_error(
+            mock_current_heading,
+            mock_desired_heading,
+            mock_wind_angle
+        ), TackController.get_heading_error_tackable(
+            mock_desired_heading,
+            mock_current_heading
+        ))
+
+    def test_jibe_error_function(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+        mock_time = 0
+
+        # Enter JIBE_ONLY mode from UNKNOWN
+        hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+
+        mock_current_heading = -math.pi
+        mock_desired_heading = math.pi / 2
+        mock_wind_angle = math.pi / 4
+
+        jibe_direction = JibeOnlyRudderController.get_jibe_controller_direction(
+            mock_current_heading,
+            mock_desired_heading,
+            mock_wind_angle
+        )
+
+        # Error function in heading controller should be the same as jibe controller error functions
+        self.assertAlmostEqual(hc.get_heading_error(
+            mock_current_heading,
+            mock_desired_heading,
+            mock_wind_angle
+        ), JibeOnlyRudderController.get_jibe_controller_error(
+            mock_current_heading,
+            mock_desired_heading,
+            jibe_direction
+        ))
+
+    def test_feedback_function(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+        mock_time = 0
+
+        # Enter JIBE_ONLY mode from UNKNOWN
+        hc = HeadingController(mock_speed, mock_time, ControlModes.UNKNOWN.value)
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+
+        self.assertEqual(
+            hc.get_feed_back_gain(-1.2),
+            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-1.2)),
+        )
 
 
 if __name__ == "__main__":
