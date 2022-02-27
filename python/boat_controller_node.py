@@ -2,6 +2,7 @@
 from jib_controller import JibController
 from sail_controller import SailController
 from rudder_controller import RudderController
+from heading_controller import HeadingController
 from controller_output_refiner import ControllerOutputRefiner
 import sailbot_constants
 import rospy
@@ -14,9 +15,12 @@ lock = threading.Lock()
 headingSetPointRad = None
 headingMeasureRad = None
 apparentWindAngleRad = None
+groundspeedKnots = None
+timestamp = None
 rudderAngleDegrees = 0
 sailAngleDegrees = 0
 jibAngleDegrees = 0
+controller = HeadingController(boat_speed=0, current_time=0)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
@@ -26,9 +30,11 @@ rudder_winch_actuation_angle_pub = rospy.Publisher(
 def sensorsCallBack(sensors_msg_instance):
     lock.acquire()
 
-    global headingMeasureRad, apparentWindAngleRad
+    global headingMeasureRad, apparentWindAngleRad, groundspeedKnots, timestamp
     headingMeasureRad = sensors_msg_instance.gps_can_true_heading_degrees * math.pi / 180
     apparentWindAngleRad = sensors_msg_instance.wind_sensor_1_angle_degrees * math.pi / 180
+    groundspeedKnots = sensors_msg_instance.gps_can_groundspeed_knots
+    timestamp = int(sensors_msg_instance.gps_can_timestamp_utc)
 
     publishRudderWinchAngle()
     lock.release()
@@ -49,15 +55,27 @@ def publishRudderWinchAngle():
         headingSetPointRad is not None
         and headingMeasureRad is not None
         and apparentWindAngleRad is not None
+        and groundspeedKnots is not None
+        and timestamp is not None
     ):
 
         global rudderAngleDegrees
-        heading_error_tackable = RudderController.get_heading_error_tackable(
-            headingSetPointRad, headingMeasureRad
+
+        heading_error = controller.get_heading_error(
+            current_heading=headingMeasureRad,
+            desired_heading=headingSetPointRad,
+            apparent_wind_angle=apparentWindAngleRad
         )
+
+        controller.switchControlMode(
+            heading_error=heading_error,
+            boat_speed=groundspeedKnots,
+            current_time=timestamp
+        )
+
         rudderAngleDegrees = (
-            RudderController.get_feed_back_gain(heading_error_tackable)
-            * heading_error_tackable
+            controller.get_feed_back_gain(heading_error)
+            * heading_error
             * 180
             / math.pi
         )
