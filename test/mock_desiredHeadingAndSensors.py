@@ -30,7 +30,7 @@ def talker():
             0,
             0.0,
             0,
-            timestamp,
+            "",
             0.0,
             0.0,
             groundspeed,

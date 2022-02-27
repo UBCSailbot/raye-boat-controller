@@ -33,7 +33,11 @@ def sensorsCallBack(sensors_msg_instance):
     headingMeasureRad = sensors_msg_instance.gps_can_true_heading_degrees * math.pi / 180
     apparentWindAngleRad = sensors_msg_instance.wind_sensor_1_angle_degrees * math.pi / 180
     groundspeedKnots = sensors_msg_instance.gps_can_groundspeed_knots
-    timestamp = int(sensors_msg_instance.gps_can_timestamp_utc)
+
+    if sensors_msg_instance.gps_can_timestamp_utc:
+        timestamp = int(sensors_msg_instance.gps_can_timestamp_utc)
+    else:
+        timestamp = sailbot_constants.TIMESTAMP_UNAVAILABLE
 
     publishRudderWinchAngle()
     lock.release()

@@ -88,7 +88,8 @@ class ControllerSelector:
             occurred (i.e. we did not enter UNKNOWN at any point).
         """
         # Only switch if the switch interval has timed out
-        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL):
+        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL or 
+           current_time == sailbot_constants.TIMESTAMP_UNAVAILABLE):
 
             # Currently tacking
             if (self.__controlModeID == ControlModes.TACKABLE.value):
@@ -99,11 +100,13 @@ class ControllerSelector:
                 self.__switchFromJibing(current_time, self.__lastSuccessfulSwitchTime, heading_error)
 
             # Update the latest switch time since a switch was attempted
-            self.__lastSwitchTime = current_time
+            if(current_time != sailbot_constants.TIMESTAMP_UNAVAILABLE):
+                self.__lastSwitchTime = current_time
 
             # If in UNKNOWN mode, we must resolve to a new control mode
             if (self.__controlModeID == ControlModes.UNKNOWN.value):
-                self.__lastSuccessfulSwitchTime = current_time
+                if(current_time != sailbot_constants.TIMESTAMP_UNAVAILABLE):
+                    self.__lastSuccessfulSwitchTime = current_time
                 self.__switchFromUnknown(boat_speed)
                 return True
 

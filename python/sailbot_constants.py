@@ -3,6 +3,8 @@ import math
 KP = 0.35
 CP = 0.34
 
+TIMESTAMP_UNAVAILABLE = -1
+
 # Radians
 SAIL_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
 JIB_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
