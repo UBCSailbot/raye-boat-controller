@@ -16,9 +16,9 @@ headingMeasureRad = None
 apparentWindAngleRad = None
 groundspeedKnots = None
 timestamp = None
-rudderAngleDegrees = 0
-sailAngleDegrees = 0
-jibAngleDegrees = 0
+rudderAngleRad = 0
+sailAngle = 0
+jibAngle = 0
 controller = HeadingController(boat_speed=0, current_time=0)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
@@ -62,7 +62,7 @@ def publishRudderWinchAngle():
         and timestamp is not None
     ):
 
-        global rudderAngleDegrees
+        global rudderAngleRad
 
         heading_error = controller.get_heading_error(
             current_heading=headingMeasureRad,
@@ -76,37 +76,33 @@ def publishRudderWinchAngle():
             current_time=timestamp
         )
 
-        rudderAngleDegrees = (
-            controller.get_feed_back_gain(heading_error)
-            * heading_error
-            * 180
-            / math.pi
+        rudderAngleRad = (
+            controller.get_feed_back_gain(heading_error) * heading_error
         )
 
-        global sailAngleDegrees
-        sailAngleDegrees = (
-            SailController.get_sail_angle(apparentWindAngleRad) * 180 / math.pi
+        global sailAngle
+        sailAngle = (
+            int(SailController.get_sail_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
         )
 
-        global jibAngleDegrees
-        jibAngleDegrees = (
-            JibController.get_jib_angle(apparentWindAngleRad) * 180 / math.pi
+        global jibAngle
+        jibAngle = (
+            int(JibController.get_jib_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
         )
 
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
-                rudderAngleDegrees,
-                sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG,
-                -sailbot_constants.MAX_ABS_RUDDER_ANGLE_DEG),
-
+                rudderAngleRad,
+                sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD,
+                -sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD),
             ControllerOutputRefiner.saturate(
-                sailAngleDegrees,
-                sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG,
-                -sailbot_constants.MAX_ABS_SAIL_ANGLE_DEG),
+                sailAngle,
+                sailbot_constants.MAX_WINCH_POSITION,
+                sailbot_constants.MIN_WINCH_POSITION),
             ControllerOutputRefiner.saturate(
-                jibAngleDegrees,
-                sailbot_constants.MAX_ABS_JIB_ANGLE_DEG,
-                -sailbot_constants.MAX_ABS_JIB_ANGLE_DEG)
+                jibAngle,
+                sailbot_constants.MAX_WINCH_POSITION,
+                sailbot_constants.MIN_WINCH_POSITION)
         )
 
 
