@@ -3,6 +3,12 @@ import math
 KP = 0.35
 CP = 0.34
 
+X1_SAIL = 0
+X2_SAIL = math.pi
+
+X1_JIB = 0
+X2_JIB = math.pi
+
 TIMESTAMP_UNAVAILABLE = -1
 
 MAX_WINCH_POSITION = 360

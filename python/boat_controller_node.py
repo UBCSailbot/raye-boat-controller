@@ -110,6 +110,7 @@ def main():
     rospy.init_node("rudder_and_sail_angle_publisher", anonymous=True)
     rospy.Subscriber("/desired_heading_degrees",
                      heading, desiredHeadingCallBack)
+    rospy.Subscriber("/", ,se)
     rospy.Subscriber("/sensors", Sensors, sensorsCallBack)
     rospy.spin()
 
