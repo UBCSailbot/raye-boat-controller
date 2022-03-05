@@ -19,6 +19,8 @@ class RudderController():
         if (abs(heading_error) >= 2 * math.pi):
             heading_error %= 2 * math.pi
 
+        heading_error = (heading_error / math.pi) - 1
+        
         return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
 
     # implementation taken from: https://stackoverflow.com/a/2007279
