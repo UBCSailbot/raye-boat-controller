@@ -88,7 +88,7 @@ class ControllerSelector:
             occurred (i.e. we did not enter UNKNOWN at any point).
         """
         # Only switch if the switch interval has timed out
-        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL or 
+        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL or
            current_time == sailbot_constants.TIMESTAMP_UNAVAILABLE):
 
             # Currently tacking
