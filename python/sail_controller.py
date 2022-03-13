@@ -21,3 +21,23 @@ class SailController:
             * abs(bounded_angle)
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
         )
+
+    @staticmethod
+    def get_winch_position(sailAngle):
+        """
+        Converts a sail angle in radians to a winch position.
+
+        ** Description of Winch Position **
+
+        Arguments
+        ---------
+        float : sailAngle
+            The sail angle in radians
+
+        Returns
+        -------
+        int
+            The winch position corresponding to the sail angle
+        """
+
+        return int(sailAngle * (360 / (math.pi / 2)))

@@ -17,8 +17,8 @@ apparentWindAngleRad = None
 groundspeedKnots = None
 timestamp = None
 rudderAngleRad = 0
-sailAngle = 0
-jibAngle = 0
+sailWinchPosition = 0
+jibWinchPosition = 0
 controller = HeadingController(boat_speed=0, current_time=0)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
@@ -80,15 +80,11 @@ def publishRudderWinchAngle():
             controller.get_feed_back_gain(heading_error) * heading_error
         )
 
-        global sailAngle
-        sailAngle = (
-            int(SailController.get_sail_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
-        )
+        global sailWinchPosition
+        sailWinchPosition = controller.get_sail_winch_position(apparentWindAngleRad)
 
-        global jibAngle
-        jibAngle = (
-            int(JibController.get_jib_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
-        )
+        global jibWinchPosition
+        jibWinchPosition = controller.get_jib_winch_position(apparentWindAngleRad)
 
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
@@ -96,11 +92,11 @@ def publishRudderWinchAngle():
                 sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD,
                 -sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD),
             ControllerOutputRefiner.saturate(
-                sailAngle,
+                sailWinchPosition,
                 sailbot_constants.MAX_WINCH_POSITION,
                 sailbot_constants.MIN_WINCH_POSITION),
             ControllerOutputRefiner.saturate(
-                jibAngle,
+                jibWinchPosition,
                 sailbot_constants.MAX_WINCH_POSITION,
                 sailbot_constants.MIN_WINCH_POSITION)
         )
