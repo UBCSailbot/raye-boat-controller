@@ -9,8 +9,11 @@ class ControllerSelector:
     # An ID indicating the current rudder controller
     __controlModeID = ControlModes.UNKNOWN.value
 
-    # The time of the latest controller switch
+    # The time of the latest controller switch attempt
     __lastSwitchTime = 0
+
+    # The time of the latest successful switch
+    __lastSuccessfulSwitchTime = 0
 
     def __init__(self, init_boat_speed, unix_timestamp, initialControlMode=ControlModes.UNKNOWN.value):
         """
@@ -48,6 +51,7 @@ class ControllerSelector:
             self.__assignMode(initialControlMode)
 
         self.__lastSwitchTime = int(unix_timestamp)
+        self.__lastSuccessfulSwitchTime = int(unix_timestamp)
 
     def switchControlMode(self, heading_error, boat_speed, current_time):
         """
@@ -59,6 +63,8 @@ class ControllerSelector:
 
         The time since the last switch is only updated when the switch interval has timed out
         and a switch is *attempted*. It is not required that a switch be successful.
+        The time since the last successful switch in modified when the controller successfully
+        switches control modes.
 
         Arguments
         ---------
@@ -81,23 +87,26 @@ class ControllerSelector:
             Returns true if a switch successfully occurred, and false if no switch
             occurred (i.e. we did not enter UNKNOWN at any point).
         """
-
         # Only switch if the switch interval has timed out
-        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL):
+        if(current_time - self.__lastSwitchTime >= sailbot_constants.SWITCH_INTERVAL or
+           current_time == sailbot_constants.TIMESTAMP_UNAVAILABLE):
 
             # Currently tacking
             if (self.__controlModeID == ControlModes.TACKABLE.value):
-                self.__switchFromTacking(boat_speed, current_time, self.__lastSwitchTime, heading_error)
+                self.__switchFromTacking(boat_speed, current_time, self.__lastSuccessfulSwitchTime, heading_error)
 
             # Currently jibing
             elif (self.__controlModeID == ControlModes.JIBE_ONLY.value):
-                self.__switchFromJibing(current_time, self.__lastSwitchTime, heading_error)
+                self.__switchFromJibing(current_time, self.__lastSuccessfulSwitchTime, heading_error)
 
             # Update the latest switch time since a switch was attempted
-            self.__lastSwitchTime = current_time
+            if(current_time != sailbot_constants.TIMESTAMP_UNAVAILABLE):
+                self.__lastSwitchTime = current_time
 
             # If in UNKNOWN mode, we must resolve to a new control mode
             if (self.__controlModeID == ControlModes.UNKNOWN.value):
+                if(current_time != sailbot_constants.TIMESTAMP_UNAVAILABLE):
+                    self.__lastSuccessfulSwitchTime = current_time
                 self.__switchFromUnknown(boat_speed)
                 return True
 
