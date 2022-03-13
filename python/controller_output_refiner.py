@@ -1,3 +1,5 @@
+import sailbot_constants
+
 class ControllerOutputRefiner:
     def __init__(self):
         pass
@@ -37,3 +39,11 @@ class ControllerOutputRefiner:
             return upperBound
         else:
             return lowerBound
+
+
+    @staticmethod
+    def lowPowerAngle(inputSignal, currAngle):
+        # check if angle changed more than MIN_ANGLE_FOR_SWITCH, if not, keep the same
+        return (abs(currAngle - inputSignal) 
+        >= sailbot_constants.MIN_ANGLE_FOR_SWITCH)
+

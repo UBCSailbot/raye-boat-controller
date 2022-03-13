@@ -2,6 +2,7 @@ from control_modes import ControlModes
 from controller_selector import ControllerSelector
 from tack_controller import TackController
 from jibe_only_rudder_controller import JibeOnlyRudderController
+from controller_output_refiner import ControllerOutputRefiner
 
 import sailbot_constants
 import math
@@ -123,13 +124,28 @@ class HeadingController:
             )
             return error
 
-        # Either UNKNOWN or TACKABLE
-        else:
+        # TACKABLE
+        elif (self.__controlModeID == ControlModes.TACKABLE.value):
             error = TackController.get_heading_error_tackable(
                 setPoint=desired_heading,
                 measure=current_heading
             )
             return error
+
+        # LOW POWER or UNKNOWN
+        else:
+            if (ControllerOutputRefiner.lowPowerAngle(
+                inputeSignal=desired_heading,
+                currAngle=current_heading
+            )):
+                error = TackController.get_heading_error_tackable(
+                setPoint=desired_heading,
+                measure=current_heading
+                ) 
+                return error
+            else:
+                return 0
+
 
     def get_feed_back_gain(self, heading_error):
         """
