@@ -96,12 +96,12 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
     # difference between angles is exactly MIN_ANGLE_FOR_SWITCH
     def test_lowPowerAngle_min_angle_difference1(self):
         self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(1.0, 1.0 + 5.0*math.pi/180.0)
+            ControllerOutputRefiner.lowPowerAngle(1.0, 1.0 + 5.1*math.pi/180.0)
         )
 
     def test_lowPowerAngle_min_angle_difference2(self):
-        self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(1.0 + 5.0*math.pi/180.0, 1.0)
+        self.assertFalse(
+            ControllerOutputRefiner.lowPowerAngle(1.0 + 4.9*math.pi/180.0, 1.0)
         )
 
     def test_lowPowerAngle_min_angle_difference3(self):
@@ -111,7 +111,7 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
 
     def test_lowPowerAngle_min_angle_difference4(self):
         self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(-2.0453 + 5.0*math.pi/180.0, -2.0453)
+            ControllerOutputRefiner.lowPowerAngle(-2.0453 + 5.1*math.pi/180.0, -2.0453)
         )
 
     # don't switch angle (difference not large enough)
