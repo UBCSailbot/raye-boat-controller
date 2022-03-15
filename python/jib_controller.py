@@ -16,13 +16,15 @@ class JibController:
         bounded_angle = math.atan2(
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
             
-      #Generate Slope Value based on X1, X2, and the Max Sail angle
-        k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE ) / (sailbot_constants.X2_JIB - sailbot_constants.X1_JIB )
+        # Generate Slope Value based on X1, X2, and the Max Sail angle
+        k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE 
+        ) / (sailbot_constants.X2_JIB - sailbot_constants.X1_JIB )
 
-        #Generate Linear function from slope and intercept
-        jib_angle = (k_s * abs(bounded_angle)) - (k_s * sailbot_constants.X2_JIB)  
+        # Generate Linear function from slope and intercept
+        jib_angle = (k_s * abs(bounded_angle)
+        ) - (k_s * sailbot_constants.X2_JIB)  
 
-        #Clamp Linear Function
+        # Clamp Linear Function
         min = 0
         max = sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
 
@@ -30,4 +32,6 @@ class JibController:
             return max
         if(jib_angle < min):
             return min
-        else: return jib_angle
+        else: 
+            return jib_angle
+            

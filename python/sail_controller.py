@@ -1,4 +1,3 @@
-#from typing_extensions import Self
 import sailbot_constants
 import math
 
@@ -17,13 +16,15 @@ class SailController:
         bounded_angle = math.atan2(
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
 
-        #Generate Slope Value based on X1, X2, and the Max Sail angle
-        k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE ) / (sailbot_constants.X2_SAIL - sailbot_constants.X1_SAIL )
+        # Generate Slope Value based on X1, X2, and the Max Sail angle
+        k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE 
+        ) / (sailbot_constants.X2_SAIL - sailbot_constants.X1_SAIL )
 
-        #Generate Linear function from slope and intercept
-        sail_angle = (k_s * abs(bounded_angle)) - (k_s * sailbot_constants.X2_SAIL)  
+        # Generate Linear function from slope and intercept
+        sail_angle = (k_s * abs(bounded_angle)
+        ) - (k_s * sailbot_constants.X2_SAIL)  
 
-        #Clamp Linear Function
+        # Clamp Linear Function
         min = 0
         max = sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
 
@@ -31,4 +32,6 @@ class SailController:
             return max
         if(sail_angle < min):
             return min
-        else: return sail_angle
+        else: 
+            return sail_angle
+            
