@@ -1,4 +1,4 @@
-from typing_extensions import Self
+#from typing_extensions import Self
 import sailbot_constants
 import math
 

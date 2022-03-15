@@ -4,7 +4,7 @@
 # I.e. 3/2==1
 from __future__ import division
 import local_imports
-import rostest
+#import rostest
 import unittest
 import math
 from jibe_only_rudder_controller import JibeOnlyRudderController
@@ -54,5 +54,6 @@ class Test_JibeController(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    rostest.rosrun("boat_controller", "Test_JibeController",
-                   Test_JibeController)
+    #rostest.rosrun("boat_controller", "Test_JibeController",
+     #              Test_JibeController)
+     unittest.main()
