@@ -17,12 +17,12 @@ class SailController:
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
 
         # Generate Slope Value based on X1, X2, and the Max Sail angle
-        k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE 
-        ) / (sailbot_constants.X2_SAIL - sailbot_constants.X1_SAIL )
+        k_s = (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
+               ) / (sailbot_constants.X2_SAIL - sailbot_constants.X1_SAIL)
 
         # Generate Linear function from slope and intercept
         sail_angle = (k_s * abs(bounded_angle)
-        ) - (k_s * sailbot_constants.X2_SAIL)  
+                      ) - (k_s * sailbot_constants.X2_SAIL)
 
         # Clamp Linear Function
         min = 0
@@ -32,6 +32,5 @@ class SailController:
             return max
         if(sail_angle < min):
             return min
-        else: 
+        else:
             return sail_angle
-            
