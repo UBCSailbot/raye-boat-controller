@@ -55,4 +55,4 @@ class Test_JibeController(unittest.TestCase):
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_JibeController",
-                  Test_JibeController)
+                   Test_JibeController)
