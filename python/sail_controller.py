@@ -20,7 +20,7 @@ class SailController:
         k_s =  (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE 
         ) / (sailbot_constants.X2_SAIL - sailbot_constants.X1_SAIL )
 
-        sail_angle = (k_s * bounded_angle) - (k_s * sailbot_constants.X2_SAIL) 
+        sail_angle = (k_s * abs(bounded_angle)) - (k_s * sailbot_constants.X2_SAIL) 
 
         return Self.clamp(sail_angle, 0, sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE)
     
