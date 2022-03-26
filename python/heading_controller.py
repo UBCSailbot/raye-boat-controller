@@ -60,7 +60,7 @@ class HeadingController:
         """
         return self.__controlModeID
 
-    def switchControlMode(self, heading_error, boat_speed):
+    def switchControlMode(self, heading_error, boat_speed, low_battery_level=False, low_wind=False):
         """
         Switches the rudder controller depending on the sensor readings. The
         controller selector is invoked and contains most of the logic for
@@ -70,6 +70,15 @@ class HeadingController:
         ---------
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
+
+        float : boat_speed
+            The speed of the boat in knots
+
+        bool : low_battery_level
+            A boolean flag that determines if the lowest battery level is below a thershold.
+
+        bool : low_wind
+            A boolean flag from the sensors that says if the boat is sailing in low winds.
 
         Modifies
         --------
@@ -82,8 +91,8 @@ class HeadingController:
             occurred.
 
         """
-
-        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed)):
+        low_power = low_battery_level or low_wind
+        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, low_power)):
             self.__controlModeID = self.__ctrl_selector.getControlModeID()
             return True
 
