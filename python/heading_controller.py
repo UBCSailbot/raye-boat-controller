@@ -23,7 +23,7 @@ class HeadingController:
     # Current Jib Angle in Radians
     __currJibAngleRad = 0
 
-    def __init__(self, boat_speed, current_time, initialControlMode=ControlModes.UNKNOWN.value):
+    def __init__(self, boat_speed, initialControlMode=ControlModes.UNKNOWN.value):
         """
         Initializes a HeadingController object with a specified control mode.
 
@@ -36,9 +36,6 @@ class HeadingController:
         float : boat_speed
             The current boat speed in knots
 
-        int : current_time
-            The current time in seconds (unix timestamp)
-
         Throws
         ------
         ValueError
@@ -49,7 +46,6 @@ class HeadingController:
         """
         self.__ctrl_selector = ControllerSelector(
             init_boat_speed=boat_speed,
-            unix_timestamp=current_time,
             initialControlMode=initialControlMode
         )
 
@@ -64,7 +60,7 @@ class HeadingController:
         """
         return self.__controlModeID
 
-    def switchControlMode(self, heading_error, boat_speed, current_time):
+    def switchControlMode(self, heading_error, boat_speed):
         """
         Switches the rudder controller depending on the sensor readings. The
         controller selector is invoked and contains most of the logic for
@@ -87,7 +83,7 @@ class HeadingController:
 
         """
 
-        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, current_time)):
+        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed)):
             self.__controlModeID = self.__ctrl_selector.getControlModeID()
             return True
 

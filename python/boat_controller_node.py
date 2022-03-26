@@ -15,11 +15,11 @@ headingSetPointRad = None
 headingMeasureRad = None
 apparentWindAngleRad = None
 groundspeedKnots = None
-timestamp = None
 rudderAngleRad = 0
 sailWinchPosition = 0
 jibWinchPosition = 0
-controller = HeadingController(boat_speed=0, current_time=0)
+
+controller = HeadingController(boat_speed=0)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
@@ -29,15 +29,10 @@ rudder_winch_actuation_angle_pub = rospy.Publisher(
 def sensorsCallBack(sensors_msg_instance):
     lock.acquire()
 
-    global headingMeasureRad, apparentWindAngleRad, groundspeedKnots, timestamp
+    global headingMeasureRad, apparentWindAngleRad, groundspeedKnots
     headingMeasureRad = sensors_msg_instance.gps_can_true_heading_degrees * math.pi / 180
     apparentWindAngleRad = sensors_msg_instance.wind_sensor_1_angle_degrees * math.pi / 180
     groundspeedKnots = sensors_msg_instance.gps_can_groundspeed_knots
-
-    if sensors_msg_instance.gps_can_timestamp_utc:
-        timestamp = int(sensors_msg_instance.gps_can_timestamp_utc)
-    else:
-        timestamp = sailbot_constants.TIMESTAMP_UNAVAILABLE
 
     publishRudderWinchAngle()
     lock.release()
@@ -59,7 +54,6 @@ def publishRudderWinchAngle():
         and headingMeasureRad is not None
         and apparentWindAngleRad is not None
         and groundspeedKnots is not None
-        and timestamp is not None
     ):
 
         global rudderAngleRad
@@ -72,8 +66,7 @@ def publishRudderWinchAngle():
 
         controller.switchControlMode(
             heading_error=heading_error,
-            boat_speed=groundspeedKnots,
-            current_time=timestamp
+            boat_speed=groundspeedKnots
         )
 
         rudderAngleRad = (
