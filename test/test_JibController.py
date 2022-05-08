@@ -64,7 +64,43 @@ class Test_JibController(unittest.TestCase):
             + sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
+    def test_getSailAngle_X1_varying(self):
+        sailbot_constants.X1_JIB = math.pi / 4
+        self.assertAlmostEqual(
+            JibController.get_jib_angle(math.pi / 4 - 0.01),
+            sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE
+        )
+        sailbot_constants.X1_JIB = 0
+
+    def test_getSailAngle_X2_varying(self):
+        sailbot_constants.X2_JIB = 3 * math.pi / 4
+        self.assertAlmostEqual(
+            JibController.get_jib_angle(3 * math.pi / 4 + 0.01),
+            0
+        )
+        sailbot_constants.X2_JIB = math.pi
+
+    def test_getSailAngle_X1_X2_mid(self):
+        sailbot_constants.X2_JIB = 3 * math.pi / 4 + 0.2
+        sailbot_constants.X1_JIB = math.pi / 4 + 0.2
+        self.assertAlmostEqual(
+            JibController.get_jib_angle((sailbot_constants.X2_JIB + sailbot_constants.X1_JIB) / 2),
+            sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / 2
+        )
+        self.assertAlmostEqual(
+            JibController.get_jib_angle((sailbot_constants.X2_JIB * 0.75 + sailbot_constants.X1_JIB * 0.25)),
+            sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / 4
+        )
+        self.assertAlmostEqual(
+            JibController.get_jib_angle((sailbot_constants.X2_JIB * 0.25 + sailbot_constants.X1_JIB * 0.75)),
+            sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE * 0.75
+        )
+        sailbot_constants.X2_JIB = math.pi
+        sailbot_constants.X1_JIB = 0
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_JibController",
                    Test_JibController)
+    sailbot_constants.X1_JIB = 0
+    sailbot_constants.X2_JIB = math.pi

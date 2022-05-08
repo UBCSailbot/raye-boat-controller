@@ -15,6 +15,7 @@ local_imports.printMessage()
 
 
 class Test_SailController(unittest.TestCase):
+
     def test_getSailAngle_apparentWindAngleZero(self):
         self.assertEqual(
             SailController.get_sail_angle(0),
@@ -63,7 +64,43 @@ class Test_SailController(unittest.TestCase):
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
+    def test_getSailAngle_X1_varying(self):
+        sailbot_constants.X1_SAIL = math.pi / 4
+        self.assertAlmostEqual(
+            SailController.get_sail_angle(math.pi / 4 - 0.01),
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
+        )
+        sailbot_constants.X1_SAIL = 0
+
+    def test_getSailAngle_X2_varying(self):
+        sailbot_constants.X2_SAIL = 3 * math.pi / 4
+        self.assertAlmostEqual(
+            SailController.get_sail_angle(3 * math.pi / 4 + 0.01),
+            0
+        )
+        sailbot_constants.X2_SAIL = math.pi
+
+    def test_getSailAngle_X1_X2_mid(self):
+        sailbot_constants.X2_SAIL = 3 * math.pi / 4 + 0.2
+        sailbot_constants.X1_SAIL = math.pi / 4 + 0.2
+        self.assertAlmostEqual(
+            SailController.get_sail_angle((sailbot_constants.X2_SAIL + sailbot_constants.X1_SAIL) / 2),
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / 2
+        )
+        self.assertAlmostEqual(
+            SailController.get_sail_angle((sailbot_constants.X2_SAIL * 0.75 + sailbot_constants.X1_SAIL * 0.25)),
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / 4
+        )
+        self.assertAlmostEqual(
+            SailController.get_sail_angle((sailbot_constants.X2_SAIL * 0.25 + sailbot_constants.X1_SAIL * 0.75)),
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE * 0.75
+        )
+        sailbot_constants.X2_SAIL = math.pi
+        sailbot_constants.X1_SAIL = 0
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_SailController",
                    Test_SailController)
+    sailbot_constants.X1_SAIL = 0
+    sailbot_constants.X2_SAIL = math.pi
