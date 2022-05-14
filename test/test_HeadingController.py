@@ -228,9 +228,12 @@ class Test_HeadingController(unittest.TestCase):
         hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value)
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
+        heading_error = -1.2
+        heading_error_normalized = (heading_error / math.pi) - 1
+
         self.assertEqual(
             hc.get_feed_back_gain(-1.2),
-            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-1.2)),
+            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error_normalized)),
         )
 
 
