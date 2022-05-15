@@ -6,7 +6,7 @@ from controller_output_refiner import ControllerOutputRefiner
 import sailbot_constants
 import rospy
 import threading
-from sailbot_msg.msg import actuation_angle, heading, Sensors
+from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS
 import math
 
 lock = threading.Lock()
@@ -25,13 +25,28 @@ rudder_winch_actuation_angle_pub = rospy.Publisher(
 )
 
 
-def sensorsCallBack(sensors_msg_instance):
+def windSensorCallBack(windsensor_msg_instance):
     lock.acquire()
 
-    global headingMeasureRad, apparentWindAngleRad, groundspeedKnots
-    headingMeasureRad = sensors_msg_instance.gps_can_true_heading_degrees * math.pi / 180
-    apparentWindAngleRad = sensors_msg_instance.wind_sensor_1_angle_degrees * math.pi / 180
-    groundspeedKnots = sensors_msg_instance.gps_can_groundspeed_knots
+    global apparentWindAngleRad
+
+    apparentWindAngleDegrees = windsensor_msg_instance.measuredDirectionDegrees
+    apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
+
+    publishRudderWinchAngle()
+    lock.release()
+
+
+def gpsCallBack(gps_msg_instance):
+    lock.acquire()
+
+    global headingMeasureRad, groundspeedKnots
+
+    headingMeasureDegrees = gps_msg_instance.headingDegrees
+    headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
+
+    groundspeedKMPH = gps_msg_instance.speedKmph
+    groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
 
     publishRudderWinchAngle()
     lock.release()
@@ -41,7 +56,7 @@ def desiredHeadingCallBack(heading_msg_instance):
     lock.acquire()
 
     global headingSetPointRad
-    headingSetPointRad = heading_msg_instance.headingDegrees * math.pi / 180
+    headingSetPointRad = heading_msg_instance.headingDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     publishRudderWinchAngle()
     lock.release()
@@ -106,9 +121,9 @@ def publishRudderWinchAngle():
 
 def main():
     rospy.init_node("rudder_and_sail_angle_publisher", anonymous=True)
-    rospy.Subscriber("/desired_heading_degrees",
-                     heading, desiredHeadingCallBack)
-    rospy.Subscriber("/sensors", Sensors, sensorsCallBack)
+    rospy.Subscriber("/desired_heading_degrees", heading, desiredHeadingCallBack)
+    rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
+    rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.spin()
 
 
