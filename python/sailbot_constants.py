@@ -1,8 +1,12 @@
 import math
 
+# Adjust the nonlinear feedback Function
+#
 KP = 0.35
 CP = 0.34
 
+# 0 < X1 and X2 < PI
+# X1 < X2
 X1_SAIL = 0
 X2_SAIL = math.pi
 

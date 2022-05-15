@@ -15,7 +15,7 @@ class JibeOnlyRudderController:
     # Takes as Parameters the current_heading and desired_heading in absolute coordinates (I.E. relative to north)
     # And takes the apparent_wind_angle as the absolute angle of the wind vector.
     # Returns an integer value representing the direction the boat should turn to jibe
-    # where 1 is counterclockwise and -1 is clockwise
+    # where -1 is counterclockwise and 1 is clockwise
     def get_jibe_controller_direction(
             current_heading,
             desired_heading,
@@ -33,15 +33,15 @@ class JibeOnlyRudderController:
             desired_heading - apparent_wind_angle) % (2 * math.pi)
 
         # find error term
-        error = -wind_relative_desired_heading + wind_relative_current_heading
+        error = -1 * (-wind_relative_desired_heading + wind_relative_current_heading)
 
-        # get jibe direction, 1 is counterclockwise, -1 is clockwise
+        # get jibe direction, -1 is counterclockwise, 1 is clockwise
         return JibeOnlyRudderController.__getSign(error)
 
     @staticmethod
     # Takes as Parameters desired_heading and current_heading as absolute coordinates  (I.E. relative to north)
     # and the jibe_direction as a value of either -1 or 1, where 1 is to turn
-    # the boat counter clockwise and vice versa for -1
+    # the boat clockwise and vice versa for -1
     def get_jibe_controller_error(
             current_heading,
             desired_heading,
