@@ -1,4 +1,3 @@
-import this
 import sailbot_constants
 import math
 

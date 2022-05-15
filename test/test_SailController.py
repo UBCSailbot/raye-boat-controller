@@ -35,20 +35,16 @@ class Test_SailController(unittest.TestCase):
         self.assertEqual(SailController.get_sail_angle(-math.pi, X1, X2), 0)
 
     def test_getSailAngle_apparentWindAngleBetween0AndPi(self):
-        X1 = 0
-        X2 = math.pi
         self.assertAlmostEqual(
             SailController.get_sail_angle(2),
-            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2 \
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAngleBetweenNegativePiAnd0(self):
-        X1 = 0
-        X2 = math.pi
         self.assertAlmostEqual(
             SailController.get_sail_angle(-2),
-            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2 \
+            sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
             + sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
@@ -81,16 +77,14 @@ class Test_SailController(unittest.TestCase):
         )
 
     def test_getSailAngle_X1_varying(self):
-        X1 = 0
         X2 = math.pi
         self.assertAlmostEqual(
             SailController.get_sail_angle(math.pi / 4 - 0.01, math.pi / 4, X2),
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
         )
-        
+
     def test_getSailAngle_X2_varying(self):
         X1 = 0
-        X2 = math.pi
         self.assertAlmostEqual(
             SailController.get_sail_angle(3 * math.pi / 4 + 0.01, X1, 3 * math.pi / 4),
             0
