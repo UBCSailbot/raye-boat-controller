@@ -73,14 +73,20 @@ def publishRudderWinchAngle():
         )
 
         global sailAngle
-        sailAngle = (
-            int(SailController.get_sail_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
-        )
+        sailAngle = (int(SailController.get_sail_angle(
+            apparentWindAngleRad,
+            sailbot_constants.X1_SAIL,
+            sailbot_constants.X2_SAIL
+        ) * (360 / (math.pi / 2))
+        ))
 
         global jibAngle
-        jibAngle = (
-            int(JibController.get_jib_angle(apparentWindAngleRad) * (360 / (math.pi / 2)))
-        )
+        jibAngle = (int(JibController.get_jib_angle(
+            apparentWindAngleRad,
+            sailbot_constants.X1_JIB,
+            sailbot_constants.X2_JIB
+        ) * (360 / (math.pi / 2))
+        ))
 
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
