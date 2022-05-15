@@ -98,18 +98,18 @@ class Test_JibController(unittest.TestCase):
         X2_TEST = 3 * math.pi / 4 + 0.2
         X1_TEST = math.pi / 4 + 0.2
         self.assertAlmostEqual(
-            JibController.get_jib_angle((sailbot_constants.X2_JIB + sailbot_constants.X1_JIB) / 2, X1_TEST, X2_TEST),
+            JibController.get_jib_angle((X2_TEST + X1_TEST) / 2, X1_TEST, X2_TEST),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / 2
         )
         self.assertAlmostEqual(
             JibController.get_jib_angle(
-                (sailbot_constants.X2_JIB * 0.75 + sailbot_constants.X1_JIB * 0.25),
+                (X2_TEST * 0.75 + X1_TEST * 0.25),
                 X1_TEST,
                 X2_TEST),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / 4)
         self.assertAlmostEqual(
             JibController.get_jib_angle(
-                (sailbot_constants.X2_JIB * 0.25 + sailbot_constants.X1_JIB * 0.75),
+                (X2_TEST * 0.25 + X1_TEST * 0.75),
                 X1_TEST,
                 X2_TEST),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE * 0.75)
