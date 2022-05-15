@@ -188,7 +188,7 @@ class HeadingController:
 
         return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
 
-    def get_sail_winch_position(self, apparentWindAngleRad):
+    def get_sail_winch_position(self, apparentWindAngleRad, X1, X2):
         """
         Calculates the winch position of the sail according to the apparent wind angle.
 
@@ -197,12 +197,18 @@ class HeadingController:
         float : apparentWindAngleRad
             The wind angle in radians
 
+        float : X1
+            Parameter for sail saturation function
+
+        float : X2
+            Parameter for sail saturation function
+
         Returns
         -------
         int
             The winch position of the sail
         """
-        sailAngle = SailController.get_sail_angle(apparentWindAngleRad)
+        sailAngle = SailController.get_sail_angle(apparentWindAngleRad, X1, X2)
         smallChange = not ControllerOutputRefiner.lowPowerAngle(
             inputSignal=sailAngle,
             currAngle=self.__currSailAngleRad
@@ -215,7 +221,7 @@ class HeadingController:
             winchPosition = SailController.get_winch_position(sailAngle)
         return winchPosition
 
-    def get_jib_winch_position(self, apparentWindAngleRad):
+    def get_jib_winch_position(self, apparentWindAngleRad, X1, X2):
         """
         Calculates the winch position of the jib according to the apparent wind angle.
 
@@ -224,13 +230,19 @@ class HeadingController:
         float : apparentWindAngleRad
             The wind angle in radians
 
+        float : X1
+            Parameter for jib saturation function
+
+        float : X2
+            Parameter for jib saturation function
+
         Returns
         -------
         int
             The winch position of the jib
         """
 
-        jibAngle = JibController.get_jib_angle(apparentWindAngleRad)
+        jibAngle = JibController.get_jib_angle(apparentWindAngleRad, X1, X2)
         smallChange = not ControllerOutputRefiner.lowPowerAngle(
             inputSignal=jibAngle,
             currAngle=self.__currJibAngleRad
