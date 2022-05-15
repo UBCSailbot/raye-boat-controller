@@ -9,6 +9,7 @@ from jib_controller import JibController
 import sailbot_constants
 import math
 
+
 class HeadingController:
 
     # The controller selector
@@ -156,7 +157,6 @@ class HeadingController:
             else:
                 return 0
 
-
     def get_feed_back_gain(self, heading_error):
         """
         Calculates the feedback gain depending on the current heading error.
@@ -254,4 +254,3 @@ class HeadingController:
             self.__currJibAngleRad = jibAngle
             winchPosition = JibController.get_winch_position(jibAngle)
         return winchPosition
-

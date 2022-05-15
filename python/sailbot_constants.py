@@ -26,7 +26,7 @@ MIN_HEADING_ERROR_FOR_SWITCH = 0.1
 MAX_ABS_RUDDER_ANGLE_RAD = math.pi / 3
 MAX_ABS_SAIL_ANGLE_RAD = math.pi / 2
 MAX_ABS_JIB_ANGLE_RAD = math.pi / 2
-MIN_ANGLE_FOR_SWITCH = 5 * math.pi/180 # min angle for low power
+MIN_ANGLE_FOR_SWITCH = 5 * math.pi / 180  # min angle for low power
 
 # Knots
 SPEED_THRESHOLD_FOR_JIBING_KNOTS = 0.5

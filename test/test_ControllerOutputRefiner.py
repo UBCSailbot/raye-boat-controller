@@ -74,10 +74,10 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
             3
         )
 
-
-    #lowPowerAngle() tests
+    # lowPowerAngle() tests
 
     # input angle = current angle
+
     def test_lowPowerAngle_equal1(self):
         self.assertFalse(
             ControllerOutputRefiner.lowPowerAngle(3.0, 3.0)
@@ -92,26 +92,26 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
         self.assertFalse(
             ControllerOutputRefiner.lowPowerAngle(-2.567, -2.567)
         )
-    
+
     # difference between angles is exactly MIN_ANGLE_FOR_SWITCH
     def test_lowPowerAngle_min_angle_difference1(self):
         self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(1.0, 1.0 + 5.1*math.pi/180.0)
+            ControllerOutputRefiner.lowPowerAngle(1.0, 1.0 + 5.1 * math.pi / 180.0)
         )
 
     def test_lowPowerAngle_min_angle_difference2(self):
         self.assertFalse(
-            ControllerOutputRefiner.lowPowerAngle(1.0 + 4.9*math.pi/180.0, 1.0)
+            ControllerOutputRefiner.lowPowerAngle(1.0 + 4.9 * math.pi / 180.0, 1.0)
         )
 
     def test_lowPowerAngle_min_angle_difference3(self):
         self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(-1.076, -1.076 + 5.0*math.pi/180.0)
+            ControllerOutputRefiner.lowPowerAngle(-1.076, -1.076 + 5.0 * math.pi / 180.0)
         )
 
     def test_lowPowerAngle_min_angle_difference4(self):
         self.assertTrue(
-            ControllerOutputRefiner.lowPowerAngle(-2.0453 + 5.1*math.pi/180.0, -2.0453)
+            ControllerOutputRefiner.lowPowerAngle(-2.0453 + 5.1 * math.pi / 180.0, -2.0453)
         )
 
     # don't switch angle (difference not large enough)
@@ -121,7 +121,7 @@ class Test_ControllerOutputRefiner(unittest.TestCase):
             ControllerOutputRefiner.lowPowerAngle(1.0054, 1.0)
         )
 
-    def test_lowPowerAngle_dont_switch1(self):
+    def test_lowPowerAngle_dont_switch2(self):
         self.assertFalse(
             ControllerOutputRefiner.lowPowerAngle(-2.0756, -2.0851)
         )

@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from jib_controller import JibController
-from sail_controller import SailController
 from heading_controller import HeadingController
 from controller_output_refiner import ControllerOutputRefiner
 import sailbot_constants
