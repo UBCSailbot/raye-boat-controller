@@ -17,18 +17,26 @@ local_imports.printMessage()
 
 class Test_JibController(unittest.TestCase):
     def test_getSailAngle_apparentWindAngleZero(self):
+        X1 = 0
+        X2 = math.pi
         self.assertEqual(
             JibController.get_jib_angle(0, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE,
         )
 
     def test_getSailAngle_apparentWindAnglePi(self):
+        X1 = 0
+        X2 = math.pi
         self.assertEqual(JibController.get_jib_angle(math.pi, X1, X2), 0)
 
     def test_getSailAngle_apparentWindAngleNegativePi(self):
+        X1 = 0
+        X2 = math.pi
         self.assertEqual(JibController.get_jib_angle(-math.pi, X1, X2), 0)
 
     def test_getSailAngle_apparentWindAngleBetween0AndPi(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(2, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
@@ -36,6 +44,8 @@ class Test_JibController(unittest.TestCase):
         )
 
     def test_getSailAngle_apparentWindAngleBetweenNegativePiAnd0(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(-2, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
@@ -43,6 +53,8 @@ class Test_JibController(unittest.TestCase):
         )
 
     def test_getSailAngle_apparentWindAngle_boundedBetweenPiAnd2Pi(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(3 / 2 * math.pi, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE /
@@ -51,6 +63,8 @@ class Test_JibController(unittest.TestCase):
         )
 
     def test_getSailAngle_apparentWindAngleNegativeNotBounded(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(-2 + 10 * math.pi, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
@@ -58,6 +72,8 @@ class Test_JibController(unittest.TestCase):
         )
 
     def test_getSailAngle_apparentWindAnglePositiveNotBounded(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(2 + 10 * math.pi, X1, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE / (-math.pi) * 2
@@ -65,12 +81,16 @@ class Test_JibController(unittest.TestCase):
         )
 
     def test_getSailAngle_X1_varying(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(math.pi / 4 - 0.01, math.pi / 4, X2),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE
         )
 
     def test_getSailAngle_X2_varying(self):
+        X1 = 0
+        X2 = math.pi
         self.assertAlmostEqual(
             JibController.get_jib_angle(3 * math.pi / 4 + 0.01, X1,  3 * math.pi / 4),
             0
@@ -95,7 +115,4 @@ class Test_JibController(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    rostest.rosrun("boat_controller", "Test_JibController",
-                   Test_JibController)
-    X1 = 0
-    X2 = math.pi
+    rostest.rosrun("boat_controller", "Test_JibController", Test_JibController)
