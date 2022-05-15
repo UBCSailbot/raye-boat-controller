@@ -76,15 +76,15 @@ def publishRudderWinchAngle():
         global sailWinchPosition
         sailWinchPosition = controller.get_sail_winch_position(
             apparentWindAngleRad,
-            sailbot_constants.sailbot_constants.X1_SAIL,
-            sailbot_constants.sailbot_constants.X2_SAIL
+            sailbot_constants.X1_SAIL,
+            sailbot_constants.X2_SAIL
         )
 
         global jibWinchPosition
         jibWinchPosition = controller.get_jib_winch_position(
             apparentWindAngleRad,
-            sailbot_constants.sailbot_constants.X1_JIB,
-            sailbot_constants.sailbot_constants.X2_JIB
+            sailbot_constants.X1_JIB,
+            sailbot_constants.X2_JIB
         )
 
         rudder_winch_actuation_angle_pub.publish(
