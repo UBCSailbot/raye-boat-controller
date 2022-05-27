@@ -280,7 +280,7 @@ class Test_HeadingController(unittest.TestCase):
         ))
 
 
-    def test_switch_from _low_power(self):
+    def test_switch_from_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
 
         # Can be anything
