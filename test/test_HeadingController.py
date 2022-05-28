@@ -169,7 +169,7 @@ class Test_HeadingController(unittest.TestCase):
             boat_speed=mock_speed
         ))
 
-        # Should now be in JIBE_ONLY mode
+        # Should now be in TACKABLE mode
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
 
     def test_tack_error_function(self):
@@ -256,6 +256,9 @@ class Test_HeadingController(unittest.TestCase):
             low_wind=low_wind
         ))
 
+        # Should now be in LOW_POWER mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.LOW_POWER.value)
+
     def test_jibe_to_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
 
@@ -278,6 +281,9 @@ class Test_HeadingController(unittest.TestCase):
             low_battery_level=low_battery,
             low_wind=low_wind
         ))
+
+        # Should now be in LOW_POWER mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.LOW_POWER.value)
 
 
     def test_switch_from_low_power(self):
@@ -312,6 +318,9 @@ class Test_HeadingController(unittest.TestCase):
             heading_error=mock_heading_error,
             boat_speed=mock_speed
         ))
+
+        # Should now be in TACKABLE mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
 
 
 if __name__ == "__main__":
