@@ -4,8 +4,7 @@ from controller_output_refiner import ControllerOutputRefiner
 import sailbot_constants
 import rospy
 import threading
-from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS
-import math
+from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -16,6 +15,8 @@ groundspeedKnots = None
 rudderAngleRad = 0
 sailWinchPosition = 0
 jibWinchPosition = 0
+lowVoltage = False
+lowWind = False
 
 controller = HeadingController(boat_speed=0)
 
@@ -61,6 +62,16 @@ def desiredHeadingCallBack(heading_msg_instance):
     lock.release()
 
 
+def minVoltageCallBack(min_voltage_msg_instance):
+    lock.acquire()
+
+    global lowVoltage
+    min_voltage_level = min_voltage_msg_instance.min_voltage
+    lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
+
+    lock.release()
+
+
 def publishRudderWinchAngle():
     if (
         headingSetPointRad is not None
@@ -79,7 +90,9 @@ def publishRudderWinchAngle():
 
         controller.switchControlMode(
             heading_error=heading_error,
-            boat_speed=groundspeedKnots
+            boat_speed=groundspeedKnots,
+            low_battery_level=lowVoltage,
+            low_wind=lowWind
         )
 
         rudderAngleRad = (
@@ -121,6 +134,7 @@ def main():
     rospy.Subscriber("/desired_heading_degrees", heading, desiredHeadingCallBack)
     rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
+    rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.spin()
 
 

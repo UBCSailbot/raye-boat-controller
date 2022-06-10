@@ -146,7 +146,7 @@ class HeadingController:
         # LOW POWER or UNKNOWN
         else:
             if (ControllerOutputRefiner.lowPowerAngle(
-                inputeSignal=desired_heading,
+                inputSignal=desired_heading,
                 currAngle=current_heading
             )):
                 error = TackController.get_heading_error_tackable(
