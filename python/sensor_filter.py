@@ -27,7 +27,6 @@ class SensorFilter:
             Returns True if the reading is valid, and False otherwise.;
 
         """
-        type_check = type(reading) is expected_type
+        type_check = isinstance(reading, expected_type)
         bound_check = (lowerbound <= reading <= upperbound)
         return type_check and bound_check
-    

@@ -34,7 +34,7 @@ def windSensorCallBack(windsensor_msg_instance):
     apparentWindAngleDegrees = windsensor_msg_instance.measuredDirectionDegrees
 
     if SensorFilter.filter(
-        apparentWindAngleDegrees, 
+        apparentWindAngleDegrees,
         sailbot_constants.MIN_WIND_ANGLE_DEG,
         sailbot_constants.MAX_WIND_ANGLE_DEG,
         float
@@ -51,9 +51,9 @@ def gpsCallBack(gps_msg_instance):
     global headingMeasureRad, groundspeedKnots
 
     headingMeasureDegrees = gps_msg_instance.headingDegrees
-    
+
     if SensorFilter.filter(
-        headingMeasureDegrees, 
+        headingMeasureDegrees,
         sailbot_constants.MIN_HEADING_DEG,
         sailbot_constants.MAX_HEADING_DEG,
         float
@@ -61,9 +61,9 @@ def gpsCallBack(gps_msg_instance):
         headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     groundspeedKMPH = gps_msg_instance.speedKmph
-    
+
     if SensorFilter.filter(
-        groundspeedKMPH, 
+        groundspeedKMPH,
         sailbot_constants.MIN_BOAT_SPEED,
         sailbot_constants.MAX_BOAT_SPEED,
         float
@@ -78,10 +78,10 @@ def desiredHeadingCallBack(heading_msg_instance):
     lock.acquire()
 
     global headingSetPointRad
-    
+
     headingSetPointDeg = heading_msg_instance.headingDegrees
     if SensorFilter.filter(
-        headingSetPointDeg, 
+        headingSetPointDeg,
         sailbot_constants.MIN_HEADING_DEG,
         sailbot_constants.MAX_HEADING_DEG,
         float
@@ -99,7 +99,7 @@ def minVoltageCallBack(min_voltage_msg_instance):
     min_voltage_level = min_voltage_msg_instance.min_voltage
 
     if SensorFilter.filter(
-        min_voltage_level, 
+        min_voltage_level,
         sailbot_constants.MIN_VOLTAGE_LEVEL,
         sailbot_constants.MAX_VOLTAGE_LEVEL,
         float

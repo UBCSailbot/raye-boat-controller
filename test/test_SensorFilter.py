@@ -8,15 +8,15 @@ from sensor_filter import SensorFilter
 # To avoid errors from linting
 local_imports.printMessage()
 
+
 class Test_SensorFilter(unittest.TestCase):
-    
+
     def test_invalid_type(self):
         reading = 4
         lowerbound = 1.0
         upperbound = 5.0
         expected_type = float
         self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
-
 
     def test_invalid_nonetype(self):
         reading = None
@@ -25,14 +25,12 @@ class Test_SensorFilter(unittest.TestCase):
         expected_type = float
         self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
 
-
     def test_below_bound(self):
         reading = 5.0
         lowerbound = 6.0
         upperbound = 8.0
         expected_type = float
         self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
-
 
     def test_above_bound(self):
         reading = 8.0
@@ -41,7 +39,6 @@ class Test_SensorFilter(unittest.TestCase):
         expected_type = float
         self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
 
-    
     def test_correct_reading(self):
         reading = 3
         lowerbound = 1
