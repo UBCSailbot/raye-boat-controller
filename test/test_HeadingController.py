@@ -263,7 +263,7 @@ class Test_HeadingController(unittest.TestCase):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
 
         # Can be anything
-        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH 
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # Enter JIBE_ONLY from UNKNOWN
         hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value)
@@ -285,12 +285,11 @@ class Test_HeadingController(unittest.TestCase):
         # Should now be in LOW_POWER mode
         self.assertEqual(hc.getControlModeID(), ControlModes.LOW_POWER.value)
 
-
     def test_switch_from_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
 
         # Can be anything
-        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH 
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # Enter JIBE_ONLY from UNKNOWN
         hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value)
@@ -308,7 +307,7 @@ class Test_HeadingController(unittest.TestCase):
             low_battery_level=low_battery,
             low_wind=low_wind
         ))
-        
+
         # Adjust parameters to switch to TACKABLE
         mock_speed = 2 * sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
         mock_heading_error = 0.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
