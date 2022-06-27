@@ -25,7 +25,11 @@ def talker():
         voltage = random.uniform(0.0, 2.0)
 
         heading_degrees_pub.publish(heading(desired_heading))
-        windSensor_pub.publish(windSensor(windangle, 1., False))
+        
+        # Low Wind flag not implemented
+        # windSensor_pub.publish(windSensor(windangle, 1., False))
+        windSensor_pub.publish(windSensor(windangle, 1.))
+
         gps_pub.publish(GPS(.0, .0, current_heading, groundspeed))
         min_voltage_pub.publish(min_voltage(voltage))
 
