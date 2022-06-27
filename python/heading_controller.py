@@ -2,11 +2,12 @@ from control_modes import ControlModes
 from controller_selector import ControllerSelector
 from tack_controller import TackController
 from jibe_only_rudder_controller import JibeOnlyRudderController
+from controller_output_refiner import ControllerOutputRefiner
+from sail_controller import SailController
+from jib_controller import JibController
 
 import sailbot_constants
 import math
-
-# TODO: Add class methods to get error and feedback gain
 
 
 class HeadingController:
@@ -16,6 +17,12 @@ class HeadingController:
 
     # A class reference to the current controller
     __controlModeID = 0
+
+    # Current Sail Angle in Radians
+    __currSailAngleRad = 0
+
+    # Current Jib Angle in Radians
+    __currJibAngleRad = 0
 
     def __init__(self, boat_speed, initialControlMode=ControlModes.UNKNOWN.value):
         """
@@ -54,7 +61,7 @@ class HeadingController:
         """
         return self.__controlModeID
 
-    def switchControlMode(self, heading_error, boat_speed):
+    def switchControlMode(self, heading_error, boat_speed, low_battery_level=False, low_wind=False):
         """
         Switches the rudder controller depending on the sensor readings. The
         controller selector is invoked and contains most of the logic for
@@ -64,6 +71,15 @@ class HeadingController:
         ---------
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
+
+        float : boat_speed
+            The speed of the boat in knots
+
+        bool : low_battery_level
+            A boolean flag that determines if the lowest battery level is below a thershold.
+
+        bool : low_wind
+            A boolean flag from the sensors that says if the boat is sailing in low winds.
 
         Modifies
         --------
@@ -76,8 +92,8 @@ class HeadingController:
             occurred.
 
         """
-
-        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed)):
+        low_power = low_battery_level or low_wind
+        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, low_power)):
             self.__controlModeID = self.__ctrl_selector.getControlModeID()
             return True
 
@@ -119,13 +135,27 @@ class HeadingController:
             )
             return error
 
-        # Either UNKNOWN or TACKABLE
-        else:
+        # TACKABLE
+        elif (self.__controlModeID == ControlModes.TACKABLE.value):
             error = TackController.get_heading_error_tackable(
                 setPoint=desired_heading,
                 measure=current_heading
             )
             return error
+
+        # LOW POWER or UNKNOWN
+        else:
+            if (ControllerOutputRefiner.lowPowerAngle(
+                inputSignal=desired_heading,
+                currAngle=current_heading
+            )):
+                error = TackController.get_heading_error_tackable(
+                    setPoint=desired_heading,
+                    measure=current_heading
+                )
+                return error
+            else:
+                return 0
 
     def get_feed_back_gain(self, heading_error):
         """
@@ -157,3 +187,70 @@ class HeadingController:
         heading_error = (heading_error / math.pi) - 1
 
         return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
+
+    def get_sail_winch_position(self, apparentWindAngleRad, X1, X2):
+        """
+        Calculates the winch position of the sail according to the apparent wind angle.
+
+        Arguments
+        ---------
+        float : apparentWindAngleRad
+            The wind angle in radians
+
+        float : X1
+            Parameter for sail saturation function
+
+        float : X2
+            Parameter for sail saturation function
+
+        Returns
+        -------
+        int
+            The winch position of the sail
+        """
+        sailAngle = SailController.get_sail_angle(apparentWindAngleRad, X1, X2)
+        smallChange = not ControllerOutputRefiner.lowPowerAngle(
+            inputSignal=sailAngle,
+            currAngle=self.__currSailAngleRad
+        )
+
+        if (self.__controlModeID == ControlModes.LOW_POWER.value) and (smallChange):
+            winchPosition = SailController.get_winch_position(self.__currSailAngleRad)
+        else:
+            self.__currSailAngleRad = sailAngle
+            winchPosition = SailController.get_winch_position(sailAngle)
+        return winchPosition
+
+    def get_jib_winch_position(self, apparentWindAngleRad, X1, X2):
+        """
+        Calculates the winch position of the jib according to the apparent wind angle.
+
+        Arguments
+        ---------
+        float : apparentWindAngleRad
+            The wind angle in radians
+
+        float : X1
+            Parameter for jib saturation function
+
+        float : X2
+            Parameter for jib saturation function
+
+        Returns
+        -------
+        int
+            The winch position of the jib
+        """
+
+        jibAngle = JibController.get_jib_angle(apparentWindAngleRad, X1, X2)
+        smallChange = not ControllerOutputRefiner.lowPowerAngle(
+            inputSignal=jibAngle,
+            currAngle=self.__currJibAngleRad
+        )
+
+        if (self.__controlModeID == ControlModes.LOW_POWER.value) and (smallChange):
+            winchPosition = JibController.get_winch_position(self.__currJibAngleRad)
+        else:
+            self.__currJibAngleRad = jibAngle
+            winchPosition = JibController.get_winch_position(jibAngle)
+        return winchPosition

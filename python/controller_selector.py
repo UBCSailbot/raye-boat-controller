@@ -31,17 +31,20 @@ class ControllerSelector:
 
         """
 
+        # Default to not be in low power upon initialization
+        low_power = False
+
         # Check if the input is valid
         if (not self.isValidModeID(initialControlMode)):
             raise ValueError("An invalid control mode was passed as an argument")
 
         # Initialize the control mode
         if(initialControlMode == ControlModes.UNKNOWN.value):
-            self.__switchFromUnknown(init_boat_speed)
+            self.__switchFromUnknown(init_boat_speed, low_power)
         else:
             self.__assignMode(initialControlMode)
 
-    def switchControlMode(self, heading_error, boat_speed):
+    def switchControlMode(self, heading_error, boat_speed, low_power):
         """
         Switches the current rudder controller depending on the current sensor readings
         and the current control mode. Upon a successful switch, the control mode
@@ -54,6 +57,9 @@ class ControllerSelector:
 
         float : boat_speed
             The current boat speed in knots
+
+        bool : low_power
+            A boolean flag that determines if the boat should go into low power mode.
 
         Modifies
         --------
@@ -68,15 +74,19 @@ class ControllerSelector:
 
         # Currently tacking
         if (self.__controlModeID == ControlModes.TACKABLE.value):
-            self.__switchFromTacking(boat_speed, heading_error)
+            self.__switchFromTacking(boat_speed, heading_error, low_power)
 
         # Currently jibing
         elif (self.__controlModeID == ControlModes.JIBE_ONLY.value):
-            self.__switchFromJibing(heading_error)
+            self.__switchFromJibing(heading_error, low_power)
+
+        # Currently in low power
+        elif (self.__controlModeID == ControlModes.LOW_POWER.value):
+            self.__switchFromLowPower(low_power)
 
         # If in UNKNOWN mode, we must resolve to a new control mode
         if (self.__controlModeID == ControlModes.UNKNOWN.value):
-            self.__switchFromUnknown(boat_speed)
+            self.__switchFromUnknown(boat_speed, low_power)
             return True
         else:
             return False
@@ -90,12 +100,15 @@ class ControllerSelector:
         """
         return self.__controlModeID
 
-    def __switchFromUnknown(self, boat_speed):
+    def __switchFromUnknown(self, boat_speed, low_power):
         """
         Switches the controller mode from the UNKNOWN controller to another controller.
 
         Switching Conditions
         --------------------
+        LOW_POWER:
+            - The low_power flag is set to True
+
         JIBE_ONLY:
             - The boat speed is less than or equal to a speed threshold.
 
@@ -108,8 +121,14 @@ class ControllerSelector:
         float : boat_speed
             The current boat speed in knots.
 
+        bool : low_power
+            A boolean flag that determines if the boat is in low power mode.
+
         """
-        if(boat_speed <= sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS):
+        if(low_power):
+            self.__assignMode(ControlModes.LOW_POWER.value)
+
+        elif(boat_speed <= sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS):
             self.__assignMode(ControlModes.JIBE_ONLY.value)
 
         else:
@@ -117,7 +136,7 @@ class ControllerSelector:
 
         return
 
-    def __switchFromTacking(self, boat_speed, heading_error):
+    def __switchFromTacking(self, boat_speed, heading_error, low_power):
         """
         The controller switches from TACKABLE mode to UNKNOWN mode if it meets its
         exit condition. The boat must be in TACKABLE mode when this method is invoked
@@ -127,6 +146,7 @@ class ControllerSelector:
         --------------
         - The boat speed is less than or equal to the speed threshold, OR
         - The boat has reached the specified setpoint
+        - The boat is in low power mode
 
         Arguments
         ---------
@@ -136,17 +156,20 @@ class ControllerSelector:
         float : heading_error
             The current heading error in radians
 
+        bool : low_power
+            A boolean flag that determines if the boat is in low power mode
+
         """
         tooSlow = boat_speed <= sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
         reached_heading = abs(heading_error) <= sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
         # TODO: Panic mode. If we are not at the desired heading by the end of the timeout then
         #       we need to do something else.
-        if(tooSlow or reached_heading):
+        if(tooSlow or reached_heading or low_power):
             self.__assignMode(ControlModes.UNKNOWN.value)
         return
 
-    def __switchFromJibing(self, heading_error):
+    def __switchFromJibing(self, heading_error, low_power):
         """
         The controller switches from JIBE_ONLY mode to UNKNOWN mode if it meets its
         exit condition. The boat must be in JIBE_ONLY mode when this method is invoked
@@ -155,16 +178,41 @@ class ControllerSelector:
         Exit Condition
         --------------
         - The boat has reached the specified setpoint
+        - The boat is in low power mode
 
         Arguments
         ---------
         float : heading_error
             The current heading error in radians
 
+        bool : low_power
+            A boolean flag that determines if the boat is in low power mode
+
         """
         reached_heading = abs(heading_error) <= sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
 
-        if(reached_heading):
+        if(reached_heading or low_power):
+            self.__assignMode(ControlModes.UNKNOWN.value)
+        return
+
+    def __switchFromLowPower(self, low_power):
+        """
+        The controller switches from LOW_POWER mode to UNKNOWN mode if it meets its
+        exit condition. The boat must be in LOW_POWER mode when this method is invoked
+        or there may be unexpected results.
+
+        Exit Condition
+        --------------
+        - The boat is not in low power mode
+
+        Arguments
+        ---------
+        bool : low_power
+            A boolean flag that determines if the boat is in low power mode
+
+        """
+
+        if(not low_power):
             self.__assignMode(ControlModes.UNKNOWN.value)
         return
 

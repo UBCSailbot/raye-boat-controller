@@ -34,3 +34,23 @@ class JibController:
             return min
         else:
             return jib_angle
+
+    @staticmethod
+    def get_winch_position(jibAngle):
+        """
+        Converts a jib angle in radians to a winch position.
+
+        ** Description of Winch Position **
+
+        Arguments
+        ---------
+        float : jibAngle
+            The jib angle in radians
+
+        Returns
+        -------
+        int
+            The winch position corresponding to the jib angle
+        """
+
+        return int(jibAngle * (360 / (math.pi / 2)))
