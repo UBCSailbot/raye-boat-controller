@@ -6,6 +6,7 @@ import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from sensor_filter import SensorFilter
+from std_msgs.msg import Bool
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -109,6 +110,15 @@ def minVoltageCallBack(min_voltage_msg_instance):
     lock.release()
 
 
+def lowWindCallBack(low_wind_msg_instance):
+    lock.acquire()
+
+    global lowWind
+    lowWind = low_wind_msg_instance
+
+    lock.release()
+
+
 def publishRudderWinchAngle():
     if (
         headingSetPointRad is not None
@@ -172,6 +182,7 @@ def main():
     rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
+    rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
     rospy.spin()
 
 
