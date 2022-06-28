@@ -31,7 +31,7 @@ def windSensorCallBack(windsensor_msg_instance):
 
     global apparentWindAngleRad
 
-    apparentWindAngleDegrees = windsensor_msg_instance.measuredDirectionDegrees
+    apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
 
     if SensorFilter.filter(
         apparentWindAngleDegrees,
@@ -50,7 +50,7 @@ def gpsCallBack(gps_msg_instance):
 
     global headingMeasureRad, groundspeedKnots
 
-    headingMeasureDegrees = gps_msg_instance.headingDegrees
+    headingMeasureDegrees = gps_msg_instance.bearingDegrees
 
     if SensorFilter.filter(
         headingMeasureDegrees,
