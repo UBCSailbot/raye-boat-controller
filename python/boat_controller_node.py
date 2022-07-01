@@ -107,6 +107,7 @@ def minVoltageCallBack(min_voltage_msg_instance):
     ):
         lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
+    publishRudderWinchAngle()
     lock.release()
 
 
@@ -116,6 +117,7 @@ def lowWindCallBack(low_wind_msg_instance):
     global lowWind
     lowWind = low_wind_msg_instance
 
+    publishRudderWinchAngle()
     lock.release()
 
 
