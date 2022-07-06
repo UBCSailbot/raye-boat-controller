@@ -7,6 +7,7 @@ import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from sensor_filter import SensorFilter
 from std_msgs.msg import Bool
+from message_filters import Subscriber, TimeSynchronizer
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -28,8 +29,6 @@ rudder_winch_actuation_angle_pub = rospy.Publisher(
 
 
 def windSensorCallBack(windsensor_msg_instance):
-    lock.acquire()
-
     global apparentWindAngleRad
 
     apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
@@ -42,13 +41,8 @@ def windSensorCallBack(windsensor_msg_instance):
     ):
         apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def gpsCallBack(gps_msg_instance):
-    lock.acquire()
-
     global headingMeasureRad, groundspeedKnots
 
     headingMeasureDegrees = gps_msg_instance.bearingDegrees
@@ -71,12 +65,8 @@ def gpsCallBack(gps_msg_instance):
     ):
         groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def desiredHeadingCallBack(heading_msg_instance):
-    lock.acquire()
 
     global headingSetPointRad
 
@@ -89,13 +79,9 @@ def desiredHeadingCallBack(heading_msg_instance):
     ):
         headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def minVoltageCallBack(min_voltage_msg_instance):
-    lock.acquire()
-
+    
     global lowVoltage
     min_voltage_level = min_voltage_msg_instance.min_voltage
 
@@ -107,18 +93,24 @@ def minVoltageCallBack(min_voltage_msg_instance):
     ):
         lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def lowWindCallBack(low_wind_msg_instance):
-    lock.acquire()
 
     global lowWind
     lowWind = low_wind_msg_instance
 
+
+def aggregateSubscriberData(heading_msg, windsensor_msg, gps_msg, min_voltage_msg, low_wind_msg):
+
+    # Collect new data
+    desiredHeadingCallBack(heading_msg)
+    windSensorCallBack(windsensor_msg)
+    gpsCallBack(gps_msg)
+    minVoltageCallBack(min_voltage_msg)
+    lowWindCallBack(low_wind_msg)
+
+    # Publish the data
     publishRudderWinchAngle()
-    lock.release()
 
 
 def publishRudderWinchAngle():
@@ -180,11 +172,15 @@ def publishRudderWinchAngle():
 
 def main():
     rospy.init_node("rudder_and_sail_angle_publisher", anonymous=True)
-    rospy.Subscriber("/desired_heading_degrees", heading, desiredHeadingCallBack)
-    rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
-    rospy.Subscriber("/GPS", GPS, gpsCallBack)
-    rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
-    rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
+    subs = [
+        Subscriber("/desired_heading_degrees", heading),
+        Subscriber("/windSensor", windSensor),
+        Subscriber("/GPS", GPS),
+        Subscriber("/min_voltage", min_voltage),
+        Subscriber('/lowWindConditions', Bool)
+    ]
+    ts = TimeSynchronizer(subs, queue_size=10)
+    ts.registerCallback(aggregateSubscriberData)
     rospy.spin()
 
 
