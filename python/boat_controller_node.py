@@ -6,6 +6,7 @@ import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from sensor_filter import SensorFilter
+from std_msgs.msg import Bool
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -31,7 +32,7 @@ def windSensorCallBack(windsensor_msg_instance):
 
     global apparentWindAngleRad
 
-    apparentWindAngleDegrees = windsensor_msg_instance.measuredDirectionDegrees
+    apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
 
     if SensorFilter.filter(
         apparentWindAngleDegrees,
@@ -50,7 +51,7 @@ def gpsCallBack(gps_msg_instance):
 
     global headingMeasureRad, groundspeedKnots
 
-    headingMeasureDegrees = gps_msg_instance.headingDegrees
+    headingMeasureDegrees = gps_msg_instance.bearingDegrees
 
     if SensorFilter.filter(
         headingMeasureDegrees,
@@ -106,6 +107,17 @@ def minVoltageCallBack(min_voltage_msg_instance):
     ):
         lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
+    publishRudderWinchAngle()
+    lock.release()
+
+
+def lowWindCallBack(low_wind_msg_instance):
+    lock.acquire()
+
+    global lowWind
+    lowWind = low_wind_msg_instance
+
+    publishRudderWinchAngle()
     lock.release()
 
 
@@ -172,6 +184,7 @@ def main():
     rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
+    rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
     rospy.spin()
 
 
