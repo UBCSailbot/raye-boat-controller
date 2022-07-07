@@ -41,8 +41,8 @@ def windSensorCallBack(windsensor_msg_instance):
         float
     ):
         apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
+        publishRudderWinchAngle()
 
-    publishRudderWinchAngle()
     lock.release()
 
 
@@ -88,8 +88,8 @@ def desiredHeadingCallBack(heading_msg_instance):
         float
     ):
         headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
+        publishRudderWinchAngle()
 
-    publishRudderWinchAngle()
     lock.release()
 
 
@@ -106,8 +106,8 @@ def minVoltageCallBack(min_voltage_msg_instance):
         float
     ):
         lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
+        publishRudderWinchAngle()
 
-    publishRudderWinchAngle()
     lock.release()
 
 
