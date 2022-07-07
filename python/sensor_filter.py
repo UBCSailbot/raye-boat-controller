@@ -24,9 +24,13 @@ class SensorFilter:
         Returns
         =======
         bool
-            Returns True if the reading is valid, and False otherwise.;
+            Returns True if the reading is valid, and False otherwise.
 
         """
-        type_check = isinstance(reading, expected_type)
+
+        # Check the type first so there is not a type error upon bound checking
+        if not isinstance(reading, expected_type):
+            return False
+
         bound_check = (lowerbound <= reading <= upperbound)
-        return type_check and bound_check
+        return bound_check

@@ -25,6 +25,13 @@ class Test_SensorFilter(unittest.TestCase):
         expected_type = float
         self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
 
+    def test_bad_type(self):
+        reading = 3
+        lowerbound = 1.0
+        upperbound = 5.0
+        expected_type = float
+        self.assertFalse(SensorFilter.filter(reading, lowerbound, upperbound, expected_type))
+
     def test_below_bound(self):
         reading = 5.0
         lowerbound = 6.0
