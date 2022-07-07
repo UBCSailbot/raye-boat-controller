@@ -7,7 +7,7 @@ import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from sensor_filter import SensorFilter
 from std_msgs.msg import Bool
-from message_filters import Subscriber, TimeSynchronizer
+from message_filters import Subscriber, ApproximateTimeSynchronizer
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -169,7 +169,7 @@ def publishRudderWinchAngle():
                 sailbot_constants.MIN_WINCH_POSITION)
         )
 
-
+    
 def main():
     rospy.init_node("rudder_and_sail_angle_publisher", anonymous=True)
     subs = [
@@ -179,7 +179,7 @@ def main():
         Subscriber("/min_voltage", min_voltage),
         Subscriber('/lowWindConditions', Bool)
     ]
-    ts = TimeSynchronizer(subs, queue_size=10)
+    ts = ApproximateTimeSynchronizer(subs, queue_size=10, slop=0.1, allow_headerless=True)
     ts.registerCallback(aggregateSubscriberData)
     rospy.spin()
 
