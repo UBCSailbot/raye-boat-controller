@@ -69,7 +69,7 @@ def minVoltageCallBack(min_voltage_msg_instance):
     lock.acquire()
 
     global lowVoltage
-    
+
     min_voltage_level = min_voltage_msg_instance.min_voltage
     lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
