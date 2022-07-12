@@ -6,6 +6,7 @@ import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from std_msgs.msg import Bool
+from control_modes import CONTROL_MODES
 
 lock = threading.Lock()
 # define global variables for the needed topics
@@ -128,6 +129,27 @@ def publishRudderWinchAngle():
             sailbot_constants.X2_JIB
         )
 
+        rospy.loginfo_throttle(2,
+                               "\n" +
+                               "SENSOR READINGS\n" +
+                               "\tCurrent Heading: {} radians\n".format(headingMeasureRad) +
+                               "\tDesired Heading: {} radians\n".format(headingSetPointRad) +
+                               "\tWind Angle: {} radians\n".format(apparentWindAngleRad) +
+                               "\tGround Speed: {} knots\n".format(groundspeedKnots) +
+                               "\tLow Wind: {}\n".format(lowWind) +
+                               "\tLow Voltage: {}\n".format(lowVoltage) +
+                               "\n" +
+                               "CONTROLLER STATE\n" +
+                               "\tControl Mode: {}\n".format(CONTROL_MODES[controller.getControlModeID()]) +
+                               "\tLow Power: {}\n".format(lowVoltage or lowWind) +
+                               "\n" +
+                               "PUBLISHED VALUES\n" +
+                               "\tRudder Angle: {} radians\n".format(rudderAngleRad) +
+                               "\tSail Winch Position: {}\n".format(sailWinchPosition) +
+                               "\tJib Winch Position: {}\n".format(jibWinchPosition) +
+                               "\n"
+                               )
+
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
                 rudderAngleRad,
@@ -151,6 +173,9 @@ def main():
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
+
+    rospy.loginfo("BOAT CONTROLLER STARTED SUCCESSFULLY. WAITING ON SENSOR DATA...\n")
+
     rospy.spin()
 
 
