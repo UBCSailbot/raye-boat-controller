@@ -5,7 +5,6 @@ import sailbot_constants
 import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
-from sensor_filter import SensorFilter
 from std_msgs.msg import Bool
 
 lock = threading.Lock()
@@ -33,14 +32,7 @@ def windSensorCallBack(windsensor_msg_instance):
     global apparentWindAngleRad
 
     apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
-
-    if SensorFilter.filter(
-        apparentWindAngleDegrees,
-        sailbot_constants.MIN_WIND_ANGLE_DEG,
-        sailbot_constants.MAX_WIND_ANGLE_DEG,
-        float
-    ):
-        apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
+    apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     publishRudderWinchAngle()
     lock.release()
@@ -52,24 +44,10 @@ def gpsCallBack(gps_msg_instance):
     global headingMeasureRad, groundspeedKnots
 
     headingMeasureDegrees = gps_msg_instance.bearingDegrees
-
-    if SensorFilter.filter(
-        headingMeasureDegrees,
-        sailbot_constants.MIN_HEADING_DEG,
-        sailbot_constants.MAX_HEADING_DEG,
-        float
-    ):
-        headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
+    headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     groundspeedKMPH = gps_msg_instance.speedKmph
-
-    if SensorFilter.filter(
-        groundspeedKMPH,
-        sailbot_constants.MIN_BOAT_SPEED,
-        sailbot_constants.MAX_BOAT_SPEED,
-        float
-    ):
-        groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
+    groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
 
     publishRudderWinchAngle()
     lock.release()
@@ -81,13 +59,7 @@ def desiredHeadingCallBack(heading_msg_instance):
     global headingSetPointRad
 
     headingSetPointDeg = heading_msg_instance.headingDegrees
-    if SensorFilter.filter(
-        headingSetPointDeg,
-        sailbot_constants.MIN_HEADING_DEG,
-        sailbot_constants.MAX_HEADING_DEG,
-        float
-    ):
-        headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
+    headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
 
     publishRudderWinchAngle()
     lock.release()
@@ -97,15 +69,9 @@ def minVoltageCallBack(min_voltage_msg_instance):
     lock.acquire()
 
     global lowVoltage
+    
     min_voltage_level = min_voltage_msg_instance.min_voltage
-
-    if SensorFilter.filter(
-        min_voltage_level,
-        sailbot_constants.MIN_VOLTAGE_LEVEL,
-        sailbot_constants.MAX_VOLTAGE_LEVEL,
-        float
-    ):
-        lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
+    lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
     publishRudderWinchAngle()
     lock.release()
