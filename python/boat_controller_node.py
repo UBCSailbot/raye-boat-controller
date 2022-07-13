@@ -8,8 +8,8 @@ from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_volta
 from std_msgs.msg import Bool
 from control_modes import CONTROL_MODES
 
-lock = threading.Lock()
-# define global variables for the needed topics
+
+# Define global variables for the needed topics
 headingSetPointRad = None
 headingMeasureRad = None
 apparentWindAngleRad = None
@@ -19,8 +19,12 @@ sailWinchPosition = 0
 jibWinchPosition = 0
 lowVoltage = False
 lowWind = False
+lock = threading.Lock()
 
-controller = HeadingController(boat_speed=0)
+# Global variables for configuring controller (should be command line arguments ideally)
+DISABLE_LOW_POWER = False
+
+controller = HeadingController(boat_speed=0, disableLowPower=DISABLE_LOW_POWER)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
@@ -175,7 +179,9 @@ def main():
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
 
-    rospy.loginfo("BOAT CONTROLLER STARTED SUCCESSFULLY. WAITING ON SENSOR DATA...\n")
+    if DISABLE_LOW_POWER:
+        rospy.logwarn("Low power mode is DISABLED! If you don't want this, change DISABLE_LOW_POWER to False.\n")
+    rospy.loginfo("Boat controller started successfully. Waiting on sensor data...\n")
 
     rospy.spin()
 

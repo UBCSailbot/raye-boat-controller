@@ -321,6 +321,55 @@ class Test_HeadingController(unittest.TestCase):
         # Should now be in TACKABLE mode
         self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
 
+    def test_tack_disabled_low_power(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # Enter TACKABLE from UNKNOWN
+        hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value, True)
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+
+        # Adjust parameters to switch to LOW POWER
+        low_battery = 0
+        low_wind = 1
+
+        # A switch should NOT occur
+        self.assertFalse(hc.switchControlMode(
+            heading_error=mock_heading_error,
+            boat_speed=mock_speed,
+            low_battery_level=low_battery,
+            low_wind=low_wind
+        ))
+
+        # Should now be in TACKABLE mode and not in LOW_POWER mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+
+    def test_jibe_disabled_low_power(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+
+        # Can be anything
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # Enter JIBE_ONLY from UNKNOWN
+        hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value, True)
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+
+        # Adjust parameters to switch to LOW POWER
+        # Only one or both of these need to be 1
+        low_battery = 1
+        low_wind = 0
+
+        # A switch NOT should occur
+        self.assertFalse(hc.switchControlMode(
+            heading_error=mock_heading_error,
+            boat_speed=mock_speed,
+            low_battery_level=low_battery,
+            low_wind=low_wind
+        ))
+
+        # Should now be in JIBE_ONLY mode and not LOW_POWER
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_HeadingController", Test_HeadingController)

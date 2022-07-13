@@ -21,7 +21,7 @@ def talker():
         current_heading = random.uniform(0.0, 45.0)
         desired_heading = random.uniform(0.0, 45.0)
         groundspeed = random.uniform(0.0, 2.0)
-        voltage = random.uniform(0.0, 2.0)
+        voltage = random.uniform(0.0, 50.0)
 
         heading_degrees_pub.publish(heading(desired_heading))
 
@@ -29,7 +29,7 @@ def talker():
         # windSensor_pub.publish(windSensor(windangle, 1., False))
         windSensor_pub.publish(windSensor(1., 1., 1., 1.))
 
-        gps_pub.publish(GPS(.0, .0, current_heading, groundspeed, 1., 1.))
+        gps_pub.publish(GPS(.0, .0, current_heading, groundspeed, groundspeed, 1.))
         min_voltage_pub.publish(min_voltage(voltage))
 
         rate.sleep()
