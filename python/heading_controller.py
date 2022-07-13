@@ -24,18 +24,24 @@ class HeadingController:
     # Current Jib Angle in Radians
     __currJibAngleRad = 0
 
-    def __init__(self, boat_speed, initialControlMode=ControlModes.UNKNOWN.value):
+    # Boolean for disabling low power mode
+    __disableLowPower = None
+
+    def __init__(self, boat_speed=0, initialControlMode=ControlModes.UNKNOWN.value, disableLowPower=False):
         """
         Initializes a HeadingController object with a specified control mode.
 
         Arguments
         ---------
+        float : boat_speed
+            The current boat speed in knots
+
         int : initialControlMode (optional)
             The ID of the initial control mode that the rudder controller. This parameter must
             adhere to the existing values in the ControlModes class found in control_modes.py.
 
-        float : boat_speed
-            The current boat speed in knots
+        bool : disableLowPower
+            If True, low power mode is disabled and the boat will never enter low power mode.
 
         Throws
         ------
@@ -50,6 +56,7 @@ class HeadingController:
             initialControlMode=initialControlMode
         )
 
+        self.__disableLowPower = disableLowPower
         self.__controlModeID = self.__ctrl_selector.getControlModeID()
 
     def getControlModeID(self):
@@ -92,7 +99,7 @@ class HeadingController:
             occurred.
 
         """
-        low_power = low_battery_level or low_wind
+        low_power = (low_battery_level or low_wind) and (not self.__disableLowPower)
         if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, low_power)):
             self.__controlModeID = self.__ctrl_selector.getControlModeID()
             return True
