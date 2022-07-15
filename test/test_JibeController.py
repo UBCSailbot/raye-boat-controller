@@ -52,6 +52,17 @@ class Test_JibeController(unittest.TestCase):
         self.assertAlmostEqual(JibeOnlyRudderController.get_jibe_controller_error(
             math.pi / 2 + 2 * math.pi, - math.pi / 2 + 2 * math.pi, -1), -math.pi)
 
+    def test_getJibeDirection_Same(self):
+        self.assertEqual(
+            JibeOnlyRudderController.get_jibe_controller_direction(
+                    math.pi / 100, - math.pi / 100, math.pi / 4), -1)
+
+    def test_getJibeDirection_Same_Opp(self):
+        self.assertEqual(
+            JibeOnlyRudderController.get_jibe_controller_direction(
+                    - math.pi / 100, math.pi / 100, math.pi / 4), 1)
+
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_JibeController",
