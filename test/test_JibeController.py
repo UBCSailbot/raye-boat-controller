@@ -18,7 +18,7 @@ class Test_JibeController(unittest.TestCase):
     def test_getJibeDirection_normalCase(self):
         self.assertEqual(
             JibeOnlyRudderController.get_jibe_controller_direction(
-                math.pi / 2, - math.pi / 2, 0), 1)
+                math.pi / 2, - math.pi / 2, - math.pi / 2), 1)
 
     def test_getJibeError_normalCase(self):
         self.assertAlmostEqual(
@@ -28,7 +28,7 @@ class Test_JibeController(unittest.TestCase):
     def test_getJibeDirection_normalCaseInverse(self):
         self.assertEqual(
             JibeOnlyRudderController.get_jibe_controller_direction(
-                math.pi / 2, - math.pi / 2, math.pi), -1)
+                math.pi / 2, - math.pi / 2, math.pi / 2), -1)
 
     def test_getJibeError_normalCaseInverse(self):
         self.assertAlmostEqual(
@@ -38,7 +38,7 @@ class Test_JibeController(unittest.TestCase):
     def test_getJibeDirection_smallAngle(self):
         self.assertEqual(
             JibeOnlyRudderController.get_jibe_controller_direction(
-                math.pi / 100, - math.pi / 100, math.pi), -1)
+                math.pi / 100, - math.pi / 100, math.pi * 99 / 100), -1)
 
     def test_getJibeError_smallAngle(self):
         self.assertAlmostEqual(JibeOnlyRudderController.get_jibe_controller_error(
@@ -46,7 +46,7 @@ class Test_JibeController(unittest.TestCase):
 
     def test_getJibeDirection_wrap(self):
         self.assertEqual(JibeOnlyRudderController.get_jibe_controller_direction(
-            math.pi / 2 + 2 * math.pi, - math.pi / 2 + 2 * math.pi, 0 + 2 * math.pi), 1)
+            math.pi / 2 + 2 * math.pi, - math.pi / 2 + 2 * math.pi, - math.pi / 2 + 2 * math.pi), 1)
 
     def test_getJibeError_wrap(self):
         self.assertAlmostEqual(JibeOnlyRudderController.get_jibe_controller_error(

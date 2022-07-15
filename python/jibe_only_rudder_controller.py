@@ -22,15 +22,15 @@ class JibeOnlyRudderController:
             apparent_wind_angle):
 
         # Bind all values between 0 and 2Pi for ease of calculation
-        apparent_wind_angle = (apparent_wind_angle) % (2 * math.pi)
+        absolute_wind_angle = (apparent_wind_angle + current_heading) % (2 * math.pi)
         current_heading %= (2 * math.pi)
         desired_heading %= (2 * math.pi)
 
         # Find heading relative to wind, where 0 is upwind
         wind_relative_current_heading = (
-            current_heading - apparent_wind_angle) % (2 * math.pi)
+            current_heading - absolute_wind_angle) % (2 * math.pi)
         wind_relative_desired_heading = (
-            desired_heading - apparent_wind_angle) % (2 * math.pi)
+            desired_heading - absolute_wind_angle) % (2 * math.pi)
 
         # find error term
         error = -1 * (-wind_relative_desired_heading + wind_relative_current_heading)
