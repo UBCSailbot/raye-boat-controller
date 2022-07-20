@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import local_imports
+import sailbot_constants
 import unittest
 import rospy
 from time import sleep
@@ -27,7 +28,7 @@ class TestControllerIntegration(unittest.TestCase):
         counter = 0
         while (
             not rospy.is_shutdown()
-            and counter < 5
+            and counter < sailbot_constants.WINCH_UPDATE_PERIOD + 2 * sailbot_constants.PUBLISHING_PERIOD
             and not (self.controllerIntegration_ok)
         ):
             sleep(SLEEP_SECONDS)
