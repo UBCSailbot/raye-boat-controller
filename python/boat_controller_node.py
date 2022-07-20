@@ -4,6 +4,8 @@ from controller_output_refiner import ControllerOutputRefiner
 import sailbot_constants
 import rospy
 import threading
+from rospy import Timer, Duration
+from datetime import datetime
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
 from std_msgs.msg import Bool
 from control_modes import CONTROL_MODES
@@ -42,20 +44,12 @@ rudder_winch_actuation_angle_pub = rospy.Publisher(
 
 
 def windSensorCallBack(windsensor_msg_instance):
-    lock.acquire()
-
     global apparentWindAngleRad
-
     apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
     apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def gpsCallBack(gps_msg_instance):
-    lock.acquire()
-
     global headingMeasureRad, groundspeedKnots
 
     headingMeasureDegrees = gps_msg_instance.bearingDegrees
@@ -64,52 +58,31 @@ def gpsCallBack(gps_msg_instance):
     groundspeedKMPH = gps_msg_instance.speedKmph
     groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def desiredHeadingCallBack(heading_msg_instance):
-    lock.acquire()
-
     global headingSetPointRad
-
     headingSetPointDeg = heading_msg_instance.headingDegrees
     headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def minVoltageCallBack(min_voltage_msg_instance):
-    lock.acquire()
-
     global lowVoltage
-
     min_voltage_level = min_voltage_msg_instance.min_voltage
     lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
-    publishRudderWinchAngle()
-    lock.release()
-
 
 def lowWindCallBack(low_wind_msg_instance):
-    lock.acquire()
-
     global lowWind
     lowWind = low_wind_msg_instance
 
-    publishRudderWinchAngle()
-    lock.release()
 
-
-def publishRudderWinchAngle():
+def updateRudders(event):
     if (
         headingSetPointRad is not None
         and headingMeasureRad is not None
         and apparentWindAngleRad is not None
         and groundspeedKnots is not None
     ):
-
         global rudderAngleRad
 
         heading_error = controller.get_heading_error(
@@ -118,17 +91,22 @@ def publishRudderWinchAngle():
             apparent_wind_angle=apparentWindAngleRad
         )
 
+        lock.acquire()
         controller.switchControlMode(
             heading_error=heading_error,
             boat_speed=groundspeedKnots,
             low_battery_level=lowVoltage,
             low_wind=lowWind
         )
+        lock.release()
 
         rudderAngleRad = (
             controller.get_feed_back_gain(heading_error) * heading_error
         )
 
+
+def updateWinches(event):
+    if apparentWindAngleRad is not None:
         global sailWinchPosition
         sailWinchPosition = controller.get_sail_winch_position(
             apparentWindAngleRad,
@@ -143,8 +121,17 @@ def publishRudderWinchAngle():
             sailbot_constants.X2_JIB
         )
 
-        rospy.loginfo_throttle(
-            2,
+
+def publishRudderWinchAngle(event):
+    if (
+        rudderAngleRad is not None
+        and sailWinchPosition is not None
+        and jibWinchPosition is not None
+    ):
+
+        rospy.loginfo(
+            "\n" +
+            "Published on {}\n".format(datetime.fromtimestamp(int(event.current_real.to_sec()))) +
             "\n" +
             "SENSOR READINGS\n" +
             "\tCurrent Heading: {} radians\n".format(headingMeasureRad) +
@@ -190,6 +177,13 @@ def main():
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
+
+    # Callbacks to update rudders and winches
+    Timer(Duration(sailbot_constants.RUDDER_UPDATE_PERIOD), updateRudders)
+    Timer(Duration(sailbot_constants.WINCH_UPDATE_PERIOD), updateWinches)
+
+    # Callback to publish
+    Timer(Duration(sailbot_constants.PUBLISHING_PERIOD), publishRudderWinchAngle)
 
     if (FIXED_CTRL_STATE is not None) and (DISABLE_LOW_POWER):
         rospy.logerr("Cannot disable low power and fix the control state at the same time!")
