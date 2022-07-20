@@ -24,8 +24,18 @@ lock = threading.Lock()
 # Global variables for configuring controller (should be command line arguments ideally)
 DISABLE_LOW_POWER = False
 
-controller = HeadingController(boat_speed=0, disableLowPower=DISABLE_LOW_POWER)
+"""
+No Fixed State: None
+Jibe: 1
+Tack: 2
+Low Power: 3
+"""
+FIXED_CTRL_STATE = None
 
+# Boat control logic
+controller = HeadingController(boat_speed=0, disableLowPower=DISABLE_LOW_POWER, fixedControlMode=FIXED_CTRL_STATE)
+
+# Control node publisher
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
 )
@@ -146,7 +156,9 @@ def publishRudderWinchAngle():
             "\n" +
             "CONTROLLER STATE\n" +
             "\tControl Mode: {}\n".format(CONTROL_MODES[controller.getControlModeID()]) +
+            "\tFixed Control State: {}\n".format(controller.controlModeIsFixed) +
             "\tLow Power: {}\n".format(lowVoltage or lowWind) +
+            "\tLow Power Disabled: {}\n".format(controller.lowPowerDisabled) +
             "\n" +
             "PUBLISHED VALUES\n" +
             "\tRudder Angle: {} radians\n".format(rudderAngleRad) +
@@ -179,11 +191,19 @@ def main():
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
 
-    if DISABLE_LOW_POWER:
-        rospy.logwarn("Low power mode is DISABLED! If you don't want this, change DISABLE_LOW_POWER to False.\n")
-    rospy.loginfo("Boat controller started successfully. Waiting on sensor data...\n")
-
-    rospy.spin()
+    if (FIXED_CTRL_STATE is not None) and (DISABLE_LOW_POWER):
+        rospy.logerr("Cannot disable low power and fix the control state at the same time!")
+        rospy.signal_shutdown("Low power mode is disabled and the control state is fixed.")
+    else:
+        if DISABLE_LOW_POWER:
+            rospy.logwarn("Low power mode is DISABLED! If you don't want this, change DISABLE_LOW_POWER to False.\n")
+        elif FIXED_CTRL_STATE is not None:
+            rospy.logwarn(
+                "The controller is fixed to the {} state! ".format(CONTROL_MODES[FIXED_CTRL_STATE]) +
+                "If you don't want this, change FIXED_CTRL_STATE to None."
+            )
+        rospy.loginfo("Boat controller started successfully. Waiting on sensor data...\n")
+        rospy.spin()
 
 
 if __name__ == "__main__":
