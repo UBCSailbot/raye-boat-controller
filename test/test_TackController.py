@@ -88,6 +88,11 @@ class Test_TackController(unittest.TestCase):
                 3 * pi, 1.1 * pi), -0.1 * pi
         )
 
+        self.assertAlmostEqual(
+            RudderController.get_header_error_tackable(
+                pi / 4, -3 * pi/4), 0
+        )
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_TackController",
