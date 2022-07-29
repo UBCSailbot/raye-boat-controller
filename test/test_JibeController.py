@@ -55,13 +55,12 @@ class Test_JibeController(unittest.TestCase):
     def test_getJibeDirection_Same(self):
         self.assertEqual(
             JibeOnlyRudderController.get_jibe_controller_direction(
-                    math.pi / 100, - math.pi / 100, math.pi / 4), -1)
+                math.pi / 100, - math.pi / 100, math.pi / 4), -1)
 
     def test_getJibeDirection_Same_Opp(self):
         self.assertEqual(
             JibeOnlyRudderController.get_jibe_controller_direction(
-                    - math.pi / 100, math.pi / 100, math.pi / 4), 1)
-
+                - math.pi / 100, math.pi / 100, math.pi / 4), 1)
 
 
 if __name__ == "__main__":

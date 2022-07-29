@@ -66,7 +66,7 @@ class Test_TackController(unittest.TestCase):
         )
 
         self.assertAlmostEqual(
-            TackController.get_heading_error_tackable(pi / 4, -pi / 4), 
+            TackController.get_heading_error_tackable(pi / 4, -pi / 4),
             pi / 2
         )
 
@@ -81,22 +81,22 @@ class Test_TackController(unittest.TestCase):
         )
 
         self.assertAlmostEqual(
-            TackController.get_heading_error_tackable(3 * pi, 1.1 * pi), 
+            TackController.get_heading_error_tackable(3 * pi, 1.1 * pi),
             -0.1 * pi
         )
 
         self.assertAlmostEqual(
-            TackController.get_heading_error_tackable(pi/4, 7*pi/4),
-            pi/2
+            TackController.get_heading_error_tackable(pi / 4, 7 * pi / 4),
+            pi / 2
         )
 
         self.assertAlmostEqual(
-            TackController.get_heading_error_tackable(3*pi/4, 5*pi/4),
-            -pi/2
+            TackController.get_heading_error_tackable(3 * pi / 4, 5 * pi / 4),
+            -pi / 2
         )
 
         self.assertAlmostEqual(
-            TackController.get_heading_error_tackable(pi/4, pi/4),
+            TackController.get_heading_error_tackable(pi / 4, pi / 4),
             0.
         )
 
