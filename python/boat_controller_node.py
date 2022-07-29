@@ -5,11 +5,11 @@ import sailbot_constants
 import rospy
 import threading
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
-from sensor_filter import SensorFilter
 from std_msgs.msg import Bool
+from control_modes import CONTROL_MODES
 
-lock = threading.Lock()
-# define global variables for the needed topics
+
+# Define global variables for the needed topics
 headingSetPointRad = None
 headingMeasureRad = None
 apparentWindAngleRad = None
@@ -19,8 +19,12 @@ sailWinchPosition = 0
 jibWinchPosition = 0
 lowVoltage = False
 lowWind = False
+lock = threading.Lock()
 
-controller = HeadingController(boat_speed=0)
+# Global variables for configuring controller (should be command line arguments ideally)
+DISABLE_LOW_POWER = False
+
+controller = HeadingController(boat_speed=0, disableLowPower=DISABLE_LOW_POWER)
 
 rudder_winch_actuation_angle_pub = rospy.Publisher(
     "/rudder_winch_actuation_angle", actuation_angle, queue_size=1
@@ -33,14 +37,7 @@ def windSensorCallBack(windsensor_msg_instance):
     global apparentWindAngleRad
 
     apparentWindAngleDegrees = windsensor_msg_instance.measuredBearingDegrees
-
-    if SensorFilter.filter(
-        apparentWindAngleDegrees,
-        sailbot_constants.MIN_WIND_ANGLE_DEG,
-        sailbot_constants.MAX_WIND_ANGLE_DEG,
-        float
-    ):
-        apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
+    apparentWindAngleRad = apparentWindAngleDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     publishRudderWinchAngle()
     lock.release()
@@ -52,24 +49,10 @@ def gpsCallBack(gps_msg_instance):
     global headingMeasureRad, groundspeedKnots
 
     headingMeasureDegrees = gps_msg_instance.bearingDegrees
-
-    if SensorFilter.filter(
-        headingMeasureDegrees,
-        sailbot_constants.MIN_HEADING_DEG,
-        sailbot_constants.MAX_HEADING_DEG,
-        float
-    ):
-        headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
+    headingMeasureRad = headingMeasureDegrees * sailbot_constants.DEGREES_TO_RADIANS
 
     groundspeedKMPH = gps_msg_instance.speedKmph
-
-    if SensorFilter.filter(
-        groundspeedKMPH,
-        sailbot_constants.MIN_BOAT_SPEED,
-        sailbot_constants.MAX_BOAT_SPEED,
-        float
-    ):
-        groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
+    groundspeedKnots = groundspeedKMPH * sailbot_constants.KMPH_TO_KNOTS
 
     publishRudderWinchAngle()
     lock.release()
@@ -81,13 +64,7 @@ def desiredHeadingCallBack(heading_msg_instance):
     global headingSetPointRad
 
     headingSetPointDeg = heading_msg_instance.headingDegrees
-    if SensorFilter.filter(
-        headingSetPointDeg,
-        sailbot_constants.MIN_HEADING_DEG,
-        sailbot_constants.MAX_HEADING_DEG,
-        float
-    ):
-        headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
+    headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
 
     publishRudderWinchAngle()
     lock.release()
@@ -97,15 +74,9 @@ def minVoltageCallBack(min_voltage_msg_instance):
     lock.acquire()
 
     global lowVoltage
-    min_voltage_level = min_voltage_msg_instance.min_voltage
 
-    if SensorFilter.filter(
-        min_voltage_level,
-        sailbot_constants.MIN_VOLTAGE_LEVEL,
-        sailbot_constants.MAX_VOLTAGE_LEVEL,
-        float
-    ):
-        lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
+    min_voltage_level = min_voltage_msg_instance.min_voltage
+    lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
     publishRudderWinchAngle()
     lock.release()
@@ -162,6 +133,28 @@ def publishRudderWinchAngle():
             sailbot_constants.X2_JIB
         )
 
+        rospy.loginfo_throttle(
+            2,
+            "\n" +
+            "SENSOR READINGS\n" +
+            "\tCurrent Heading: {} radians\n".format(headingMeasureRad) +
+            "\tDesired Heading: {} radians\n".format(headingSetPointRad) +
+            "\tWind Angle: {} radians\n".format(apparentWindAngleRad) +
+            "\tGround Speed: {} knots\n".format(groundspeedKnots) +
+            "\tLow Wind: {}\n".format(lowWind) +
+            "\tLow Voltage: {}\n".format(lowVoltage) +
+            "\n" +
+            "CONTROLLER STATE\n" +
+            "\tControl Mode: {}\n".format(CONTROL_MODES[controller.getControlModeID()]) +
+            "\tLow Power: {}\n".format(lowVoltage or lowWind) +
+            "\n" +
+            "PUBLISHED VALUES\n" +
+            "\tRudder Angle: {} radians\n".format(rudderAngleRad) +
+            "\tSail Winch Position: {}\n".format(sailWinchPosition) +
+            "\tJib Winch Position: {}\n".format(jibWinchPosition) +
+            "\n"
+        )
+
         rudder_winch_actuation_angle_pub.publish(
             ControllerOutputRefiner.saturate(
                 rudderAngleRad,
@@ -185,6 +178,11 @@ def main():
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
     rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
+
+    if DISABLE_LOW_POWER:
+        rospy.logwarn("Low power mode is DISABLED! If you don't want this, change DISABLE_LOW_POWER to False.\n")
+    rospy.loginfo("Boat controller started successfully. Waiting on sensor data...\n")
+
     rospy.spin()
 
 
