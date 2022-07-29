@@ -370,6 +370,70 @@ class Test_HeadingController(unittest.TestCase):
         # Should now be in JIBE_ONLY mode and not LOW_POWER
         self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
 
+    def test_fixed_tack_mode(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+        fixedMode = ControlModes.TACKABLE.value
+
+        # Enter TACKABLE from UNKNOWN
+        hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value, fixedControlMode=fixedMode)
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+
+        # Adjust parameters to switch to JIBE_ONLY
+        mock_speed = 0.5 * sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
+
+        # A switch should NOT occur
+        self.assertFalse(hc.switchControlMode(
+            heading_error=mock_heading_error,
+            boat_speed=mock_speed
+        ))
+
+        # Should still be in TACKABLE mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.TACKABLE.value)
+        self.assertTrue(hc.controlModeIsFixed)
+
+    def test_fixed_jibe_mode(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+        fixedMode = ControlModes.JIBE_ONLY.value
+
+        # Enter JIBE_ONLY from UNKNOWN
+        hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value, fixedControlMode=fixedMode)
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+
+        # Adjust parameters to switch to TACKABLE
+        mock_speed = 2 * sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS
+        mock_heading_error = 0.5 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+
+        # A switch should NOT occur
+        self.assertFalse(hc.switchControlMode(
+            heading_error=mock_heading_error,
+            boat_speed=mock_speed
+        ))
+
+        # Should still be in JIBE_ONLY mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.JIBE_ONLY.value)
+        self.assertTrue(hc.controlModeIsFixed)
+
+    def test_fixed_low_power(self):
+        mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS - 0.1
+        mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
+        fixedMode = ControlModes.LOW_POWER.value
+
+        # Enter LOWER_POWER from UNKNOWN
+        hc = HeadingController(mock_speed, ControlModes.UNKNOWN.value, fixedControlMode=fixedMode)
+        self.assertEqual(hc.getControlModeID(), ControlModes.LOW_POWER.value)
+
+        # A switch should NOT occur
+        self.assertFalse(hc.switchControlMode(
+            heading_error=mock_heading_error,
+            boat_speed=mock_speed
+        ))
+
+        # Should now be in LOW_POWER mode
+        self.assertEqual(hc.getControlModeID(), ControlModes.LOW_POWER.value)
+        self.assertTrue(hc.controlModeIsFixed)
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_HeadingController", Test_HeadingController)

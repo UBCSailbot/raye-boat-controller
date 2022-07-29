@@ -27,7 +27,15 @@ class HeadingController:
     # Boolean for disabling low power mode
     __disableLowPower = None
 
-    def __init__(self, boat_speed=0, initialControlMode=ControlModes.UNKNOWN.value, disableLowPower=False):
+    # Boolean to tell if the heading controller is in a fixed state or not
+    __controlModeIsFixed = None
+
+    def __init__(
+            self,
+            boat_speed=0,
+            initialControlMode=ControlModes.UNKNOWN.value,
+            disableLowPower=False,
+            fixedControlMode=None):
         """
         Initializes a HeadingController object with a specified control mode.
 
@@ -43,6 +51,11 @@ class HeadingController:
         bool : disableLowPower
             If True, low power mode is disabled and the boat will never enter low power mode.
 
+        int, None : fixedControlMode
+            If it is an integer, then the controller will fix on a specific control state. Consult
+            control_modes.py for the correct integers to specify (do not specify UNKNOWN). If set to
+            None, then the control mode is not fixed.
+
         Throws
         ------
         ValueError
@@ -57,7 +70,18 @@ class HeadingController:
         )
 
         self.__disableLowPower = disableLowPower
-        self.__controlModeID = self.__ctrl_selector.getControlModeID()
+
+        if (fixedControlMode is not None) and \
+           (ControllerSelector.isValidModeID(fixedControlMode)) and \
+           (fixedControlMode != ControlModes.UNKNOWN.value):
+
+            self.__controlModeID = fixedControlMode
+            self.__controlModeIsFixed = True
+
+        else:
+
+            self.__controlModeID = self.__ctrl_selector.getControlModeID()
+            self.__controlModeIsFixed = False
 
     def getControlModeID(self):
         """
@@ -99,10 +123,12 @@ class HeadingController:
             occurred.
 
         """
-        low_power = (low_battery_level or low_wind) and (not self.__disableLowPower)
-        if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, low_power)):
-            self.__controlModeID = self.__ctrl_selector.getControlModeID()
-            return True
+
+        if (not self.__controlModeIsFixed):
+            low_power = (low_battery_level or low_wind) and (not self.__disableLowPower)
+            if(self.__ctrl_selector.switchControlMode(heading_error, boat_speed, low_power)):
+                self.__controlModeID = self.__ctrl_selector.getControlModeID()
+                return True
 
         return False
 
@@ -261,3 +287,25 @@ class HeadingController:
             self.__currJibAngleRad = jibAngle
             winchPosition = JibController.get_winch_position(jibAngle)
         return winchPosition
+
+    @property
+    def lowPowerDisabled(self):
+        """
+        Returns
+        -------
+        bool
+            Returns a boolean that specifies if the heading controller has low power
+            mode disabled.
+        """
+        return self.__disableLowPower
+
+    @property
+    def controlModeIsFixed(self):
+        """
+        Returns
+        -------
+        bool
+            Returns a boolean that specifies if the control state of the heading controller
+            is fixed or not.
+        """
+        return self.__controlModeIsFixed
