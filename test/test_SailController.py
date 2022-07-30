@@ -106,6 +106,26 @@ class Test_SailController(unittest.TestCase):
             sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE * 0.75
         )
 
+    def test_quant_winch_position_4(self):
+        quant_param = 4
+        self.assertEqual(SailController.get_winch_position(math.pi / 5, quant_param), 180)
+        self.assertEqual(SailController.get_winch_position(math.pi / 8, quant_param), 90)
+        self.assertEqual(SailController.get_winch_position(math.pi / 16, quant_param), 90)
+        self.assertEqual(SailController.get_winch_position(math.pi / 17, quant_param), 0)
+        self.assertEqual(SailController.get_winch_position(math.pi / 3, quant_param), 270)
+        self.assertEqual(SailController.get_winch_position(math.pi / 2.2, quant_param), 360)
+        self.assertEqual(SailController.get_winch_position(math.pi / 2.5, quant_param), 270)
+
+    def test_quant_winch_position_360(self):
+        quant_param = 360
+        self.assertEqual(SailController.get_winch_position(math.pi / 5, quant_param), 144)
+        self.assertEqual(SailController.get_winch_position(math.pi / 8, quant_param), 90)
+        self.assertEqual(SailController.get_winch_position(math.pi / 16, quant_param), 45)
+        self.assertEqual(SailController.get_winch_position(math.pi / 17, quant_param), 42)
+        self.assertEqual(SailController.get_winch_position(math.pi / 3, quant_param), 239)
+        self.assertEqual(SailController.get_winch_position(math.pi / 2.2, quant_param), 327)
+        self.assertEqual(SailController.get_winch_position(math.pi / 2.5, quant_param), 288)
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_SailController", Test_SailController)
