@@ -15,7 +15,7 @@ class TackController():
         if (abs(heading_error) > math.pi):
             raise ValueError("heading_error must be between -pi and pi")
 
-      # Bound the heading error between -pi and pi
+        # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):
             heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
 
