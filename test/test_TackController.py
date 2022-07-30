@@ -28,7 +28,7 @@ class Test_TackController(unittest.TestCase):
     def test_getFeedBackGain_symmetric(self):
         self.assertAlmostEqual(
             TackController.get_feed_back_gain(0.5),
-            -TackController.get_feed_back_gain(-0.5),
+            TackController.get_feed_back_gain(-0.5),
         )
 
     def test_getFeedBackGain_headingErrorGreaterThanPi_valueErrorRaised(self):
