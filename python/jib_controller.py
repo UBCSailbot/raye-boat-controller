@@ -36,21 +36,26 @@ class JibController:
             return jib_angle
 
     @staticmethod
-    def get_winch_position(jibAngle):
+    def get_winch_position(sailAngle, quantParam=360):
         """
-        Converts a jib angle in radians to a winch position.
+        Converts a sail angle in radians to a winch position.
 
         ** Description of Winch Position **
 
         Arguments
         ---------
-        float : jibAngle
-            The jib angle in radians
+        float : sailAngle
+            The sail angle in radians
+
+        int : quantParam
+            The quantization parameter for the winch position.
 
         Returns
         -------
         int
-            The winch position corresponding to the jib angle
+            The quantized winch position corresponding to the sail angle.
         """
-
-        return int(jibAngle * (360 / (math.pi / 2)))
+        exact_position = int(sailAngle * (360 / (math.pi / 2)))
+        step = 360 // quantParam
+        quantized_position = int(round(exact_position / float(step))) * step
+        return quantized_position

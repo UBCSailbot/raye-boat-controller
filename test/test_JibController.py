@@ -114,6 +114,26 @@ class Test_JibController(unittest.TestCase):
                 X2_TEST),
             sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE * 0.75)
 
+    def test_quant_winch_position_4(self):
+        quant_param = 4
+        self.assertEqual(JibController.get_winch_position(math.pi / 5, quant_param), 180)
+        self.assertEqual(JibController.get_winch_position(math.pi / 8, quant_param), 90)
+        self.assertEqual(JibController.get_winch_position(math.pi / 16, quant_param), 90)
+        self.assertEqual(JibController.get_winch_position(math.pi / 17, quant_param), 0)
+        self.assertEqual(JibController.get_winch_position(math.pi / 3, quant_param), 270)
+        self.assertEqual(JibController.get_winch_position(math.pi / 2.2, quant_param), 360)
+        self.assertEqual(JibController.get_winch_position(math.pi / 2.5, quant_param), 270)
+
+    def test_quant_winch_position_360(self):
+        quant_param = 360
+        self.assertEqual(JibController.get_winch_position(math.pi / 5, quant_param), 144)
+        self.assertEqual(JibController.get_winch_position(math.pi / 8, quant_param), 90)
+        self.assertEqual(JibController.get_winch_position(math.pi / 16, quant_param), 45)
+        self.assertEqual(JibController.get_winch_position(math.pi / 17, quant_param), 42)
+        self.assertEqual(JibController.get_winch_position(math.pi / 3, quant_param), 239)
+        self.assertEqual(JibController.get_winch_position(math.pi / 2.2, quant_param), 327)
+        self.assertEqual(JibController.get_winch_position(math.pi / 2.5, quant_param), 288)
+
 
 if __name__ == "__main__":
     rostest.rosrun("boat_controller", "Test_JibController", Test_JibController)

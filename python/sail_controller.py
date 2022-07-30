@@ -36,7 +36,7 @@ class SailController:
             return sail_angle
 
     @staticmethod
-    def get_winch_position(sailAngle):
+    def get_winch_position(sailAngle, quantParam=360):
         """
         Converts a sail angle in radians to a winch position.
 
@@ -47,10 +47,15 @@ class SailController:
         float : sailAngle
             The sail angle in radians
 
+        int : quantParam
+            The quantization parameter for the winch position.
+
         Returns
         -------
         int
-            The winch position corresponding to the sail angle
+            The quantized winch position corresponding to the sail angle.
         """
-
-        return int(sailAngle * (360 / (math.pi / 2)))
+        exact_position = int(sailAngle * (360 / (math.pi / 2)))
+        step = 360 // quantParam
+        quantized_position = int(round(exact_position / float(step))) * step
+        return quantized_position
