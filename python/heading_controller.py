@@ -31,12 +31,16 @@ class HeadingController:
     # Boolean to tell if the heading controller is in a fixed state or not
     __controlModeIsFixed = None
 
+    # The winch quantization parameter
+    __winchQuantParam = None
+
     def __init__(
             self,
             boat_speed=0,
             initialControlMode=ControlModes.UNKNOWN.value,
             disableLowPower=False,
-            fixedControlMode=None):
+            fixedControlMode=None,
+            winchQuantParam=360):
         """
         Initializes a HeadingController object with a specified control mode.
 
@@ -57,6 +61,10 @@ class HeadingController:
             control_modes.py for the correct integers to specify (do not specify UNKNOWN). If set to
             None, then the control mode is not fixed.
 
+        int : winchQuantParam
+            The quantization parameter for the winch position. If the value is 4 for example, the winch
+            position is quantized into 4 sections.
+
         Throws
         ------
         ValueError
@@ -71,6 +79,7 @@ class HeadingController:
         )
 
         self.__disableLowPower = disableLowPower
+        self.__winchQuantParam = winchQuantParam
 
         if (fixedControlMode is not None) and \
            (ControllerSelector.isValidModeID(fixedControlMode)) and \
@@ -246,10 +255,10 @@ class HeadingController:
         )
 
         if (self.__controlModeID == ControlModes.LOW_POWER.value) and (smallChange):
-            winchPosition = SailController.get_winch_position(self.__currSailAngleRad)
+            winchPosition = SailController.get_winch_position(self.__currSailAngleRad, self.__winchQuantParam)
         else:
             self.__currSailAngleRad = sailAngle
-            winchPosition = SailController.get_winch_position(sailAngle)
+            winchPosition = SailController.get_winch_position(sailAngle, self.__winchQuantParam)
         return winchPosition
 
     def get_jib_winch_position(self, apparentWindAngleRad, X1, X2):
@@ -280,10 +289,10 @@ class HeadingController:
         )
 
         if (self.__controlModeID == ControlModes.LOW_POWER.value) and (smallChange):
-            winchPosition = JibController.get_winch_position(self.__currJibAngleRad)
+            winchPosition = JibController.get_winch_position(self.__currJibAngleRad, self.__winchQuantParam)
         else:
             self.__currJibAngleRad = jibAngle
-            winchPosition = JibController.get_winch_position(jibAngle)
+            winchPosition = JibController.get_winch_position(jibAngle, self.__winchQuantParam)
         return winchPosition
 
     @property
