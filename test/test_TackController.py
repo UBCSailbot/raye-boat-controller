@@ -26,7 +26,7 @@ class Test_TackController(unittest.TestCase):
         )
 
     def test_getFeedBackGain_symmetric(self):
-        self.assertEqual(
+        self.assertAlmostEqual(
             TackController.get_feed_back_gain(0.5),
             -TackController.get_feed_back_gain(-0.5),
         )
