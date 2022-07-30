@@ -33,9 +33,15 @@ Tack: 2
 Low Power: 3
 """
 FIXED_CTRL_STATE = None
+WINCH_QUANTIZATION_PARAMETER = 4
 
 # Boat control logic
-controller = HeadingController(boat_speed=0, disableLowPower=DISABLE_LOW_POWER, fixedControlMode=FIXED_CTRL_STATE)
+controller = HeadingController(
+    boat_speed=0,
+    disableLowPower=DISABLE_LOW_POWER,
+    fixedControlMode=FIXED_CTRL_STATE,
+    winchQuantParam=WINCH_QUANTIZATION_PARAMETER
+)
 
 # Control node publisher
 rudder_winch_actuation_angle_pub = rospy.Publisher(
