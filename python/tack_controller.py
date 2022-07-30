@@ -12,12 +12,12 @@ class TackController():
     # https://core.ac.uk/download/pdf/79618904.pdf
     def get_feed_back_gain(heading_error):
 
-        if (abs(heading_error) > 2 * math.pi):
-            raise ValueError("heading_error must be between -2pi and 2pi")
+        if (abs(heading_error) > math.pi):
+            raise ValueError("heading_error must be between -pi and pi")
 
-        # Bound the heading error between -2pi and 2pi
-        if (abs(heading_error) >= 2 * math.pi):
-            heading_error %= 2 * math.pi
+      # Bound the heading error between -pi and pi
+        if (abs(heading_error) >= math.pi):
+            heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
 
         return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
 

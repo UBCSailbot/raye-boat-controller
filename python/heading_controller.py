@@ -8,6 +8,7 @@ from jib_controller import JibController
 
 import sailbot_constants
 import math
+import rospy
 
 
 class HeadingController:
@@ -209,15 +210,12 @@ class HeadingController:
 
         """
 
-        if (abs(heading_error) > 2 * math.pi):
-            raise ValueError("heading_error must be between -2pi and 2pi")
+        if (abs(heading_error) > math.pi):
+            rospy.logwarn("heading_error must be between -pi and pi")
 
-        # Bound the heading error between 0 and 2pi
-        if (abs(heading_error) >= 2 * math.pi):
-            heading_error %= 2 * math.pi
-
-        # Normalize heading error between -1 and 1 (relevant as controller is nonlinear)
-        heading_error = (heading_error / math.pi) - 1
+        # Bound the heading error between -pi and pi
+        if (abs(heading_error) >= math.pi):
+            heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
 
         return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
 

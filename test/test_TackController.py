@@ -25,23 +25,17 @@ class Test_TackController(unittest.TestCase):
             sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-1.2)),
         )
 
-    def test_getFeedBackGain_headingErrorBetweenPiAnd2Pi(self):
+    def test_getFeedBackGain_symmetric(self):
         self.assertEqual(
-            TackController.get_feed_back_gain(pi + 0.5),
-            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(pi + 0.5)),
+            TackController.get_feed_back_gain(0.5),
+            -TackController.get_feed_back_gain(-0.5),
         )
 
-    def test_getFeedBackGain_headingErrorBetweenNegativePiAndNegative2Pi(self):
-        self.assertEqual(
-            TackController.get_feed_back_gain(-pi - 0.5),
-            sailbot_constants.KP / (1 + sailbot_constants.CP * abs(-pi - 0.5)),
-        )
-
-    def test_getFeedBackGain_headingErrorGreaterThan2Pi_valueErrorRaised(self):
+    def test_getFeedBackGain_headingErrorGreaterThanPi_valueErrorRaised(self):
         self.assertRaises(
             ValueError, TackController.get_feed_back_gain, 4 * pi)
 
-    def test_getFeedBackGain_headingErrorBelowNegative2Pi_valueErrorRaised(self):
+    def test_getFeedBackGain_headingErrorBelowNegativePi_valueErrorRaised(self):
         self.assertRaises(
             ValueError, TackController.get_feed_back_gain, -4 * pi)
 
