@@ -6,8 +6,8 @@ import rospy
 import threading
 from rospy import Timer, Duration
 from datetime import datetime
-from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS, min_voltage
-from std_msgs.msg import Bool
+from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS
+from std_msgs.msg import Bool, Float32
 from control_modes import CONTROL_MODES
 
 
@@ -73,7 +73,7 @@ def desiredHeadingCallBack(heading_msg_instance):
 
 def minVoltageCallBack(min_voltage_msg_instance):
     global lowVoltage
-    min_voltage_level = min_voltage_msg_instance.min_voltage
+    min_voltage_level = min_voltage_msg_instance
     lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
 
@@ -181,7 +181,7 @@ def main():
     rospy.Subscriber("/desired_heading_degrees", heading, desiredHeadingCallBack)
     rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
-    rospy.Subscriber("/min_voltage", min_voltage, minVoltageCallBack)
+    rospy.Subscriber("/min_voltage", Float32, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
 
     # Callbacks to update rudders and winches
