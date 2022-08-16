@@ -7,10 +7,10 @@ CP = 0.34
 
 # 0 < X1 and X2 < PI
 # X1 < X2
-X1_SAIL = 0
+X1_SAIL = math.pi / 2
 X2_SAIL = math.pi
 
-X1_JIB = 0
+X1_JIB = 3 * math.pi / 4
 X2_JIB = math.pi
 
 MAX_WINCH_POSITION = 360
@@ -22,7 +22,7 @@ DEGREES_TO_RADIANS = math.pi / 180
 
 # Radians
 SAIL_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
-JIB_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
+JIB_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2 * 3 / 4
 MIN_HEADING_ERROR_FOR_SWITCH = 0.1
 MAX_ABS_RUDDER_ANGLE_RAD = math.pi / 6
 MAX_ABS_SAIL_ANGLE_RAD = math.pi / 2
