@@ -73,13 +73,13 @@ def desiredHeadingCallBack(heading_msg_instance):
 
 def minVoltageCallBack(min_voltage_msg_instance):
     global lowVoltage
-    min_voltage_level = min_voltage_msg_instance
+    min_voltage_level = min_voltage_msg_instance.data
     lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
 
 
 def lowWindCallBack(low_wind_msg_instance):
     global lowWind
-    lowWind = low_wind_msg_instance
+    lowWind = low_wind_msg_instance.data
 
 
 def updateRudders(event):

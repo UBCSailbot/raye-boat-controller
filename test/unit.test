@@ -1,5 +1,4 @@
 <launch>
-  <test test-name="test_RudderController" pkg="boat_controller" type="test_RudderController.py" />
   <test test-name="test_TackController" pkg="boat_controller" type="test_TackController.py" />
   <test test-name="test_SailController" pkg="boat_controller" type="test_SailController.py" />
   <test test-name="test_JibController" pkg="boat_controller" type="test_JibController.py" />

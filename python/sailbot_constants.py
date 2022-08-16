@@ -2,7 +2,7 @@ import math
 
 # Adjust the nonlinear feedback Function
 #
-KP = 0.35
+KP = 0.7
 CP = 0.34
 
 # 0 < X1 and X2 < PI
