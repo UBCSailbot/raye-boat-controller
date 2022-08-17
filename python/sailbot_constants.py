@@ -22,11 +22,11 @@ DEGREES_TO_RADIANS = math.pi / 180
 
 # Radians
 SAIL_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
-JIB_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2
+JIB_CONTROLLER_MAX_SAIL_ANGLE = math.pi / 2  * 3 / 4
 MIN_HEADING_ERROR_FOR_SWITCH = 0.1
 MAX_ABS_RUDDER_ANGLE_RAD = math.pi / 6
 MAX_ABS_SAIL_ANGLE_RAD = math.pi / 2
-MAX_ABS_JIB_ANGLE_RAD = math.pi / 2
+MAX_ABS_JIB_ANGLE_RAD = math.pi / 2 * 3 / 4
 MIN_ANGLE_FOR_SWITCH = 5 * math.pi / 180  # min angle for low power
 
 # Knots
