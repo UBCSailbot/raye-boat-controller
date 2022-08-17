@@ -226,10 +226,6 @@ class HeadingController:
         bounded_angle = math.atan2(
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
 
-
-        if (abs(heading_error) > math.pi):
-            rospy.logwarn("heading_error must be between -pi and pi")
-
         # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):
             heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
