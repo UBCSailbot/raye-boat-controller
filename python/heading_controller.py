@@ -200,7 +200,7 @@ class HeadingController:
             else:
                 return 0
 
-    def get_feed_back_gain(self, heading_error):
+    def get_feed_back_gain(self, heading_error, apparent_wind_angle_rad):
         """
         Calculates the feedback gain depending on the current heading error.
 
@@ -211,6 +211,9 @@ class HeadingController:
         ---------
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
+        
+        float : apparent_wind_angle_rad
+            The current wind angle in radians based on the wind angle relative to the boat
 
         Returns
         -------
@@ -219,14 +222,26 @@ class HeadingController:
 
         """
 
+         # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
+        bounded_angle = math.atan2(
+            math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
+
+
         if (abs(heading_error) > math.pi):
             rospy.logwarn("heading_error must be between -pi and pi")
 
         # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):
             heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
+        
+        # return feedback to produce max rudder angle if boat is in the nogo zone
+        if (abs(bounded_angle) < math.pi / 8):
+            return math.pi / (3 * abs(heading_error))
 
-        return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
+        # return normal feedback value
+        else:
+            return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
+        
 
     def get_sail_winch_position(self, apparentWindAngleRad, X1, X2):
         """

@@ -107,7 +107,7 @@ def updateRudders(event):
         lock.release()
 
         rudderAngleRad = (
-            controller.get_feed_back_gain(heading_error) * heading_error
+            controller.get_feed_back_gain(heading_error, apparentWindAngleRad) * heading_error
         )
 
 

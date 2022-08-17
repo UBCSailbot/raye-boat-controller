@@ -231,7 +231,7 @@ class Test_HeadingController(unittest.TestCase):
         heading_error = -1.2
 
         self.assertEqual(
-            hc.get_feed_back_gain(-1.2),
+            hc.get_feed_back_gain(-1.2, 0),
             sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error)),
         )
 
