@@ -235,8 +235,8 @@ class HeadingController:
             heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
         
         # return feedback to produce max rudder angle if boat is in the nogo zone
-        if (abs(bounded_angle) < math.pi / 8):
-            return math.pi / (3 * abs(heading_error))
+        if (abs(bounded_angle) > (math.pi * 7 / 8)):
+            return sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / abs(heading_error)
 
         # return normal feedback value
         else:
