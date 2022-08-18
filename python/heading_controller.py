@@ -211,7 +211,7 @@ class HeadingController:
         ---------
         float : heading_error
             The current heading error from the setpoint. Should be in radians.
-        
+
         float : apparent_wind_angle_rad
             The current wind angle in radians based on the wind angle relative to the boat
 
@@ -222,23 +222,22 @@ class HeadingController:
 
         """
 
-         # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
+        # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
         bounded_angle = math.atan2(
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
 
         # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):
             heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
-        
-        # return feedback to produce max rudder angle if boat is in the nogo zone
+  
+        # return feedback to produce max rudder angle if boat is in the nogo zone 
         if (abs(bounded_angle) > (math.pi * 7 / 8)):
-            return sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / abs(heading_error)
+            return sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / (abs(heading_error) + 0.01)
 
         # return normal feedback value
         else:
             return sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error))
-        
-
+   
     def get_sail_winch_position(self, apparentWindAngleRad, X1, X2):
         """
         Calculates the winch position of the sail according to the apparent wind angle.
