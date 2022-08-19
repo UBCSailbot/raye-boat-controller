@@ -9,6 +9,7 @@ from jib_controller import JibController
 import sailbot_constants
 import math
 
+
 class HeadingController:
 
     # The controller selector
