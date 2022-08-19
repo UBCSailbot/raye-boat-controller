@@ -8,8 +8,6 @@ from jib_controller import JibController
 
 import sailbot_constants
 import math
-import rospy
-
 
 class HeadingController:
 
