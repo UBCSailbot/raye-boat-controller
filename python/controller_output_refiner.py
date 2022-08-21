@@ -1,6 +1,7 @@
 import sailbot_constants
 
 
+# Adding dummy comment
 class ControllerOutputRefiner:
     def __init__(self):
         pass

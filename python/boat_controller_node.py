@@ -12,6 +12,7 @@ from control_modes import CONTROL_MODES
 
 
 # Define global variables for the needed topics
+# Adding dummy comment
 headingSetPointRad = None
 headingMeasureRad = None
 apparentWindAngleRad = None
