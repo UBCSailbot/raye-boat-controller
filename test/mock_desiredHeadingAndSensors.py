@@ -28,7 +28,7 @@ def talker():
 
         # Low Wind flag not implemented
         # windSensor_pub.publish(windSensor(windangle, 1., False))
-        windSensor_pub.publish(windSensor(1., 1., 1., 1.))
+        windSensor_pub.publish(windSensor(1., 1.))
 
         gps_pub.publish(GPS(.0, .0, current_heading, groundspeed, groundspeed, 1.))
         min_voltage_pub.publish(voltage)
