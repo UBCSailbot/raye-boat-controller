@@ -222,8 +222,7 @@ class HeadingController:
         """
 
         # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
-        bounded_angle = math.atan2(
-            math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
+        bounded_angle = ((bounded_angle + math.pi) % 2 * math.pi) - math.pi
 
         # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):

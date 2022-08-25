@@ -230,10 +230,10 @@ class Test_HeadingController(unittest.TestCase):
 
         heading_error = -1.2
 
-        # Generate List of evenly Spaced floats from -4pi to 4pi
+        # Generate List of evenly Spaced floats from -pi to pi
         testFloatList = []
-        for i in range(0, (int) (8 * math.pi / 0.001)):
-            testFloatList.append(-4 * math.pi + 0.001)
+        for i in range(0, (int) (2 * math.pi / 0.001)):
+            testFloatList.append(-math.pi + 0.001)
 
         self.assertEqual(
             hc.get_feed_back_gain(-1.2, 0),
@@ -248,7 +248,7 @@ class Test_HeadingController(unittest.TestCase):
         # Test Symmetry of function for all possible cases
         for windAngle in testFloatList:
             for headingError in testFloatList:
-                self.assertEqual(
+                self.assertAlmostEqual(
                     hc.get_feed_back_gain(headingError, windAngle),
                     hc.get_feed_back_gain(-headingError, windAngle),
                 )
