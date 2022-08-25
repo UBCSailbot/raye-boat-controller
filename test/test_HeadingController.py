@@ -232,8 +232,8 @@ class Test_HeadingController(unittest.TestCase):
 
         # Generate List of evenly Spaced floats from -pi to pi
         testFloatList = []
-        for i in range(0, (int) (2 * math.pi / 0.001)):
-            testFloatList.append(-math.pi + 0.001)
+        for i in range(0, (int) (4 * math.pi / 0.001)):
+            testFloatList.append(-2 * math.pi + 0.001)
 
         self.assertEqual(
             hc.get_feed_back_gain(-1.2, 0),

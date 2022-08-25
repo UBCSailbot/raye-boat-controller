@@ -223,11 +223,14 @@ class HeadingController:
 
         # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
         if (abs(apparent_wind_angle_rad) >= math.pi):
-            bounded_angle = ((apparent_wind_angle_rad + math.pi) % 2 * math.pi) - math.pi
+            bounded_angle = ((apparent_wind_angle_rad + math.pi) % (2 * math.pi)) - math.pi
+ 
+        else:
+            bounded_angle = apparent_wind_angle_rad
 
         # Bound the heading error between -pi and pi
         if (abs(heading_error) >= math.pi):
-            heading_error = ((heading_error + math.pi) % 2 * math.pi) - math.pi
+            heading_error = ((heading_error + math.pi) % (2 * math.pi)) - math.pi
 
         # return feedback to produce max rudder angle if boat is in the nogo zone
         if (abs(bounded_angle) > (sailbot_constants.NO_GO_ZONE_WIND_ANGLE)):
