@@ -240,7 +240,7 @@ class Test_HeadingController(unittest.TestCase):
             sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / (abs(heading_error) + 0.01),
         )
 
-        # Test Symmetry of function
+        # Test Symmetry of function for all possible cases
         for windAngle in range(-4 * math.pi, 4 * math.pi, 0.001):
             for headingError in range(-4 * math.pi, 4 * math.pi, 0.001):
                 self.assertEqual(
