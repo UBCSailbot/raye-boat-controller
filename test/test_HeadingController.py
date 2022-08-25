@@ -230,10 +230,10 @@ class Test_HeadingController(unittest.TestCase):
 
         heading_error = -1.2
 
-        # Generate List of evenly Spaced floats from -pi to pi
+        # Generate List of evenly Spaced floats from -4pi to 4pi
         testFloatList = []
-        for i in range(0, (int) (4 * math.pi / 0.01)):
-            testFloatList.append(-2 * math.pi + 0.01)
+        for i in range(0, (int)(8 * math.pi / 0.01)):
+            testFloatList.append(-4 * math.pi + 0.01)
 
         self.assertEqual(
             hc.get_feed_back_gain(-1.2, 0),

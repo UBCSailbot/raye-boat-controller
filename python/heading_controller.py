@@ -224,7 +224,7 @@ class HeadingController:
         # bound angle to be between -pi and pi based on this post: https://stackoverflow.com/a/2321125
         if (abs(apparent_wind_angle_rad) >= math.pi):
             bounded_angle = ((apparent_wind_angle_rad + math.pi) % (2 * math.pi)) - math.pi
- 
+
         else:
             bounded_angle = apparent_wind_angle_rad
 
