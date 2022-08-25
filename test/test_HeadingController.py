@@ -235,6 +235,23 @@ class Test_HeadingController(unittest.TestCase):
             sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error)),
         )
 
+        self.assertAlmostEqual(
+            hc.get_feed_back_gain(-1, math.pi),
+            sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / (abs(heading_error) + 0.01),
+        )
+
+        self.assertAlmostEqual(
+            hc.get_feed_back_gain(-1, math.pi),
+            hc.get_feed_back_gain(1, math.pi),
+        )
+
+        for windAngle in range(-2 * math.pi, 2 * math.pi, 0.01):
+            for headingError in range(-2 * math.pi, -2 * math.pi):
+                self.assertGreaterEqual(
+                    hc.get_feed_back_gain(headingError, windAngle),
+                    0,
+                )
+
     def test_tack_to_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH

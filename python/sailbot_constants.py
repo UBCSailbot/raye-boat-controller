@@ -28,6 +28,7 @@ MAX_ABS_RUDDER_ANGLE_RAD = math.pi / 6
 MAX_ABS_SAIL_ANGLE_RAD = math.pi / 2
 MAX_ABS_JIB_ANGLE_RAD = math.pi / 2 * 3 / 4
 MIN_ANGLE_FOR_SWITCH = 5 * math.pi / 180  # min angle for low power
+NO_GO_ZONE_WIND_ANGLE = 5 / 6 * math.pi
 
 # Knots
 SPEED_THRESHOLD_FOR_JIBING_KNOTS = 0.5
