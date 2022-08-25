@@ -230,6 +230,11 @@ class Test_HeadingController(unittest.TestCase):
 
         heading_error = -1.2
 
+        # Generate List of evenly Spaced floats from -4pi to 4pi
+        testFloatList = []
+        for i in range(0, (int) (8 * math.pi / 0.001)):
+            testFloatList[i] = -4 * math.pi + 0.001
+
         self.assertEqual(
             hc.get_feed_back_gain(-1.2, 0),
             sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error)),
@@ -241,16 +246,16 @@ class Test_HeadingController(unittest.TestCase):
         )
 
         # Test Symmetry of function for all possible cases
-        for windAngle in range(-4 * math.pi, 4 * math.pi, 0.001):
-            for headingError in range(-4 * math.pi, 4 * math.pi, 0.001):
+        for windAngle in testFloatList:
+            for headingError in testFloatList:
                 self.assertEqual(
                     hc.get_feed_back_gain(headingError, windAngle),
                     hc.get_feed_back_gain(-headingError, windAngle),
                 )
 
         # Ensure function is positive and works for all possible cases
-        for windAngle in range(-4 * math.pi, 4 * math.pi, 0.001):
-            for headingError in range(-4 * math.pi, 4 * math.pi, 0.001):
+        for windAngle in testFloatList:
+            for headingError in testFloatList:
                 self.assertGreaterEqual(
                     hc.get_feed_back_gain(headingError, windAngle),
                     0,
