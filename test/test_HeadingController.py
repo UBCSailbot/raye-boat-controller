@@ -261,6 +261,18 @@ class Test_HeadingController(unittest.TestCase):
                     0,
                 )
 
+        # Ensure that Rudder commands give realistic values for all possible error values
+        for windAngle in testFloatList:
+            for headingError in testFloatList:
+                self.assertGreaterEqual(
+                    hc.get_feed_back_gain(headingError, windAngle) * heading_error,
+                    -sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD,
+                )
+                self.assertLessEqual(
+                    hc.get_feed_back_gain(headingError, windAngle) * heading_error,
+                    sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD,
+                )
+
     def test_tack_to_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
         mock_heading_error = 2 * sailbot_constants.MIN_HEADING_ERROR_FOR_SWITCH
