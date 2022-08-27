@@ -17,7 +17,7 @@ class JibController:
             math.sin(apparent_wind_angle_rad), math.cos(apparent_wind_angle_rad))
 
         # Generate Slope Value based on X1, X2, and the Max Sail angle
-        k_s = (-sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
+        k_s = (-sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE
                ) / (X2 - X1)
 
         # Generate Linear function from slope and intercept
@@ -26,7 +26,7 @@ class JibController:
 
         # Clamp Linear Function
         min = 0
-        max = sailbot_constants.SAIL_CONTROLLER_MAX_SAIL_ANGLE
+        max = sailbot_constants.JIB_CONTROLLER_MAX_SAIL_ANGLE
 
         if(jib_angle > max):
             return max

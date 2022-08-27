@@ -230,10 +230,36 @@ class Test_HeadingController(unittest.TestCase):
 
         heading_error = -1.2
 
+        # Generate List of evenly Spaced floats from -4pi to 4pi
+        testFloatList = []
+        for i in range(0, (int)(8 * math.pi / 0.01)):
+            testFloatList.append(-4 * math.pi + 0.01)
+
         self.assertEqual(
-            hc.get_feed_back_gain(-1.2),
+            hc.get_feed_back_gain(-1.2, 0),
             sailbot_constants.KP / (1 + sailbot_constants.CP * abs(heading_error)),
         )
+
+        self.assertAlmostEqual(
+            hc.get_feed_back_gain(-1.2, math.pi),
+            sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / (abs(heading_error) + 0.01),
+        )
+
+        # Test Symmetry of function for all possible cases
+        for windAngle in testFloatList:
+            for headingError in testFloatList:
+                self.assertAlmostEqual(
+                    hc.get_feed_back_gain(headingError, windAngle),
+                    hc.get_feed_back_gain(-headingError, windAngle),
+                )
+
+        # Ensure function is positive and works for all possible cases
+        for windAngle in testFloatList:
+            for headingError in testFloatList:
+                self.assertGreaterEqual(
+                    hc.get_feed_back_gain(headingError, windAngle),
+                    0,
+                )
 
     def test_tack_to_low_power(self):
         mock_speed = sailbot_constants.SPEED_THRESHOLD_FOR_JIBING_KNOTS + 0.1
