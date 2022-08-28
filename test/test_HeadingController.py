@@ -242,7 +242,7 @@ class Test_HeadingController(unittest.TestCase):
 
         self.assertAlmostEqual(
             hc.get_feed_back_gain(-1.2, math.pi),
-            sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD / (abs(heading_error) + 0.01),
+            sailbot_constants.MAX_ABS_RUDDER_ANGLE_RAD_IRONS / (abs(heading_error) + 0.01),
         )
 
         # Test Symmetry of function for all possible cases
