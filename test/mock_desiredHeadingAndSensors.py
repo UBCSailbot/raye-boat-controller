@@ -2,7 +2,6 @@
 
 import rospy
 import random
-from std_msgs.msg import Float32
 from sailbot_msg.msg import heading, windSensor, GPS
 ROSPY_RATE = 10  # hertz
 
