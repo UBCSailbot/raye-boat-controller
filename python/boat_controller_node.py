@@ -7,7 +7,7 @@ import threading
 from rospy import Timer, Duration
 from datetime import datetime
 from sailbot_msg.msg import actuation_angle, heading, windSensor, GPS
-from std_msgs.msg import Bool, Float32
+from std_msgs.msg import Bool
 from control_modes import CONTROL_MODES
 
 
