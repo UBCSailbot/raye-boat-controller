@@ -71,12 +71,6 @@ def desiredHeadingCallBack(heading_msg_instance):
     headingSetPointRad = headingSetPointDeg * sailbot_constants.DEGREES_TO_RADIANS
 
 
-def minVoltageCallBack(min_voltage_msg_instance):
-    global lowVoltage
-    min_voltage_level = min_voltage_msg_instance.data
-    lowVoltage = (min_voltage_level < sailbot_constants.MIN_VOLTAGE_THRESHOLD)
-
-
 def lowWindCallBack(low_wind_msg_instance):
     global lowWind
     lowWind = low_wind_msg_instance.data
@@ -145,7 +139,6 @@ def publishRudderWinchAngle(event):
             "\tWind Angle: {} radians\n".format(apparentWindAngleRad) +
             "\tGround Speed: {} knots\n".format(groundspeedKnots) +
             "\tLow Wind: {}\n".format(lowWind) +
-            "\tLow Voltage: {}\n".format(lowVoltage) +
             "\n" +
             "CONTROLLER STATE\n" +
             "\tControl Mode: {}\n".format(CONTROL_MODES[controller.getControlModeID()]) +
@@ -181,7 +174,6 @@ def main():
     rospy.Subscriber("/desired_heading_degrees", heading, desiredHeadingCallBack)
     rospy.Subscriber("/windSensor", windSensor, windSensorCallBack)
     rospy.Subscriber("/GPS", GPS, gpsCallBack)
-    rospy.Subscriber("/min_voltage", Float32, minVoltageCallBack)
     rospy.Subscriber('/lowWindConditions', Bool, lowWindCallBack)
 
     # Callbacks to update rudders and winches
